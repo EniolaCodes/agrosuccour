@@ -7,7 +7,7 @@ import Link from "next/link";
 const Header = () => {
   return (
     <>
-      <header className="hidden md:block px-20 py-2">
+      <header className="hidden md:block px-20 py-4">
         <div className="w-full rounded-2xl bg-black text-white py-4 px-6 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Image
