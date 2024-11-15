@@ -13,13 +13,13 @@ const Hero = () => {
         "Explore premium meats and proteins from trusted farms. Choose from grass-fed beef, free-range poultry, seafood, and plant-based options—all sustainably sourced, fresh, and ready for delivery to elevate your meals.",
     },
     {
-      image: "/images/bg1.svg",
+      image: "/images/bg2.svg",
       title: "Grass-Fed Beef and Organic Options",
       description:
         "Choose from our variety of organic, grass-fed beef and poultry that are raised in natural environments for the highest quality and taste.",
     },
     {
-      image: "/images/bg1.svg",
+      image: "/images/bg3.svg",
       title: "Seafood Fresh From the Ocean",
       description:
         "Our selection of seafood is fresh from the ocean, ensuring the best quality and flavor for your meals.",
@@ -45,17 +45,19 @@ const Hero = () => {
         </div>
       </div>
       {/* Slide Content */}
-      <div className="relative z-10 p-8 text-black w-full max-w-lg">
-        <h1 className="text-4xl font-bold mb-4">
+      <div className="absolute inset-0 flex flex-col justify-center items-start z-10 ml-6 md:ml-20 px-4 md:px-8 max-w-lg">
+        <h1 className="text-2xl md:text-4xl text-agroWhite font-bold mb-4">
           {slides[currentIndex].title}
         </h1>
-        <p className="mb-6 text-lg">{slides[currentIndex].description}</p>
+        <p className="mb-6 text-sm md:text-lg text-agroText">
+          {slides[currentIndex].description}
+        </p>
         <button className="bg-green-600 hover:bg-green-500 text-black text-lg font-semibold px-6 py-3 rounded-lg">
           Shop Now
         </button>
       </div>
       {/* Slide Indicators */}
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute z-20 bottom-24 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {slides.map((_, index) => (
           <button
             key={index}
