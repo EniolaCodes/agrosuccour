@@ -14,6 +14,8 @@ module.exports = {
         agroGreen: "#4caf50",
         agroWhite: "#E8F5E9",
         agroTop: "#102018",
+        Green50: "#F0F7EC",
+        Grey500: "#102018",
       },
     },
   },
