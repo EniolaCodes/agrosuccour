@@ -1,10 +1,19 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { IoMenu, IoClose, IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { FiSearch, FiPhone } from "react-icons/fi";
 import { FaShoppingCart } from "react-icons/fa";
-import { IoMenu } from "react-icons/io5";
-import Link from "next/link";
 
 const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
+
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+
+  const toggleProducts = () => setProductsOpen((prev) => !prev);
+
   return (
     <>
       <header className="hidden md:block px-20 py-4">
@@ -22,7 +31,11 @@ const Header = () => {
           </div>
           {/* Search Bar */}
           <div className="flex items-center bg-white rounded overflow-hidden w-full max-w-lg px-4 py-2 relative">
-            <IoMenu className="text-green-600" size={20} />
+            <IoMenu
+              className="text-green-600 cursor-pointer relative z-50"
+              size={20}
+              onClick={toggleProducts}
+            />
 
             <input
               type="text"
@@ -33,16 +46,113 @@ const Header = () => {
               <FiSearch className="text-white" />
             </button>
           </div>
+          {/*desktop menu */}
+          {productsOpen && (
+            <div className="mt-4 bg-white rounded shadow-lg p-6">
+              <ul className="flex flex-col space-y-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/box 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/all">All Products</Link>
+                </li>
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/apple 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/fruits">Fruits</Link>
+                </li>
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/meat 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/meat">Meat and Fish</Link>
+                </li>
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/cabbage 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/vegetables">Vegetables</Link>
+                </li>
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/wine 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/beverages">Drinks & Beverages</Link>
+                </li>
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/wheat-sack 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/drygoods">Dry Goods</Link>
+                </li>
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/cooking-oil 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/oils">Oils</Link>
+                </li>
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/milk 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/dairy">Dairy</Link>
+                </li>
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/food 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/baking">Baking Goods</Link>
+                </li>
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green100">
+                  <Image
+                    src="/images/spice 1.svg"
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                  <Link href="/products/spices">Spices</Link>
+                </li>
+              </ul>
+            </div>
+          )}
           {/* navigation */}
           <ul className="flex space-x-2 text-agroText">
-            <li className="text-inherit">
+            <li className="text-inherit hover:text-green-600">
               <Link href="/">Home</Link>
             </li>
 
-            <li className="text-inherit">
+            <li className="text-inherit hover:text-green-600">
               <Link href="/#about">About</Link>
             </li>
-            <li className="text-inherit">
+            <li className="text-inherit hover:text-green-600">
               <Link href="/#products">Products</Link>
             </li>
           </ul>
@@ -78,7 +188,7 @@ const Header = () => {
                   height={40}
                 />
                 <h1 className="text-2xl font-semibold text-agroLightGreen">
-                  Agrosuccour
+                  Agrosucco
                 </h1>
               </div>
             </div>
@@ -95,8 +205,11 @@ const Header = () => {
           </div>
           {/* Search Bar */}
           <div className="flex items-center bg-white rounded overflow-hidden w-full max-w-lg px-4 py-2 relative">
-            <IoMenu className="text-green-600" size={20} />
-
+            <IoMenu
+              className="text-green-600 cursor-pointer relative z-50"
+              size={20}
+              onClick={toggleMenu}
+            />
             <input
               type="text"
               placeholder="Search your favorite product..."
@@ -106,6 +219,145 @@ const Header = () => {
               <FiSearch className="text-white" />
             </button>
           </div>
+          {/* Mobile Menu */}
+          {menuOpen && (
+            <div className="mt-4 bg-red rounded shadow-lg relative top-0 right-0">
+              <div className="flex justify-end items-center p-4">
+                <IoClose
+                  className="text-2xl text-Grey400 cursor-pointer relative z-50"
+                  size={20}
+                  onClick={toggleMenu}
+                />
+              </div>
+              <ul className="flex flex-col space-y-4 p-4">
+                <li className="text-Grey500 hover:text-green-600">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="text-Grey500 hover:text-green-600">
+                  <Link href="/#about">About</Link>
+                </li>
+                <li className=" hover:text-green-600">
+                  <Link
+                    href="/cart"
+                    className="flex items-center justify-between"
+                  >
+                    <span className="text-Grey500">Cart</span>
+                    <span className="text-sm bg-red-600 text-white px-2 py-1 rounded-full">
+                      4
+                    </span>
+                  </Link>
+                </li>
+                <li className="flex justify-between items-center hover:text-green-600">
+                  <span onClick={toggleProducts}>Products</span>
+                  {productsOpen ? (
+                    <IoChevronUp
+                      onClick={toggleProducts}
+                      className="relative z-50 text-Grey400 cursor-pointer"
+                    />
+                  ) : (
+                    <IoChevronDown
+                      onClick={toggleProducts}
+                      className="relative z-50 text-Grey400 cursor-pointer"
+                    />
+                  )}
+                </li>
+                {productsOpen && (
+                  <ul className="ml-4 space-y-4">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Grey500">
+                      <Image
+                        src="/images/box 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/all">All Products</Link>
+                    </li>
+                    <li className="flex space-x-4 text-Grey400 hover:bg-green-600">
+                      <Image
+                        src="/images/apple 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/fruits">Fruits</Link>
+                    </li>
+                    <li className="flex space-x-4 text-Grey400 hover:bg-green-600">
+                      <Image
+                        src="/images/meat 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/meat">Meat and Fish</Link>
+                    </li>
+                    <li className="flex space-x-4 text-Grey400 hover:text-green-600">
+                      <Image
+                        src="/images/cabbage 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/vegetables">Vegetables</Link>
+                    </li>
+                    <li className="flex space-x-4 text-Grey400 hover:text-green-600">
+                      <Image
+                        src="/images/wine 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/beverages">Drinks & Beverages</Link>
+                    </li>
+                    <li className="flex space-x-4 text-Grey400 hover:text-green-600">
+                      <Image
+                        src="/images/wheat-sack 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/drygoods">Dry Goods</Link>
+                    </li>
+                    <li className="flex space-x-4 text-Grey400 hover:text-green-600">
+                      <Image
+                        src="/images/cooking-oil 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/oils">Oils</Link>
+                    </li>
+                    <li className="flex space-x-4 text-Grey400 hover:text-green-600">
+                      <Image
+                        src="/images/milk 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/dairy">Dairy</Link>
+                    </li>
+                    <li className="flex space-x-4 text-Grey400 hover:text-green-600">
+                      <Image
+                        src="/images/food 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/baking">Baking Goods</Link>
+                    </li>
+                    <li className="flex space-x-4 text-Grey400 hover:text-green-600">
+                      <Image
+                        src="/images/spice 1.svg"
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                      <Link href="/products/spices">Spices</Link>
+                    </li>
+                  </ul>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
       </header>
     </>
