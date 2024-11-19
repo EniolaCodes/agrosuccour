@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { IoMenu, IoClose, IoChevronDown, IoChevronUp } from "react-icons/io5";
@@ -33,14 +34,29 @@ const Header = () => {
   }, []);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
-
   const toggleProducts = () => setProductsOpen((prev) => !prev);
 
+  const router = useRouter();
+
+  const handleCartClick = () => {
+    toggleMenu(); // Close the menu
+    router.push("/cart"); // Redirect to the cart page
+  };
+
+  const handleHomeClick = () => {
+    toggleMenu(); // Close the menu
+    router.push("/"); // Redirect to the home page
+  };
+
+  const handleAboutClick = () => {
+    toggleMenu(); // Close the menu
+    router.push("/about"); // Redirect to the home page
+  };
   return (
     <>
       <header className="hidden md:block px-20 py-4">
-        <div className="w-full rounded-2xl bg-agroTop text-white py-4 px-6 flex items-center justify-between relative">
-          <div className="flex items-center space-x-4">
+        <div className="w-full rounded-2xl bg-Grey500 text-white py-4 px-6 flex items-center justify-between relative">
+          <Link href="/" className="flex items-center space-x-4">
             <Image
               src="/images/logo.svg"
               alt="Agrosuccour Logo"
@@ -50,11 +66,11 @@ const Header = () => {
             <h1 className="text-2xl font-semibold text-agroLightGreen">
               Agrosuccour
             </h1>
-          </div>
+          </Link>
           {/* Search Bar */}
           <div className="flex items-center bg-white rounded overflow-hidden w-full max-w-lg px-4 py-2 relative">
             <IoMenu
-              className="text-green-600 cursor-pointer relative z-50"
+              className="text-Green500 cursor-pointer relative z-50"
               size={20}
               onClick={toggleProducts}
             />
@@ -175,10 +191,10 @@ const Header = () => {
             </li>
 
             <li className="text-inherit hover:text-green-600 ">
-              <Link href="/#about">About</Link>
+              <Link href="/about">About</Link>
             </li>
             <li className="text-inherit hover:text-green-600 ">
-              <Link href="/#products">Products</Link>
+              <Link href="/products">Products</Link>
             </li>
           </ul>
           {/* Contact */}
@@ -187,15 +203,17 @@ const Header = () => {
             <span>0706375930</span>
           </div>
           {/* Cart */}
-          <div className="flex items-center space-x-4 cursor-pointer border px-2 py-4 rounded-xl">
-            <FaShoppingCart className="text-2xl" />
-            <div className="relative">
-              <h1>Cart</h1>
-              <span className="absolute -top-2 right-1 bg-red-600 text-white rounded-full px-2 text-xs">
-                4
-              </span>
+          <Link href="/cart">
+            <div className="flex items-center space-x-4 cursor-pointer border px-2 py-4 rounded-xl">
+              <FaShoppingCart className="text-2xl" />
+              <div className="relative">
+                <h1>Cart</h1>
+                <span className="absolute -top-2 right-1 bg-red-600 text-white rounded-full px-2 text-xs">
+                  4
+                </span>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       </header>
       {/* mobile */}
@@ -213,19 +231,19 @@ const Header = () => {
                   height={40}
                 />
                 <h1 className="text-2xl font-semibold text-agroLightGreen">
-                  Agrosucco
+                  Agrosuccour
                 </h1>
               </div>
             </div>
             {/* cart */}
-            <div className="flex items-center space-x-4 cursor-pointer border px-2 py-4 rounded-xl">
+            <div className="flex items-center space-x-4 border px-2 py-4 rounded-xl">
               <FaShoppingCart className="text-2xl" />
-              <div className="relative">
+              <Link href="/cart" className="relative">
                 <h1>Cart</h1>
                 <span className="absolute -top-2 right-1 bg-red-600 text-white rounded-full px-2 text-xs">
                   4
                 </span>
-              </div>
+              </Link>
             </div>
           </div>
           {/* Search Bar */}
@@ -259,14 +277,19 @@ const Header = () => {
               </div>
               <ul className="flex flex-col space-y-4 mt-2">
                 <li className="text-Grey500 font-bold hover:bg-Green100 px-6 py-1">
-                  <Link href="/">Home</Link>
+                  <Link href="/" onClick={handleHomeClick}>
+                    Home
+                  </Link>
                 </li>
                 <li className="text-Grey500 font-bold hover:bg-Green100 px-6 py-1">
-                  <Link href="/#about">About</Link>
+                  <Link href="/about" onClick={handleAboutClick}>
+                    About
+                  </Link>
                 </li>
                 <li className="px-6 py-1 font-bold hover:bg-Green100">
                   <Link
                     href="/cart"
+                    onClick={handleCartClick}
                     className="flex items-center justify-between"
                   >
                     <span className="text-Grey500">Cart</span>
