@@ -223,7 +223,7 @@ const Header = () => {
           <div className="flex items-center justify-between">
             {/* logo */}
             <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-4">
+              <Link href="/" className="flex items-center space-x-4">
                 <Image
                   src="/images/logo.svg"
                   alt="Agrosuccour Logo"
@@ -233,7 +233,7 @@ const Header = () => {
                 <h1 className="text-2xl font-semibold text-agroLightGreen">
                   Agrosuccour
                 </h1>
-              </div>
+              </Link>
             </div>
             {/* cart */}
             <div className="flex items-center space-x-4 border px-2 py-4 rounded-xl">
