@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { IoMenu, IoClose, IoChevronDown, IoChevronUp } from "react-icons/io5";
@@ -9,6 +9,28 @@ import { FaShoppingCart } from "react-icons/fa";
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+
+  const menuRef = useRef(null);
+  const productsRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    //check if click is outside of the desktop menu
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+      console.log("opened");
+    }
+    if (productsRef.current && !productsRef.current.contains(event.target)) {
+      setProductsOpen(false);
+      console.log("closed");
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
@@ -48,7 +70,10 @@ const Header = () => {
           </div>
           {/*desktop menu */}
           {productsOpen && (
-            <div className="mt-4 bg-Green50 rounded-md shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72">
+            <div
+              ref={productsRef}
+              className="mt-4 bg-Green50 rounded-md shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72"
+            >
               <ul className="flex flex-col space-y-4 mt-6 mb-6">
                 <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
                   <Image
@@ -221,7 +246,10 @@ const Header = () => {
           </div>
           {/* Mobile Menu */}
           {menuOpen && (
-            <div className="mt-2 bg-Green50 rounded-md shadow-lg absolute z-50 top-36 left-8 w-[272px] h-[600px]">
+            <div
+              ref={menuRef}
+              className="mt-2 bg-Green50 rounded-md shadow-lg absolute z-50 top-36 left-8 w-[272px] h-[600px]"
+            >
               <div className="flex justify-end items-center p-4">
                 <IoClose
                   className="text-2xl text-Grey400 cursor-pointer relative z-50"
