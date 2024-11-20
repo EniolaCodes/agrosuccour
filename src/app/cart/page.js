@@ -175,7 +175,7 @@ export default function Cart() {
             </div>
             <Link href="/checkout">
               <button className="mt-4 w-full bg-Green500 text-Grey500 font-medium py-2 rounded-md hover:bg-[#5A9E3A] transition">
-                Continue Checkout
+                Checkout
               </button>
             </Link>
           </div>
@@ -254,7 +254,7 @@ export default function Cart() {
         <div className="">
           <Link href="/checkout">
             <button className="mt-4 w-full bg-Green500 text-Grey500 font-medium py-2 rounded-md hover:bg-[#5A9E3A] transition">
-              Continue Checkout
+              Checkout
             </button>
           </Link>
         </div>

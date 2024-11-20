@@ -6,23 +6,60 @@ import Link from "next/link";
 import { IoMenu, IoClose, IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { FiSearch, FiPhone } from "react-icons/fi";
 import { FaShoppingCart } from "react-icons/fa";
+import { ImEnlarge2 } from "react-icons/im";
 
 const Header = () => {
+  // Initial product data
+  const initialProducts = [
+    {
+      id: 1,
+      name: "Pepper",
+      quantity: 1,
+      price: 1200.99,
+      image: "/images/elo.svg",
+    },
+    {
+      id: 2,
+      name: "Full Chicken",
+      quantity: 2,
+      price: 1200.99,
+      image: "/images/chicken.svg",
+    },
+    {
+      id: 3,
+      name: "Fresh Fishes",
+      quantity: 1,
+      price: 1200.99,
+      image: "/images/fish.svg",
+    },
+    {
+      id: 4,
+      name: "Cabbage",
+      quantity: 1,
+      price: 1200.99,
+      image: "/images/rice.svg",
+    },
+  ];
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [products, setProducts] = useState(initialProducts);
 
   const menuRef = useRef(null);
   const productsRef = useRef(null);
+  const cartRef = useRef(null);
 
   const handleClickOutside = (event) => {
     //check if click is outside of the desktop menu
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setMenuOpen(false);
-      console.log("opened");
     }
     if (productsRef.current && !productsRef.current.contains(event.target)) {
       setProductsOpen(false);
-      console.log("closed");
+    }
+    if (cartRef.current && !cartRef.current.contains(event.target)) {
+      setCartOpen(false);
     }
   };
 
@@ -35,13 +72,9 @@ const Header = () => {
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const toggleProducts = () => setProductsOpen((prev) => !prev);
+  const toggleCart = () => setCartOpen((prev) => !prev);
 
   const router = useRouter();
-
-  const handleCartClick = () => {
-    toggleMenu(); // Close the menu
-    router.push("/cart"); // Redirect to the cart page
-  };
 
   const handleHomeClick = () => {
     toggleMenu(); // Close the menu
@@ -52,6 +85,42 @@ const Header = () => {
     toggleMenu(); // Close the menu
     router.push("/about"); // Redirect to the home page
   };
+  const handleCartClick = () => {
+    toggleMenu(); // Close the menu
+    router.push("/cart"); // Redirect to the home page
+  };
+  // Function to increment quantity
+  const incrementQuantity = (id) => {
+    setProducts(
+      products.map((product) =>
+        product.id === id
+          ? { ...product, quantity: product.quantity + 1 }
+          : product
+      )
+    );
+  };
+
+  // Function to decrement quantity
+  const decrementQuantity = (id) => {
+    setProducts(
+      products.map((product) =>
+        product.id === id && product.quantity > 1
+          ? { ...product, quantity: product.quantity - 1 }
+          : product
+      )
+    );
+  };
+
+  // Function to delete a product
+  const deleteProduct = (id) => {
+    setProducts(products.filter((product) => product.id !== id));
+  };
+
+  // Calculate total price
+  const totalPrice = products.reduce(
+    (total, product) => total + product.price * product.quantity,
+    0
+  );
   return (
     <>
       <header className="hidden md:block px-20 py-4">
@@ -203,7 +272,7 @@ const Header = () => {
             <span>0706375930</span>
           </div>
           {/* Cart */}
-          <Link href="/cart">
+          <div onClick={toggleCart} className="relative">
             <div className="flex items-center space-x-4 cursor-pointer border px-2 py-4 rounded-xl">
               <FaShoppingCart className="text-2xl" />
               <div className="relative">
@@ -213,7 +282,114 @@ const Header = () => {
                 </span>
               </div>
             </div>
-          </Link>
+            {/* cart dropdown */}
+            {cartOpen && (
+              <div className="px-4 py-2 bg-Green50 rounded-md border w-[400px] h-auto absolute z-50 top-16 right-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h1 className="xl text-Grey400">Cart Overview</h1>
+                  <div className="flex items-center space-x-4 text-Grey400">
+                    <ImEnlarge2
+                      onClick={handleCartClick}
+                      className="text-2xl"
+                    />
+                    <button className=" flex items-center border border-Grey200 rounded-md space-x-2 p-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                      <h1>Cancel</h1>
+                    </button>
+                  </div>
+                </div>
+                <div className="border-b border-gray-200 mb-4" />
+                <div className="mb-4  flex justify-between items-center">
+                  <h1 className="text-Grey400 text-sm font-bold">
+                    {products.length} items
+                  </h1>
+                  <p className="text-lg font-bold text-Grey500">
+                    ₦{totalPrice.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col space-y-4">
+                  {products.map((product) => (
+                    <div
+                      key={product.id}
+                      className=" bg-Green50 rounded-md border p-4 mb-4"
+                    >
+                      <div className="space-y-6">
+                        <div className="flex justify-between items-center relative">
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            width={124}
+                            height={80}
+                            className="rounded-md"
+                          />
+                          <div className="text-Grey500">
+                            <h2 className="text-lg font-bold">
+                              {product.name}
+                            </h2>
+                            <p className="text-sm">
+                              {product.quantity} kilogram / Bag
+                            </p>
+                          </div>
+                          <div className="">
+                            <button
+                              onClick={() => deleteProduct(product.id)}
+                              className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
+                            >
+                              x
+                            </button>
+                          </div>
+                        </div>
+                        {/* + & - buttons and product price */}
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center space-x-2">
+                            <button
+                              onClick={() => decrementQuantity(product.id)}
+                              className="bg-Grey100 text-Green50 px-2 py-1 rounded-md font-extrabold"
+                            >
+                              -
+                            </button>
+                            <span className="text-lg text-Grey400 font-semibold">
+                              {product.quantity}
+                            </span>
+                            <button
+                              onClick={() => incrementQuantity(product.id)}
+                              className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
+                            >
+                              +
+                            </button>
+                          </div>
+                          <p className="text-lg font-bold text-Grey500 ml-2">
+                            ₦{product.price.toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {/* checkout button */}
+                <div className="">
+                  <Link href="/checkout">
+                    <button className="mt-4 w-full bg-Green500 text-Grey500 font-medium py-2 rounded-md hover:bg-[#5A9E3A] transition">
+                      Checkout
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
       {/* mobile */}
