@@ -145,77 +145,178 @@ const Products = () => {
               </div>
             ))}
           </div>
-          {/* pagination */}
-          <div className="mt-8">
-            {/* Page indicator (always displayed) */}
-            <div className="text-gray-600 w-full text-right">
-              Page{" "}
-              <input
-                type="number"
-                value={currentPage}
-                onChange={(e) =>
-                  setCurrentPage(
-                    Math.max(
-                      1,
-                      Math.min(totalPages, parseInt(e.target.value) || 1)
-                    )
-                  )
-                }
-                className="w-10 text-center border border-gray-300 rounded px-2 mx-1"
-              />{" "}
-              of {totalPages}
-            </div>
+          {/* desktop pagination */}
+          <div className="hidden md:block mt-8">
             {/* Conditional rendering based on current page */}
             {currentPage > 1 ? (
-              // Pagination for pages greater than 1
-              <div className="flex items-center justify-between">
-                {/* Back to Page 1 button */}
-                <button
-                  onClick={() => setCurrentPage(1)}
-                  className="text-Green500 hover:text-Green600 flex items-center"
-                >
-                  <IoChevronBackOutline className="mr-2" />
-                  Back to Page 1
-                </button>
-
-                {/* Previous and Next buttons */}
-                <div className="flex space-x-4">
+              <div className="flex justify-between items-center">
+                <div className="w-full">
+                  {/* Back to Page 1 button */}
                   <button
-                    onClick={handlePreviousPage}
-                    className="bg-Green500 text-white px-4 py-2 rounded hover:bg-green-600 flex items-center"
+                    onClick={() => setCurrentPage(1)}
+                    className="text-Green500 hover:text-green-600 flex items-center"
                   >
                     <IoChevronBackOutline className="mr-2" />
+                    Back to Page 1
                   </button>
+                </div>
+                {/* Previous and Next buttons */}
+                <div className="w-full flex space-x-4">
+                  <button
+                    onClick={handlePreviousPage}
+                    className="border border-gray-300 px-4 py-2 rounded-md  flex items-center"
+                  >
+                    <IoChevronBackOutline className="text-Grey300" />
+                  </button>
+                  <div className="">
+                    {/* Next page button */}
+                    <button
+                      onClick={handleNextPage}
+                      disabled={currentPage === totalPages}
+                      className={`flex justify-center items-center px-4 py-2 rounded-md ${
+                        currentPage === totalPages
+                          ? "bg-Grey200 cursor-not-allowed"
+                          : "bg-Green500 hover:bg-green-600"
+                      }`}
+                    >
+                      Next page
+                      <IoChevronForwardOutline className="h-4 w-4 ml-4" />
+                    </button>
+                  </div>
+                </div>
+                {/* page indicator */}
+                <div className="text-gray-600 w-full text-right">
+                  Page{" "}
+                  <input
+                    type="number"
+                    value={currentPage}
+                    onChange={(e) =>
+                      setCurrentPage(
+                        Math.max(
+                          1,
+                          Math.min(totalPages, parseInt(e.target.value) || 1)
+                        )
+                      )
+                    }
+                    className="w-10 text-center border border-gray-300 rounded px-2 mx-1"
+                  />{" "}
+                  of {totalPages}
+                </div>
+              </div>
+            ) : (
+              // Pagination for page 1
+              <div className="flex justify-between items-center">
+                <div className="w-full">
+                  {/* Next page button */}
                   <button
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
-                    className={`flex items-center justify-center space-x-2 p-2 rounded ${
+                    className={`flex justify-center items-center p-2 rounded ${
                       currentPage === totalPages
                         ? "bg-Grey200 cursor-not-allowed"
                         : "bg-Green500 hover:bg-green-600"
                     }`}
                   >
                     Next page
-                    <IoChevronForwardOutline className="h-4 w-4" />
+                    <IoChevronForwardOutline className="h-4 w-4 ml-4" />
                   </button>
+                </div>
+                {/* page indicator */}
+                <div className="text-gray-600 w-full text-right">
+                  Page{" "}
+                  <input
+                    type="number"
+                    value={currentPage}
+                    onChange={(e) =>
+                      setCurrentPage(
+                        Math.max(
+                          1,
+                          Math.min(totalPages, parseInt(e.target.value) || 1)
+                        )
+                      )
+                    }
+                    className="w-10 text-center border border-gray-300 rounded px-2 mx-1"
+                  />{" "}
+                  of {totalPages}
+                </div>
+              </div>
+            )}
+          </div>
+          {/* mobile pagination */}
+          <div className="md:hidden mt-8">
+            {/* Conditional rendering based on current page */}
+            {currentPage > 1 ? (
+              <div className="flex justify-between items-center">
+                {/* Previous and Next buttons */}
+                <div className="w-full flex space-x-4">
+                  <button
+                    onClick={handlePreviousPage}
+                    className="bg-Green500 px-4 py-2 rounded-md  flex items-center"
+                  >
+                    <IoChevronBackOutline className="text-Grey500" />
+                  </button>
+                  <button
+                    onClick={handleNextPage}
+                    className="bg-Green500 px-4 py-2 rounded-md  flex items-center"
+                  >
+                    <IoChevronForwardOutline className="text-Grey500" />
+                  </button>
+                </div>
+                {/* page indicator */}
+                <div className="text-gray-600 w-full text-right">
+                  Page{" "}
+                  <input
+                    type="number"
+                    value={currentPage}
+                    onChange={(e) =>
+                      setCurrentPage(
+                        Math.max(
+                          1,
+                          Math.min(totalPages, parseInt(e.target.value) || 1)
+                        )
+                      )
+                    }
+                    className="w-10 text-center border border-gray-300 rounded px-2 mx-1"
+                  />{" "}
+                  of {totalPages}
                 </div>
               </div>
             ) : (
               // Pagination for page 1
-              <div className="flex items-center justify-between">
-                {/* Next page button */}
-                <button
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
-                  className={`flex items-center justify-center space-x-2 p-2 rounded ${
-                    currentPage === totalPages
-                      ? "bg-Grey200 cursor-not-allowed"
-                      : "bg-Green500 hover:bg-green-600"
-                  }`}
-                >
-                  Next page
-                  <IoChevronForwardOutline className="h-4 w-4" />
-                </button>
+              <div className="flex justify-between items-center">
+                <div className="w-full">
+                  {/* Next page button */}
+                  <button
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                    className={`flex justify-center items-center p-2 rounded ${
+                      currentPage === totalPages
+                        ? "bg-Grey200 cursor-not-allowed"
+                        : "bg-Green500 hover:bg-green-600"
+                    }`}
+                  >
+                    Next page
+                    <IoChevronForwardOutline className="h-4 w-4 ml-4" />
+                  </button>
+                </div>
+                {/* page indicator */}
+                <div className="text-gray-600 w-full text-right">
+                  Page{" "}
+                  <input
+                    type="number"
+                    value={currentPage}
+                    onChange={(e) =>
+                      setCurrentPage(
+                        Math.max(
+                          1,
+                          Math.min(totalPages, parseInt(e.target.value) || 1)
+                        )
+                      )
+                    }
+                    className="w-10 text-center border border-gray-300 rounded px-2 mx-1"
+                  />{" "}
+                  of {totalPages}
+                </div>
               </div>
             )}
           </div>
