@@ -1,15 +1,18 @@
 "use client";
+import { useGetProducts } from "@/lib/models/product/hooks";
 import Image from "next/image";
 import Link from "next/link";
 import { FaShoppingCart } from "react-icons/fa";
 
 const FeaturedProducts = () => {
+    const {data: fetchProducts, isSuccess} = useGetProducts({})
   const products = Array(14).fill({
     image: "/images/singleProduct.svg",
     title: "Product Name",
     description: "15g",
     price: "₦10,000.00",
   });
+  console.log(fetchProducts)
 
   return (
     <div className="px-4 md:px-20 py-8">
@@ -36,7 +39,7 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Small Products Section Under Large Image */}
-        {products.map((product, index) => (
+        {fetchProducts?.result.map((product, index) => (
           <div
             key={index}
             className="bg-white rounded-lg p-4 shadow-md hover:shadow-lg relative"
