@@ -123,21 +123,21 @@ const Header = () => {
   );
   return (
     <>
-      <header className="hidden md:block px-20 py-4">
-        <div className="w-full rounded-2xl bg-Grey500 text-white py-4 px-6 flex items-center justify-between relative">
-          <Link href="/" className="flex items-center space-x-4">
+      <header className="bg-Grey50 hidden md:block px-20 py-4">
+        <div className="w-full rounded-[28px] bg-Grey500 text-white py-4 px-6 flex items-center justify-between relative">
+          <Link href="/" className="flex items-center space-x-2">
             <Image
               src="/images/logo.svg"
               alt="Agrosuccour Logo"
               width={40}
               height={40}
             />
-            <h1 className="text-2xl font-semibold text-agroLightGreen">
+            <h1 className="text-[32px] font-urbanist font-semibold text-Green100">
               Agrosuccour
             </h1>
           </Link>
           {/* Search Bar */}
-          <div className="flex items-center bg-white rounded overflow-hidden w-full max-w-lg px-4 py-2 relative">
+          <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative">
             <IoMenu
               className="text-Green500 cursor-pointer relative z-50"
               size={20}
@@ -157,7 +157,7 @@ const Header = () => {
           {productsOpen && (
             <div
               ref={productsRef}
-              className="mt-4 bg-Green50 rounded-md shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72"
+              className="mt-4 bg-white rounded-md shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72"
             >
               <ul className="flex flex-col space-y-4 mt-6 mb-6">
                 <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
@@ -254,37 +254,44 @@ const Header = () => {
             </div>
           )}
           {/* navigation */}
-          <ul className="flex space-x-2 text-agroText ">
-            <li className="text-inherit hover:text-green-600 ">
+          <ul className="flex space-x-2 text-Green50 font-nunitoSans">
+            <li className="text-inherit text-[16px] font-[inherit] hover:text-Green500 ">
               <Link href="/">Home</Link>
             </li>
 
-            <li className="text-inherit hover:text-green-600 ">
+            <li className="text-inherit text-[16px] font-[inherit] hover:text-Green500 ">
               <Link href="/about">About</Link>
             </li>
-            <li className="text-inherit hover:text-green-600 ">
+            <li className="text-inherit text-[16px] font-[inherit] hover:text-Green500 ">
               <Link href="/products">Products</Link>
             </li>
           </ul>
           {/* Contact */}
           <div className="flex items-center space-x-2">
-            <FiPhone className="text-lg" />
-            <span>0706375930</span>
+            <FiPhone className=" text-Green50" />
+            <span className="font-nunitoSans text-[13px]">0706375930</span>
           </div>
           {/* Cart */}
           <div onClick={toggleCart} className="relative">
-            <div className="flex items-center space-x-4 cursor-pointer border px-2 py-4 rounded-xl">
-              <FaShoppingCart className="text-2xl" />
-              <div className="relative">
-                <h1>Cart</h1>
-                <span className="absolute -top-2 right-1 bg-red-600 text-white rounded-full px-2 text-xs">
+            <div className="flex items-center space-x-2 cursor-pointer border border-Grey300 p-2 rounded-[12px]">
+              <Image
+                src="/images/header_cart.svg"
+                alt="cart"
+                width={32}
+                height={32}
+              />
+              <div className="relative items-center">
+                <h1 className="text-[13px] text-Green50 font-nunitoSans">
+                  Cart
+                </h1>
+                <span className="absolute -top-3 right-1 bg-red-600 text-white rounded-full px-2 text-xs">
                   4
                 </span>
               </div>
             </div>
             {/* cart dropdown */}
             {cartOpen && (
-              <div className="px-4 py-2 bg-Green50 rounded-md border w-[400px] h-auto absolute z-50 top-16 right-4">
+              <div className="px-4 py-2 bg-white rounded-md border w-[400px] h-auto absolute z-50 top-16 right-4">
                 <div className="flex justify-between items-center mb-4">
                   <h1 className="xl text-Grey400">Cart Overview</h1>
                   <div className="flex items-center space-x-4 text-Grey400">

@@ -52,7 +52,7 @@ const Hero = () => {
         <p className="mb-6 text-sm md:text-lg text-agroText">
           {slides[currentIndex].description}
         </p>
-        <button className="bg-green-600 hover:bg-green-500 text-black text-lg font-semibold px-6 py-3 rounded-lg">
+        <button className="bg-Green500 hover:bg-Green600 text-black text-lg font-semibold px-6 py-3 rounded-lg">
           Shop Now
         </button>
       </div>

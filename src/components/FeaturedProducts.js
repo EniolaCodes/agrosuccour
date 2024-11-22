@@ -16,7 +16,7 @@ const FeaturedProducts = () => {
       <h2 className="text-2xl font-semibold text-Grey500 text-center mb-4">
         <span className="text-Green500">Featured</span> Products
       </h2>
-      <div className="flex justify-between items-center mb-6 bg-Green50 p-4 rounded-2xl">
+      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl">
         <h1 className="text-Grey500 font-semibold text-xl">All Products</h1>
         <Link href="/products">
           <h1 className="text-00">View All</h1>
