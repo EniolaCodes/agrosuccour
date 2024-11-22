@@ -13,9 +13,11 @@ const TopSellingProducts = () => {
   return (
     <div className="px-4 md:px-20 py-8">
       <div className="flex justify-between items-center mb-6 bg-Green50 p-4 rounded-2xl">
-        <h1 className="text-Grey500">Top Selling Products</h1>
+        <h1 className="text-Grey500 text-xl font-semibold">
+          Top Selling Products
+        </h1>
         <Link href="/products">
-          <h1 className="text-green-600 hover:underline">View All</h1>
+          <h1 className="text-Green500">View All</h1>
         </Link>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
@@ -33,12 +35,20 @@ const TopSellingProducts = () => {
                 className="rounded-lg"
               />
             </div>
-            <h3 className="mt-4 text-lg font-semibold">{product.title}</h3>
-            <p className="mt-2 text-green-600 font-bold">
+            <h3 className="mt-4 text-sm text-Grey400 font-semibold">
+              {product.title}
+            </h3>
+            <p className="mt-2 text-Grey200 font-normal">
               {product.description}
             </p>
-            <p className="mt-2 text-green-600 font-bold">{product.price}</p>
-            <FaShoppingCart className="absolute bottom-4 right-4 text-green-600 cursor-pointer" />
+            <div className="flex justify-between items-center">
+              <p className="mt-2 text-Grey500 font-bold">{product.price}</p>
+              <Link href={`/products/${product.id}`} className="">
+                <div className="rounded-full border border-Green500 p-2 text-Green500 cursor-pointer">
+                  <FaShoppingCart className="w-4 h-4" />
+                </div>
+              </Link>
+            </div>
           </div>
         ))}
       </div>
