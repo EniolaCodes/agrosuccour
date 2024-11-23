@@ -139,7 +139,7 @@ const Header = () => {
           {/* Search Bar */}
           <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative">
             <IoMenu
-              className="text-Green500 cursor-pointer relative z-50"
+              className="text-Grey400 cursor-pointer relative z-50"
               size={20}
               onClick={toggleProducts}
             />
@@ -147,19 +147,19 @@ const Header = () => {
             <input
               type="text"
               placeholder="Search your favorite product..."
-              className="flex-1 p-3 text-gray-700 focus:outline-none"
+              className="flex-1 p-3 text-Green50 focus:outline-none"
             />
-            <button className="flex items-center justify-center p-3 bg-green-500 absolute h-full top-0 right-0">
-              <FiSearch className="text-white" />
+            <button className="flex items-center justify-center p-3 bg-Green500 absolute h-full top-0 right-0">
+              <FiSearch className="text-Green50 text-[24px]" />
             </button>
           </div>
           {/*desktop menu */}
           {productsOpen && (
             <div
               ref={productsRef}
-              className="mt-4 bg-white rounded-md shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72"
+              className="mt-4 bg-white rounded-[8px] shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72"
             >
-              <ul className="flex flex-col space-y-4 mt-6 mb-6">
+              <ul className="flex flex-col space-y-4 mt-6 mb-6 text-[13px] font-nunitoSans">
                 <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
                   <Image
                     src="/images/box 1.svg"
@@ -254,15 +254,15 @@ const Header = () => {
             </div>
           )}
           {/* navigation */}
-          <ul className="flex space-x-2 text-Green50 font-nunitoSans">
-            <li className="text-inherit text-[16px] font-[inherit] hover:text-Green500 ">
+          <ul className="flex space-x-2 text-[16px] text-Green50 font-nunitoSans">
+            <li className=" hover:text-Green500 ">
               <Link href="/">Home</Link>
             </li>
 
-            <li className="text-inherit text-[16px] font-[inherit] hover:text-Green500 ">
+            <li className="hover:text-Green500 ">
               <Link href="/about">About</Link>
             </li>
-            <li className="text-inherit text-[16px] font-[inherit] hover:text-Green500 ">
+            <li className="hover:text-Green500 ">
               <Link href="/products">Products</Link>
             </li>
           </ul>
@@ -280,11 +280,11 @@ const Header = () => {
                 width={32}
                 height={32}
               />
-              <div className="relative items-center">
-                <h1 className="text-[13px] text-Green50 font-nunitoSans">
+              <div className="relative text-Green50 font-nunitoSans">
+                <h1 className="text-[13px] text-inherit text-Green50 font-nunitoSans">
                   Cart
                 </h1>
-                <span className="absolute -top-3 right-1 bg-red-600 text-white rounded-full px-2 text-xs">
+                <span className="absolute -top-3 right-1 bg-red-600 text-inherit rounded-full px-2 text-xs">
                   4
                 </span>
               </div>
@@ -293,20 +293,22 @@ const Header = () => {
             {cartOpen && (
               <div className="px-4 py-2 bg-white rounded-md border w-[400px] h-auto absolute z-50 top-16 right-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h1 className="xl text-Grey400">Cart Overview</h1>
+                  <h1 className="font-bold text-[20px] font-nunitoSans text-Grey400">
+                    Cart Overview
+                  </h1>
                   <div className="flex items-center space-x-4 text-Grey400">
                     <ImEnlarge2
                       onClick={handleCartClick}
                       className="text-2xl"
                     />
-                    <button className=" flex items-center border border-Grey200 rounded-md space-x-2 p-2">
+                    <button className=" flex items-center border border-Grey300 rounded-[12px] space-x-2 p-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="w-4 h-4"
+                        className="w-4 h-4 text-[10px]"
                       >
                         <path
                           strokeLinecap="round"
@@ -314,16 +316,16 @@ const Header = () => {
                           d="M6 18L18 6M6 6l12 12"
                         />
                       </svg>
-                      <h1>Cancel</h1>
+                      <h1 className="text-[11px] font-nunitoSans">Cancel</h1>
                     </button>
                   </div>
                 </div>
-                <div className="border-b border-gray-200 mb-4" />
-                <div className="mb-4  flex justify-between items-center">
+                <div className="border-b border-Grey50 mb-4" />
+                <div className="mb-4 font-nunitoSans flex justify-between items-center">
                   <h1 className="text-Grey400 text-sm font-bold">
                     {products.length} items
                   </h1>
-                  <p className="text-lg font-bold text-Grey500">
+                  <p className="text-[16px] font-bold bg-Green100 rounded-[6px] p-1 text-Green900">
                     ₦{totalPrice.toFixed(2)}
                   </p>
                 </div>
@@ -331,7 +333,7 @@ const Header = () => {
                   {products.map((product) => (
                     <div
                       key={product.id}
-                      className=" bg-Green50 rounded-md border p-4 mb-4"
+                      className=" bg-white rounded-[8px] border p-4 mb-4"
                     >
                       <div className="space-y-6">
                         <div className="flex justify-between items-center relative">
@@ -342,11 +344,11 @@ const Header = () => {
                             height={80}
                             className="rounded-md"
                           />
-                          <div className="text-Grey500">
-                            <h2 className="text-lg font-bold">
+                          <div className="">
+                            <h2 className="text-Grey500 text-[16px] font-bold">
                               {product.name}
                             </h2>
-                            <p className="text-sm">
+                            <p className="text-[16px] text-Grey400">
                               {product.quantity} kilogram / Bag
                             </p>
                           </div>
@@ -389,8 +391,8 @@ const Header = () => {
                 {/* checkout button */}
                 <div className="">
                   <Link href="/checkout">
-                    <button className="mt-4 w-full bg-Green500 text-Grey500 font-medium py-2 rounded-md hover:bg-[#5A9E3A] transition">
-                      Checkout
+                    <button className="mt-4 w-full h-[44px] bg-Green500 text-Grey500 text-[16px]uppercase font-bold py-2 rounded-md hover:bg-Green600 transition">
+                      Checkout ( ₦{totalPrice.toFixed(2)} )
                     </button>
                   </Link>
                 </div>
@@ -400,8 +402,8 @@ const Header = () => {
         </div>
       </header>
       {/* mobile */}
-      <header className="px-4 py-2 md:hidden">
-        <div className="w-full rounded-2xl bg-black text-white py-4 px-6 flex flex-col space-y-4 relative">
+      <header className="px-4 py-2 bg-Grey50 md:hidden">
+        <div className="w-full rounded-[28px] bg-Grey500 py-4 px-6 flex flex-col space-y-4 relative">
           {/* logo & cart */}
           <div className="flex items-center justify-between">
             {/* logo */}
@@ -413,58 +415,58 @@ const Header = () => {
                   width={40}
                   height={40}
                 />
-                <h1 className="text-2xl font-semibold text-agroLightGreen">
+                <h1 className="text-[20px] font-urbanist font-semibold text-Green50">
                   Agrosuccour
                 </h1>
               </Link>
             </div>
             {/* cart */}
-            <div className="flex items-center space-x-4 border px-2 py-4 rounded-xl">
+            <div className="flex items-center text-Green50 font-nunitoSans space-x-4 border border-Grey300 px-2 py-4 rounded-[12px]">
               <FaShoppingCart className="text-2xl" />
               <Link href="/cart" className="relative">
                 <h1>Cart</h1>
-                <span className="absolute -top-2 right-1 bg-red-600 text-white rounded-full px-2 text-xs">
+                <span className="absolute -top-2 right-1 bg-red-600 rounded-full px-2 text-xs">
                   4
                 </span>
               </Link>
             </div>
           </div>
           {/* Search Bar */}
-          <div className="flex items-center bg-white rounded overflow-hidden w-full max-w-lg px-4 py-2 relative">
+          <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative">
             <IoMenu
-              className="text-green-600 cursor-pointer relative z-50"
+              className="text-Grey400 cursor-pointer relative z-50"
               size={20}
               onClick={toggleMenu}
             />
             <input
               type="text"
               placeholder="Search your favorite product..."
-              className="flex-1 p-3 text-gray-700 focus:outline-none"
+              className="flex-1 p-3 text-Green50 focus:outline-none"
             />
-            <button className="flex items-center justify-center p-3 bg-green-500 absolute h-full top-0 right-0">
-              <FiSearch className="text-white" />
+            <button className="flex items-center justify-center p-3 bg-Green500 absolute h-full top-0 right-0">
+              <FiSearch className="text-Green50 text-[24px]" />
             </button>
           </div>
           {/* Mobile Menu */}
           {menuOpen && (
             <div
               ref={menuRef}
-              className="mt-2 bg-Green50 rounded-md shadow-lg absolute z-50 top-36 left-8 w-[272px] h-[600px]"
+              className="mt-2 bg-white rounded-md shadow-lg absolute z-50 top-36 left-8 w-[272px] h-[600px]"
             >
               <div className="flex justify-end items-center p-4">
                 <IoClose
-                  className="text-2xl text-Grey400 cursor-pointer relative z-50"
+                  className="text-[14px] text-Grey200 cursor-pointer relative z-50"
                   size={20}
                   onClick={toggleMenu}
                 />
               </div>
-              <ul className="flex flex-col space-y-4 mt-2">
-                <li className="text-Grey500 font-bold hover:bg-Green100 px-6 py-1">
+              <ul className="flex flex-col text-[16px] font-nunitoSans text-Grey500 space-y-4 mt-2">
+                <li className="font-bold hover:bg-Green100 px-6 py-1">
                   <Link href="/" onClick={handleHomeClick}>
                     Home
                   </Link>
                 </li>
-                <li className="text-Grey500 font-bold hover:bg-Green100 px-6 py-1">
+                <li className="font-bold hover:bg-Green100 px-6 py-1">
                   <Link href="/about" onClick={handleAboutClick}>
                     About
                   </Link>
@@ -475,8 +477,8 @@ const Header = () => {
                     onClick={handleCartClick}
                     className="flex items-center justify-between"
                   >
-                    <span className="text-Grey500">Cart</span>
-                    <span className="text-sm bg-red-600 text-white px-2 py-1 rounded-full">
+                    <span className="">Cart</span>
+                    <span className="text-sm bg-red-600 text-Green50 px-2 py-1 rounded-full">
                       4
                     </span>
                   </Link>
@@ -501,7 +503,7 @@ const Header = () => {
                   )}
                 </li>
                 {productsOpen && (
-                  <ul className="bg-Green50 ml-4 space-y-4 mt-4">
+                  <ul className="bg-white ml-4 space-y-4 mt-4 text-[13px] font-nunitoSans">
                     <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1 ">
                       <Image
                         src="/images/box 1.svg"
