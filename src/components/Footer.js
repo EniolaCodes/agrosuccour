@@ -21,7 +21,7 @@ const Footer = () => {
               height={50}
               className=""
             />
-            <h2 className="text-2xl font-semibold text-agroLightGreen">
+            <h2 className="text-3xl font-urbanist font-semibold text-agroLightGreen">
               Agrosuccour
             </h2>
           </div>

@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaShoppingCart } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TopSellingProducts = () => {
   const products = Array(6).fill({
@@ -10,6 +12,9 @@ const TopSellingProducts = () => {
     description: "15g",
     price: "₦10,000.00",
   });
+
+  const notify = () => toast("One item has been added to cart!");
+
   return (
     <div className="px-4 md:px-20 py-8">
       <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
@@ -47,10 +52,11 @@ const TopSellingProducts = () => {
               <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
                 {product.price}
               </p>
-              <Link href={`/products/${product.id}`} className="">
-                <div className="rounded-full border border-Green500 p-2 text-Green500 cursor-pointer">
+              <Link href="/" className="" onClick={notify}>
+                <div className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer">
                   <FaShoppingCart className="w-4 h-4" />
                 </div>
+                <ToastContainer />
               </Link>
             </div>
           </div>
