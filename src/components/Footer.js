@@ -8,7 +8,7 @@ import { FiPhone, FiMail } from "react-icons/fi";
 const Footer = () => {
   return (
     <footer
-      className="w-full relative h-auto bg-cover bg-center bg-no-repeat mt-16 px-4 pt-6 pb-14 md:py-8 md:px-20"
+      className="w-full relative h-auto  bg-cover bg-center bg-no-repeat mt-16 px-4 pt-6 pb-14 md:py-8 md:px-20"
       style={{ backgroundImage: "url('/images/Footer.svg')" }}
     >
       <div className="flex flex-col space-y-10 md:flex-row md:space-x-28">
