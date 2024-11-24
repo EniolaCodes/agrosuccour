@@ -123,7 +123,7 @@ const Header = () => {
   );
   return (
     <>
-      <header className="bg-Grey50 hidden md:block px-20 py-4">
+      <header className=" hidden md:block px-20 py-4">
         <div className="w-full rounded-[28px] bg-Grey500 text-white py-4 px-6 flex items-center justify-between relative">
           <Link href="/" className="flex items-center space-x-2">
             <Image

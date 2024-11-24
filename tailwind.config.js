@@ -10,7 +10,6 @@ module.exports = {
       colors: {
         agroLightGreen: "#C8E6C9",
         agroHeading: "#EEF5E2",
-        agroText: "#9E9E9E",
         agroGreen: "#4caf50",
         agroWhite: "#E8F5E9",
         Green50: "#F0F7EC",

@@ -128,14 +128,18 @@ const Products = () => {
                     className="rounded-lg"
                   />
                 </div>
-                <h3 className="mt-4 text-sm text-Grey400 font-semibold">
-                  {product.title}
-                </h3>
-                <p className="mt-2 text-Grey200 font-normal">
-                  {product.description}
-                </p>
+                <div className="flex flex-col">
+                  <h3 className="mt-4 text-sm text-Grey400 font-semibold">
+                    {product.title}
+                  </h3>
+                  <p className=" text-Grey200 font-normal">
+                    {product.description}
+                  </p>
+                </div>
                 <div className="flex justify-between items-center">
-                  <p className="mt-2 text-Grey500 font-bold">{product.price}</p>
+                  <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
+                    {product.price}
+                  </p>
                   <Link href={`/products/${product.id}`} className="">
                     <div className="rounded-full border border-Green500 p-2 text-Green500 cursor-pointer">
                       <FaShoppingCart className="w-4 h-4" />

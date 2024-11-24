@@ -12,19 +12,21 @@ const TopSellingProducts = () => {
   });
   return (
     <div className="px-4 md:px-20 py-8">
-      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl">
-        <h1 className="text-Grey500 text-xl font-semibold">
+      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
+        <h1 className="text-Grey500 text-4xl font-nunito font-bold">
           Top Selling Products
         </h1>
         <Link href="/products">
-          <h1 className="text-Green500">View All</h1>
+          <h1 className="text-Green500 text-[16px] font-nunitoSans">
+            View All
+          </h1>
         </Link>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
         {products.map((product, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg p-4 shadow-md hover:shadow-lg relative"
+            className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
           >
             <div className="relative w-full h-40 md:h-40">
               <Image
@@ -35,14 +37,16 @@ const TopSellingProducts = () => {
                 className="rounded-lg"
               />
             </div>
-            <h3 className="mt-4 text-sm text-Grey400 font-semibold">
-              {product.title}
-            </h3>
-            <p className="mt-2 text-Grey200 font-normal">
-              {product.description}
-            </p>
+            <div className="flex flex-col">
+              <h3 className="mt-4 text-sm text-Grey400 font-bold">
+                {product.title}
+              </h3>
+              <p className=" text-Grey200">{product.description}</p>
+            </div>
             <div className="flex justify-between items-center">
-              <p className="mt-2 text-Grey500 font-bold">{product.price}</p>
+              <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
+                {product.price}
+              </p>
               <Link href={`/products/${product.id}`} className="">
                 <div className="rounded-full border border-Green500 p-2 text-Green500 cursor-pointer">
                   <FaShoppingCart className="w-4 h-4" />

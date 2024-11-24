@@ -16,13 +16,17 @@ const FeaturedProducts = () => {
 
   return (
     <div className="px-4 md:px-20 py-8">
-      <h2 className="text-2xl font-semibold text-Grey500 text-center mb-4">
+      <h2 className="text-4xl font-nunito font-bold text-Grey500 text-center mb-4">
         <span className="text-Green500">Featured</span> Products
       </h2>
-      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl">
-        <h1 className="text-Grey500 font-semibold text-xl">All Products</h1>
+      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
+        <h1 className="text-Grey500 font-semibold font-nunito text-4xl">
+          All Products
+        </h1>
         <Link href="/products">
-          <h1 className="text-00">View All</h1>
+          <h1 className="text-Green500 text-[16px] font-nunitoSans">
+            View All
+          </h1>
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
@@ -53,14 +57,16 @@ const FeaturedProducts = () => {
                 className="rounded-lg"
               />
             </div>
-            <h3 className="mt-4 text-sm text-Grey400 font-semibold">
-              {product.title}
-            </h3>
-            <p className="mt-2 text-Grey200 font-normal">
-              {product.description}
-            </p>
+            <div className="flex flex-col font-nunitoSans">
+              <h3 className="mt-4 text-sm text-Grey400 font-semibold">
+                {product.title}
+              </h3>
+              <p className=" text-Grey200">{product.description}</p>
+            </div>
             <div className="flex justify-between items-center">
-              <p className="mt-2 text-Grey500 font-bold">{product.price}</p>
+              <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
+                {product.price}
+              </p>
               <Link href={`/products/${product.id}`} className="">
                 <div className="rounded-full border border-Green500 p-2 text-Green500 cursor-pointer">
                   <FaShoppingCart className="w-4 h-4" />

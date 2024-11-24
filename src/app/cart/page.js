@@ -74,7 +74,7 @@ export default function Cart() {
   return (
     <>
       {/* desktop */}
-      <div className="hidden bg-Grey50 md:block px-20 pt-6">
+      <div className="hidden  md:block px-20 pt-6">
         <div className="mb-4 bg-white rounded-[28px] border p-4 flex justify-between items-center">
           <h1 className="text-Grey500 text-[25px] font-bold">Shopping Cart</h1>
           <Link
