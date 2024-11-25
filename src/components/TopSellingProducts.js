@@ -52,7 +52,11 @@ const TopSellingProducts = () => {
               <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
                 {product.price}
               </p>
-              <Link href="/" className="" onClick={notify}>
+              <Link
+                href={`/products/${product.id}`}
+                className=""
+                onClick={notify}
+              >
                 <div className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer">
                   <FaShoppingCart className="w-4 h-4" />
                 </div>

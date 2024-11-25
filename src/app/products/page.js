@@ -109,10 +109,10 @@ const Products = () => {
         </div>
         <div className="flex-1">
           <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
-            <h1 className="text-Grey500 font-semibold font-nunito text-4xl">
+            <h1 className="text-Grey500 font-bold font-nunitotext-[20px] md:text-[25px]">
               All Products
             </h1>
-            <p className="text-Grey200 text-[16px] font-nunitoSans">
+            <p className="text-Grey400 text-[13px] md:text-[16px] font-nunitoSans">
               1500 items
             </p>
           </div>

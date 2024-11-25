@@ -76,10 +76,12 @@ export default function Cart() {
       {/* desktop */}
       <div className="hidden  md:block px-20 pt-6">
         <div className="mb-4 bg-white rounded-[28px] border p-4 flex justify-between items-center">
-          <h1 className="text-Grey500 text-[25px] font-bold">Shopping Cart</h1>
+          <h1 className="text-Grey500 font-nunito text-[25px] font-bold">
+            Shopping Cart
+          </h1>
           <Link
             href="/products"
-            className="text-Green800 border border-Green500 text-[16px] p-4 rounded-[12px]"
+            className="text-Green800 border border-Green500 font-nunitoSans text-[16px] p-4 rounded-[12px]"
           >
             Continue Shopping
           </Link>
@@ -235,7 +237,7 @@ export default function Cart() {
                     <button
                       onClick={() => decrementQuantity(product.id)}
                       className={`px-2 py-1 rounded-md font-extrabold ${
-                        product.quantity > 2
+                        product.quantity > 1
                           ? "bg-Green500 text-Green50"
                           : "bg-Grey100 text-Green50"
                       }`}

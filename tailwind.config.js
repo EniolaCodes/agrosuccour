@@ -25,6 +25,7 @@ module.exports = {
         Grey300: "#5F6A64",
         Grey400: "#404D46",
         Grey500: "#102018",
+        LightGry: "#0E1F16",
       },
       fontFamily: {
         urbanist: ["Urbanist", "sans-serif"],
