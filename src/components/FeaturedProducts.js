@@ -31,7 +31,7 @@ const FeaturedProducts = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
         {/* large image */}
-        <div className="col-span-2 md:col-span-2 md:row-span-2 bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="col-span-2 md:col-span-2 md:row-span-2 bg-Grey500 rounded-[12px] shadow-md overflow-hidden">
           <Image
             src="/images/bigProduct.svg"
             alt="Featured Product"

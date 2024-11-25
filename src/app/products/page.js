@@ -30,7 +30,7 @@ const Products = () => {
       <div className="flex">
         {/* Sidebar - hidden on mobile */}
         <div className="hidden lg:flex w-1/4 h-full">
-          <div className="bg-Green50 p-4 rounded-lg shadow">
+          <div className="bg-white p-4 w-[301px] rounded-[28px] shadow">
             <h2 className="text-xl text-Grey500 font-semibold mb-4">
               Select by category
             </h2>
@@ -65,7 +65,7 @@ const Products = () => {
                 <Image src="/images/wine 1.svg" width={20} height={20} alt="" />
                 <Link href="/products/beverages">Drinks & Beverages</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
                 <Image
                   src="/images/wheat-sack 1.svg"
                   width={20}
@@ -108,12 +108,16 @@ const Products = () => {
           </div>
         </div>
         <div className="flex-1">
-          <div className="flex justify-between items-center mb-6 bg-Green50 p-4 rounded-2xl">
-            <h1 className="text-Grey500 font-semibold text-xl">All Products</h1>
-            <p className="text-Grey200">1500 items</p>
+          <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
+            <h1 className="text-Grey500 font-semibold font-nunito text-4xl">
+              All Products
+            </h1>
+            <p className="text-Grey200 text-[16px] font-nunitoSans">
+              1500 items
+            </p>
           </div>
           {/* all products */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {products.map((product, index) => (
               <div
                 key={index}
@@ -158,7 +162,7 @@ const Products = () => {
                   {/* Back to Page 1 button */}
                   <button
                     onClick={() => setCurrentPage(1)}
-                    className="text-Green500 hover:text-green-600 flex items-center"
+                    className="text-Green500 hover:text-Green600 flex items-center"
                   >
                     <IoChevronBackOutline className="mr-2" />
                     Back to Page 1
@@ -177,10 +181,10 @@ const Products = () => {
                     <button
                       onClick={handleNextPage}
                       disabled={currentPage === totalPages}
-                      className={`flex justify-center items-center px-4 py-2 rounded-md ${
+                      className={`flex justify-center text-Grey500 items-center px-4 py-2 rounded-[12px] ${
                         currentPage === totalPages
                           ? "bg-Grey200 cursor-not-allowed"
-                          : "bg-Green500 hover:bg-green-600"
+                          : "bg-Green500 hover:bg-Green600"
                       }`}
                     >
                       Next page
@@ -189,7 +193,7 @@ const Products = () => {
                   </div>
                 </div>
                 {/* page indicator */}
-                <div className="text-gray-600 w-full text-right">
+                <div className="text-Grey500 font-nunitoSans text-[13px] w-full text-right">
                   Page{" "}
                   <input
                     type="number"
@@ -202,7 +206,7 @@ const Products = () => {
                         )
                       )
                     }
-                    className="w-10 text-center border border-gray-300 rounded px-2 mx-1"
+                    className="w-10 text-center bg-white rounded-[8px] px-2 mx-1"
                   />{" "}
                   of {totalPages}
                 </div>
@@ -226,7 +230,7 @@ const Products = () => {
                   </button>
                 </div>
                 {/* page indicator */}
-                <div className="text-gray-600 w-full text-right">
+                <div className="text-Grey500 font-nunitoSans text-[13px] w-full text-right">
                   Page{" "}
                   <input
                     type="number"
@@ -239,7 +243,7 @@ const Products = () => {
                         )
                       )
                     }
-                    className="w-10 text-center border border-gray-300 rounded px-2 mx-1"
+                    className="w-10 text-center rounded-[8px]  px-2 mx-1"
                   />{" "}
                   of {totalPages}
                 </div>
@@ -267,7 +271,7 @@ const Products = () => {
                   </button>
                 </div>
                 {/* page indicator */}
-                <div className="text-gray-600 w-full text-right">
+                <div className="text-Grey500 font-nunitoSans text-[13px]  w-full text-right">
                   Page{" "}
                   <input
                     type="number"
@@ -280,7 +284,7 @@ const Products = () => {
                         )
                       )
                     }
-                    className="w-10 text-center border border-gray-300 rounded px-2 mx-1"
+                    className="w-10 text-center rounded-[8px]   px-2 mx-1"
                   />{" "}
                   of {totalPages}
                 </div>
@@ -317,7 +321,7 @@ const Products = () => {
                         )
                       )
                     }
-                    className="w-10 text-center border border-gray-300 rounded px-2 mx-1"
+                    className="w-10 text-center rounded-[8px] px-2 mx-1"
                   />{" "}
                   of {totalPages}
                 </div>
