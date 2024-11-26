@@ -20,6 +20,25 @@ console.log('OUR GREAT PARAM', params)
     });
 };
 
+export const useGetSingleProducts = ({productId}) => {
+    // const token = getCookie(USER_TOKEN);
+    console.log('OUR GREAT PARAM', productId)
+    const fetchProducts = () =>
+        backendFetch({
+            endpoint: `/product/${productId}`,
+            // token: token
+        });
+
+    return useQuery({
+        queryKey: ["FETCH_PRODUCT_DETAIL"],
+        queryFn: () => fetchProducts(),
+        ...{
+            staleTime: Infinity,
+
+        }
+    });
+};
+
 // To be used later on
 // export const useGetSingleProducts = ({poductId, options}) => {
 //     // const token = getCookie(USER_TOKEN);

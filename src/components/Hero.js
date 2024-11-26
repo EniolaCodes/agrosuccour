@@ -32,7 +32,7 @@ const Hero = () => {
 
   return (
     <div className="px-4 md:px-20 py-6 ">
-      <div className="w-full relative h-[500px] bg-cover bg-center rounded-2xl overflow-hidden">
+      <div className="w-full relative h-[500px] bg-cover bg-center rounded-[28px] overflow-hidden">
         {/* Slide Image */}
         <div className="absolute inset-0">
           <Image
@@ -41,18 +41,28 @@ const Hero = () => {
             layout="fill"
             objectFit="cover"
           />
-          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(
+            to right,
+            rgba(16, 32, 24, 1) 0%,
+            rgba(16, 32, 24, 0.8) 80%,
+            rgba(16, 32, 24, 0.2) 100%
+          )`,
+            }}
+          ></div>
         </div>
       </div>
       {/* Slide Content */}
       <div className="absolute inset-0 flex flex-col justify-center items-start z-10 ml-6 md:ml-20 px-4 md:px-8 max-w-lg">
-        <h1 className="text-2xl md:text-4xl text-agroWhite font-bold mb-4">
+        <h1 className="text-2xl md:text-4xl font-nunito text-Green50 font-bold mb-4">
           {slides[currentIndex].title}
         </h1>
-        <p className="mb-6 text-sm md:text-lg text-agroText">
+        <p className="mb-6 text-sm md:text-lg text-agroHeading font-nunitoSans">
           {slides[currentIndex].description}
         </p>
-        <button className="bg-green-600 hover:bg-green-500 text-black text-lg font-semibold px-6 py-3 rounded-lg">
+        <button className="bg-Green500 hover:bg-Green600 text-Grey500 font-nunitoSans text-lg font-bold px-6 py-3 rounded-[12px]">
           Shop Now
         </button>
       </div>
