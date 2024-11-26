@@ -76,16 +76,18 @@ export default function Cart() {
       {/* desktop */}
       <div className="hidden  md:block px-20 pt-6">
         <div className="mb-4 bg-white rounded-[28px] border p-4 flex justify-between items-center">
-          <h1 className="text-Grey500 text-[25px] font-bold">Shopping Cart</h1>
+          <h1 className="text-Grey500 font-nunito text-[25px] font-bold">
+            Shopping Cart
+          </h1>
           <Link
             href="/products"
-            className="text-Green800 border border-Green500 text-[16px] p-4 rounded-[12px]"
+            className="text-Green800 border border-Green500 font-nunitoSans text-[16px] p-4 rounded-[12px]"
           >
             Continue Shopping
           </Link>
         </div>
         <div className="flex space-x-4">
-          <div className="bg-white p-4 rounded-[16px] shadow-md flex-1 space-x-8">
+          <div className="bg-white p-4 rounded-[28px] shadow-md flex-1 space-x-8">
             {/* Product List */}
             <div className="space-y-4">
               {products.map((product) => (
@@ -116,7 +118,11 @@ export default function Cart() {
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => decrementQuantity(product.id)}
-                      className="bg-Grey100 text-Green50 px-2 py-1 rounded-md font-extrabold"
+                      className={`px-2 py-1 rounded-md font-extrabold ${
+                        product.quantity > 1
+                          ? "bg-Green500 text-Green50"
+                          : "bg-Grey100 text-Green50"
+                      }`}
                     >
                       -
                     </button>
@@ -143,7 +149,7 @@ export default function Cart() {
             </div>
           </div>
           {/* Order Summary */}
-          <div className="pt-6 bg-white p-4 rounded-[16px] shadow-md flex flex-col space-y-12">
+          <div className="pt-6 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
             <div className="flex justify-between items-center border-b pb-2 mb-4">
               <h2 className="text-[20px] text-Grey500 font-bold">
                 Order summary
@@ -185,7 +191,7 @@ export default function Cart() {
       </div>
       {/* mobile */}
       <div className="px-4 py-2 bg-Grey50 md:hidden">
-        <div className="mb-4 bg-Green50 rounded-md border p-4 flex justify-between items-center">
+        <div className="mb-4 bg-Green50 rounded-[28px] border p-4 flex justify-between items-center">
           <div className="text-Grey400 text-lg font-bold">
             <h1 className="text-Grey500 text-xl font-bold">Shopping Cart</h1>
             <p>₦{totalPrice.toFixed(2)}</p>
@@ -201,7 +207,7 @@ export default function Cart() {
           {products.map((product) => (
             <div
               key={product.id}
-              className=" bg-white rounded-md border p-4 mb-4"
+              className=" bg-white rounded-[28px] border p-4 mb-4"
             >
               <div className="space-y-6">
                 <div className="flex justify-between items-center relative">
@@ -230,7 +236,11 @@ export default function Cart() {
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => decrementQuantity(product.id)}
-                      className="bg-Grey100 text-Green50 px-2 py-1 rounded-md font-extrabold"
+                      className={`px-2 py-1 rounded-md font-extrabold ${
+                        product.quantity > 1
+                          ? "bg-Green500 text-Green50"
+                          : "bg-Grey100 text-Green50"
+                      }`}
                     >
                       -
                     </button>
@@ -255,14 +265,14 @@ export default function Cart() {
         {/* checkout button */}
         <div className="">
           <Link href="/checkout">
-            <button className="mt-4 w-full bg-Green500 text-Grey500 font-medium py-2 rounded-md hover:bg-[#5A9E3A] transition">
+            <button className="mt-4 w-full bg-Green500 text-Grey500 font-medium py-2 rounded-[12px] hover:bg-[#5A9E3A] transition">
               Checkout
             </button>
           </Link>
         </div>
 
         {/* Order Summary */}
-        <div className="pt-6 mt-6 bg-Green50 p-4 rounded-lg shadow-md flex flex-col space-y-12">
+        <div className="pt-6 mt-6 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
           <div className="flex justify-between items-center border-b pb-2 mb-4">
             <h2 className="text-lg text-Grey500 font-semibold">
               Order summary

@@ -31,7 +31,7 @@ const FeaturedProducts = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
         {/* large image */}
-        <div className="col-span-2 md:col-span-2 md:row-span-2 bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="col-span-2 md:col-span-2 md:row-span-2 bg-Grey500 rounded-[12px] shadow-md overflow-hidden">
           <Image
             src="/images/bigProduct.svg"
             alt="Featured Product"
@@ -46,7 +46,7 @@ const FeaturedProducts = () => {
         {products.map((product, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg p-4 shadow-md hover:shadow-lg relative"
+            className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
           >
             <div className="relative w-full h-40 md:h-40">
               <Image
@@ -68,7 +68,7 @@ const FeaturedProducts = () => {
                 {product.price}
               </p>
               <Link href={`/products/${product.id}`} className="">
-                <div className="rounded-full border border-Green500 p-2 text-Green500 cursor-pointer">
+                <div className="rounded-full border border-Green500 p-2 text-Green500 hover:bg-Green500 hover:text-white cursor-pointer">
                   <FaShoppingCart className="w-4 h-4" />
                 </div>
               </Link>
