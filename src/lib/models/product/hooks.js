@@ -1,12 +1,12 @@
 import { backendFetch } from "@/lib/core/client";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetProducts = ({options}) => {
+export const useGetProducts = ({options, params}) => {
     // const token = getCookie(USER_TOKEN);
-
+console.log('OUR GREAT PARAM', params)
     const fetchProducts = () =>
         backendFetch({
-            endpoint: `/product/`,
+            endpoint: `/product/${params}`,
             // token: token
         });
 
@@ -20,8 +20,12 @@ export const useGetProducts = ({options}) => {
     });
 };
 
+// To be used later on
 // export const useGetSingleProducts = ({poductId, options}) => {
 //     // const token = getCookie(USER_TOKEN);
+
+    // const params = `?limit=10&page=${page}`
+    // endpoint: `/poduct/${poductId}/orders/${params}`,
 
 //     const fetchProducts = () =>
 //         backendFetch({

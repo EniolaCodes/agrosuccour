@@ -5,14 +5,17 @@ import Link from "next/link";
 import { FaShoppingCart } from "react-icons/fa";
 
 const FeaturedProducts = () => {
-    const {data: fetchProducts, isSuccess} = useGetProducts({})
+    const {data: fetchProducts, isSuccess} = useGetProducts({
+        params: `?limit=5`
+    })
   const products = Array(14).fill({
     image: "/images/singleProduct.svg",
     title: "Product Name",
     description: "15g",
     price: "₦10,000.00",
   });
-  console.log(fetchProducts)
+//   console.log(fetchProducts)
+  console.log(fetchProducts?.result?.data)
 
   return (
     <div className="px-4 md:px-20 py-8">
@@ -39,7 +42,7 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Small Products Section Under Large Image */}
-        {fetchProducts?.result.map((product, index) => (
+        {fetchProducts?.result?.data?.map((product, index) => (
           <div
             key={index}
             className="bg-white rounded-lg p-4 shadow-md hover:shadow-lg relative"
