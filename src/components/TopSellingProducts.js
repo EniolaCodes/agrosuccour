@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { FaShoppingCart } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -27,11 +26,11 @@ const TopSellingProducts = () => {
           </h1>
         </Link>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
+      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
         {products.map((product, index) => (
           <div
             key={index}
-            className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
+            className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey200 hover:border-solid transition duration-200 ease-in-out"
           >
             <div className="relative w-full h-40 md:h-40">
               <Image
@@ -49,19 +48,22 @@ const TopSellingProducts = () => {
               <p className=" text-Grey200">{product.description}</p>
             </div>
             <div className="flex justify-between items-center">
-              <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
+              <p className="mt-2 text-Grey500 font-nunitoSans text-[20px] font-bold">
                 {product.price}
               </p>
-              <Link
-                href={`/products/${product.id}`}
-                className=""
+
+              <div
                 onClick={notify}
+                className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer"
               >
-                <div className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer">
-                  <FaShoppingCart className="w-4 h-4" />
-                </div>
-                <ToastContainer />
-              </Link>
+                <Image
+                  src="/images/bx_cart-add.svg"
+                  alt="cart"
+                  width={25}
+                  height={25}
+                />
+              </div>
+              <ToastContainer />
             </div>
           </div>
         ))}

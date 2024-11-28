@@ -13,7 +13,7 @@ const Footer = () => {
     >
       <div className="flex flex-col space-y-10 md:flex-row md:space-x-28">
         <div>
-          <div className="flex items-center space-x-4">
+          <div className="flex justify-center items-center space-x-4">
             <Image
               src="/images/logo.svg"
               alt="Agrosuccour Logo"

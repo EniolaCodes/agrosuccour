@@ -87,7 +87,7 @@ const Header = () => {
   };
   const handleCartClick = () => {
     toggleMenu(); // Close the menu
-    router.push("/cart"); // Redirect to the home page
+    router.push("/cart"); // Redirect to the cart page
   };
   // Function to increment quantity
   const incrementQuantity = (id) => {
@@ -125,7 +125,7 @@ const Header = () => {
     <>
       <header className=" hidden md:block px-20 py-4">
         <div className="w-full rounded-[28px] bg-Grey500 text-white py-4 px-6 flex items-center justify-between relative">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex justify-center items-center space-x-2">
             <Image
               src="/images/logo.svg"
               alt="Agrosuccour Logo"
@@ -140,7 +140,7 @@ const Header = () => {
           <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative">
             <IoMenu
               className="text-Grey400 cursor-pointer relative z-50"
-              size={20}
+              size={30}
               onClick={toggleProducts}
             />
 
@@ -267,9 +267,9 @@ const Header = () => {
             </li>
           </ul>
           {/* Contact */}
-          <div className="flex items-center space-x-2">
+          <div className="flex text-[16px] justify-center items-center space-x-2">
             <FiPhone className=" text-Green50" />
-            <span className="font-nunitoSans text-[13px]">0706375930</span>
+            <span className="font-nunitoSans ">0706375930</span>
           </div>
           {/* Cart */}
           <div onClick={toggleCart} className="relative">
@@ -291,7 +291,10 @@ const Header = () => {
             </div>
             {/* cart dropdown */}
             {cartOpen && (
-              <div className="px-4 py-2 bg-white rounded-md border w-[400px] h-auto absolute z-50 top-16 right-4">
+              <div
+                className="px-4 py-2 bg-white rounded-[8px] border w-[400px] h-auto absolute z-50 top-16 right-4"
+                ref={cartRef}
+              >
                 <div className="flex justify-between items-center mb-4">
                   <h1 className="font-bold text-[20px] font-nunitoSans text-Grey400">
                     Cart Overview
@@ -336,21 +339,23 @@ const Header = () => {
                       className=" bg-white rounded-[8px] border p-4 mb-4"
                     >
                       <div className="space-y-6">
-                        <div className="flex justify-between items-center relative">
-                          <Image
-                            src={product.image}
-                            alt={product.name}
-                            width={124}
-                            height={80}
-                            className="rounded-md"
-                          />
-                          <div className="">
-                            <h2 className="text-Grey500 text-[16px] font-bold">
-                              {product.name}
-                            </h2>
-                            <p className="text-[16px] text-Grey400">
-                              {product.quantity} kilogram / Bag
-                            </p>
+                        <div className=" relative">
+                          <div className="flex flex-row space-x-6">
+                            <Image
+                              src={product.image}
+                              alt={product.name}
+                              width={124}
+                              height={80}
+                              className="rounded-md"
+                            />
+                            <div className="">
+                              <h2 className="text-Grey500 text-[16px] font-bold">
+                                {product.name}
+                              </h2>
+                              <p className="text-[16px] text-Grey400">
+                                {product.quantity} kilogram / Bag
+                              </p>
+                            </div>
                           </div>
                           <div className="">
                             <button
@@ -393,9 +398,9 @@ const Header = () => {
                   ))}
                 </div>
                 {/* checkout button */}
-                <div className="">
+                <div className="pb-6">
                   <Link href="/checkout">
-                    <button className="mt-4 w-full h-[44px] bg-Green500 text-Grey500 text-[16px]uppercase font-bold py-2 rounded-md hover:bg-Green600 transition">
+                    <button className="mt-4 w-full h-[44px] bg-Green500 text-Grey500 text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
                       Checkout ( ₦{totalPrice.toFixed(2)} )
                     </button>
                   </Link>

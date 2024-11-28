@@ -190,15 +190,15 @@ export default function Cart() {
         </div>
       </div>
       {/* mobile */}
-      <div className="px-4 py-2 bg-Grey50 md:hidden">
-        <div className="mb-4 bg-Green50 rounded-[28px] border p-4 flex justify-between items-center">
+      <div className="px-4 py-2 md:hidden">
+        <div className="mb-4 bg-white rounded-[28px] border p-4 flex justify-between items-center">
           <div className="text-Grey400 text-lg font-bold">
             <h1 className="text-Grey500 text-xl font-bold">Shopping Cart</h1>
             <p>₦{totalPrice.toFixed(2)}</p>
           </div>
           <Link
             href="/products"
-            className="text-Green800 border border-Green500 text-xs p-4 rounded-[12px]"
+            className="text-Green800 border border-Green500 hover:border-Green600 text-xs p-4 rounded-[12px]"
           >
             Continue Shopping
           </Link>
@@ -210,17 +210,21 @@ export default function Cart() {
               className=" bg-white rounded-[28px] border p-4 mb-4"
             >
               <div className="space-y-6">
-                <div className="flex justify-between items-center relative">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={124}
-                    height={80}
-                    className="rounded-md"
-                  />
-                  <div className="text-Grey500">
-                    <h2 className="text-lg font-bold">{product.name}</h2>
-                    <p className="text-sm">{product.quantity} kilogram / Bag</p>
+                <div className=" relative">
+                  <div className="flex flex-row items-center space-x-6">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={124}
+                      height={80}
+                      className="rounded-md"
+                    />
+                    <div className="text-Grey500">
+                      <h2 className="text-lg font-bold">{product.name}</h2>
+                      <p className="text-sm">
+                        {product.quantity} kilogram / Bag
+                      </p>
+                    </div>
                   </div>
                   <div className="">
                     <button
@@ -239,7 +243,7 @@ export default function Cart() {
                       className={`px-2 py-1 rounded-md font-extrabold ${
                         product.quantity > 1
                           ? "bg-Green500 text-Green50"
-                          : "bg-Grey100 text-Green50"
+                          : "bg-Green100 text-Green50"
                       }`}
                     >
                       -
@@ -298,7 +302,7 @@ export default function Cart() {
             <p>₦0.00</p>
           </div>
 
-          <div className="flex justify-between items-center text-Grey400 text-lg font-bold border-b pb-2">
+          <div className="flex justify-between items-center text-Grey500 text-[20px] font-bold border-b pb-2">
             <p className="text-medium">Total:</p>
             <p>₦{totalPrice.toFixed(2)}</p>
           </div>

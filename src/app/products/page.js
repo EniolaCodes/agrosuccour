@@ -61,7 +61,7 @@ const Products = () => {
                 />
                 <Link href="/products/vegetables">Vegetables</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 px-6 py-1">
                 <Image src="/images/wine 1.svg" width={20} height={20} alt="" />
                 <Link href="/products/beverages">Drinks & Beverages</Link>
               </li>
@@ -121,7 +121,7 @@ const Products = () => {
             {products.map((product, index) => (
               <div
                 key={index}
-                className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
+                className="bg-white shadow-md rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
               >
                 <div className="relative w-full h-40 md:h-40">
                   <Image
@@ -144,11 +144,18 @@ const Products = () => {
                   <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
                     {product.price}
                   </p>
-                  <Link href={`/products/${product.id}`} className="">
-                    <div className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white  cursor-pointer">
-                      <FaShoppingCart className="w-4 h-4" />
-                    </div>
-                  </Link>
+
+                  <div
+                    onClick={notify}
+                    className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white  cursor-pointer"
+                  >
+                    <Image
+                      src="/images/bx_cart-add.svg"
+                      alt="cart"
+                      width={25}
+                      height={25}
+                    />
+                  </div>
                 </div>
               </div>
             ))}

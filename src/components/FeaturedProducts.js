@@ -2,7 +2,8 @@
 // import { useGetProducts } from "@/lib/models/product/hooks";
 import Image from "next/image";
 import Link from "next/link";
-import { FaShoppingCart } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const FeaturedProducts = () => {
   // const {data: fetchProducts, isSuccess} = useGetProducts({})
@@ -13,6 +14,8 @@ const FeaturedProducts = () => {
     price: "₦10,000.00",
   });
   // console.log(fetchProducts);
+  const notify = () => toast("One item has been added to cart!");
+  console.log(notify);
 
   return (
     <div className="px-4 md:px-20 py-8">
@@ -29,7 +32,7 @@ const FeaturedProducts = () => {
           </h1>
         </Link>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-1 md:grid-cols-6 gap-6">
         {/* large image */}
         <div className="col-span-2 md:col-span-2 md:row-span-2 bg-Grey500 rounded-[12px] shadow-md overflow-hidden">
           <Image
@@ -44,36 +47,46 @@ const FeaturedProducts = () => {
 
         {/* Small Products Section Under Large Image */}
         {products.map((product, index) => (
-          <div
+          <Link
+            href={`/products/${product.id}`}
             key={index}
-            className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
+            className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey200 hover:border-solid transition duration-200 ease-in-out"
           >
-            <div className="relative w-full h-40 md:h-40">
-              <Image
-                src={product.image}
-                alt={product.title}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
-              />
-            </div>
-            <div className="flex flex-col font-nunitoSans">
-              <h3 className="mt-4 text-sm text-Grey400 font-semibold">
-                {product.title}
-              </h3>
-              <p className=" text-Grey200">{product.description}</p>
-            </div>
-            <div className="flex justify-between items-center">
-              <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
-                {product.price}
-              </p>
-              <Link href={`/products/${product.id}`} className="">
-                <div className="rounded-full border border-Green500 p-2 text-Green500 hover:bg-Green500 hover:text-white cursor-pointer">
-                  <FaShoppingCart className="w-4 h-4" />
+            <div>
+              <div className="relative w-full h-40 md:h-40">
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg"
+                />
+              </div>
+              <div className="flex flex-col font-nunitoSans">
+                <h3 className="mt-4 text-sm text-Grey400 font-semibold">
+                  {product.title}
+                </h3>
+                <p className=" text-Grey200">{product.description}</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <p className="mt-2 text-Grey500 font-nunitoSans text-[20px] font-bold">
+                  {product.price}
+                </p>
+                <div
+                  onClick={notify}
+                  className="rounded-full border border-Green500 p-2 text-Green500 hover:bg-Green500 hover:text-white cursor-pointer"
+                >
+                  <Image
+                    src="/images/bx_cart-add.svg"
+                    alt="cart"
+                    width={25}
+                    height={25}
+                  />
                 </div>
-              </Link>
+                <ToastContainer />
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
