@@ -2,7 +2,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaShoppingCart, FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
+import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -146,7 +147,8 @@ const ProductDetails = () => {
           {products.map((product, index) => (
             <div
               key={index}
-              className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
+              onClick={notify}
+              className="bg-white shadow-md rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
             >
               <div className="relative w-full h-40 md:h-40">
                 <Image
@@ -167,18 +169,9 @@ const ProductDetails = () => {
                 <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
                   {product.price}
                 </p>
-                <div
-                  onClick={notify}
-                  className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer"
-                >
-                  <Image
-                    src="/images/bx_cart-add.svg"
-                    alt="cart"
-                    width={25}
-                    height={25}
-                  />
+                <div className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer">
+                  <MdAddShoppingCart className="text-[20px]" />
                 </div>
-                <ToastContainer />
               </div>
             </div>
           ))}

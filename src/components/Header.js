@@ -132,7 +132,7 @@ const Header = () => {
               width={40}
               height={40}
             />
-            <h1 className="text-[32px] font-urbanist font-semibold text-Green100">
+            <h1 className="text-3xl font-urbanist font-semibold text-Green100">
               Agrosuccour
             </h1>
           </Link>
@@ -157,10 +157,10 @@ const Header = () => {
           {productsOpen && (
             <div
               ref={productsRef}
-              className="mt-4 bg-white rounded-[8px] shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72"
+              className="mt-4 p-4 bg-white rounded-[8px] shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72"
             >
               <ul className="flex flex-col space-y-4 mt-6 mb-6 text-[13px] font-nunitoSans">
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/box 1.svg"
                     width={20}
@@ -169,7 +169,7 @@ const Header = () => {
                   />
                   <Link href="/products/all">All Products</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/apple 1.svg"
                     width={20}
@@ -178,7 +178,7 @@ const Header = () => {
                   />
                   <Link href="/products/fruits">Fruits</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/meat 1.svg"
                     width={20}
@@ -187,7 +187,7 @@ const Header = () => {
                   />
                   <Link href="/products/meat">Meat and Fish</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/cabbage 1.svg"
                     width={20}
@@ -196,7 +196,7 @@ const Header = () => {
                   />
                   <Link href="/products/vegetables">Vegetables</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/wine 1.svg"
                     width={20}
@@ -205,7 +205,7 @@ const Header = () => {
                   />
                   <Link href="/products/beverages">Drinks & Beverages</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/wheat-sack 1.svg"
                     width={20}
@@ -214,7 +214,7 @@ const Header = () => {
                   />
                   <Link href="/products/drygoods">Dry Goods</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/cooking-oil 1.svg"
                     width={20}
@@ -223,7 +223,7 @@ const Header = () => {
                   />
                   <Link href="/products/oils">Oils</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/milk 1.svg"
                     width={20}
@@ -232,7 +232,7 @@ const Header = () => {
                   />
                   <Link href="/products/dairy">Dairy</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/food 1.svg"
                     width={20}
@@ -241,7 +241,7 @@ const Header = () => {
                   />
                   <Link href="/products/baking">Baking Goods</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
                   <Image
                     src="/images/spice 1.svg"
                     width={20}

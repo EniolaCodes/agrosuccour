@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -30,7 +31,7 @@ const TopSellingProducts = () => {
         {products.map((product, index) => (
           <div
             key={index}
-            className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey200 hover:border-solid transition duration-200 ease-in-out"
+            className="bg-white shadow-md rounded-[16px] p-4 hover:border border-Grey200 hover:border-solid transition duration-200 ease-in-out"
           >
             <div className="relative w-full h-40 md:h-40">
               <Image
@@ -56,17 +57,12 @@ const TopSellingProducts = () => {
                 onClick={notify}
                 className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer"
               >
-                <Image
-                  src="/images/bx_cart-add.svg"
-                  alt="cart"
-                  width={25}
-                  height={25}
-                />
+                <MdAddShoppingCart className="text-[20px]" />
               </div>
-              <ToastContainer />
             </div>
           </div>
         ))}
+        <ToastContainer />
       </div>
     </div>
   );
