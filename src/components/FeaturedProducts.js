@@ -15,8 +15,14 @@ const FeaturedProducts = () => {
     price: "₦10,000.00",
   });
   // console.log(fetchProducts);
-  const notify = () => toast("One item has been added to cart!");
-  console.log(notify);
+
+  const notify = (event) => {
+    toast("One item has been added to cart!");
+  };
+  const handleCartClick = (event) => {
+    event.preventDefault(); // Prevent default Link behavior
+    notify(event);
+  };
 
   return (
     <div className="px-4 md:px-20 py-8">
@@ -33,7 +39,7 @@ const FeaturedProducts = () => {
           </h1>
         </Link>
       </div>
-      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-1 md:grid-cols-6 gap-6">
+      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-1 md:grid-cols-6 gap-6 overflow-y-scroll">
         {/* large image */}
         <div className="col-span-2 md:col-span-2 md:row-span-2 bg-Grey500 rounded-[12px] shadow-md overflow-hidden">
           <Image
@@ -45,7 +51,6 @@ const FeaturedProducts = () => {
             className="object-cover"
           />
         </div>
-
         {/* Small Products Section Under Large Image */}
         {products.map((product, index) => (
           <Link
@@ -74,7 +79,7 @@ const FeaturedProducts = () => {
                   {product.price}
                 </p>
                 <div
-                  key={index}
+                  onClickCapture={handleCartClick}
                   className="rounded-full border border-Green500 p-2 text-Green500 hover:bg-Green500 hover:text-white cursor-pointer"
                 >
                   <MdAddShoppingCart className="text-[20px]" />

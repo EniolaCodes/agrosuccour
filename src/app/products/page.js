@@ -111,7 +111,7 @@ const Products = () => {
             </ul>
           </div>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 overflow-y-scroll">
           <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
             <h1 className="text-Grey500 font-bold font-nunitotext-[20px] md:text-[25px]">
               All Products

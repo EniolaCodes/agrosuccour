@@ -13,7 +13,13 @@ const TopSellingProducts = () => {
     price: "₦10,000.00",
   });
 
-  const notify = () => toast("One item has been added to cart!");
+  const notify = (event) => {
+    toast("One item has been added to cart!");
+  };
+  const handleCartClick = (event) => {
+    event.preventDefault(); // Prevent default Link behavior
+    notify(event);
+  };
 
   return (
     <div className="px-4 md:px-20 py-8">
@@ -27,9 +33,10 @@ const TopSellingProducts = () => {
           </h1>
         </Link>
       </div>
-      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
+      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6 overflow-y-scroll">
         {products.map((product, index) => (
-          <div
+          <Link
+            href={`/products/${product.id}`}
             key={index}
             className="bg-white shadow-md rounded-[16px] p-4 hover:border border-Grey200 hover:border-solid transition duration-200 ease-in-out"
           >
@@ -54,13 +61,13 @@ const TopSellingProducts = () => {
               </p>
 
               <div
-                onClick={notify}
+                onClickCapture={handleCartClick}
                 className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer"
               >
                 <MdAddShoppingCart className="text-[20px]" />
               </div>
             </div>
-          </div>
+          </Link>
         ))}
         <ToastContainer />
       </div>

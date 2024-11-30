@@ -81,75 +81,83 @@ export default function Cart() {
           </h1>
           <Link
             href="/products"
-            className="text-Green800 border border-Green500 font-nunitoSans text-[16px] p-4 rounded-[12px]"
+            className="text-Green800 hover:text-Green600 border border-Green500 font-nunitoSans text-[16px] p-4 rounded-[12px]"
           >
             Continue Shopping
           </Link>
         </div>
         <div className="flex space-x-4">
-          <div className="bg-white p-4 rounded-[28px] shadow-md flex-1 space-x-8">
-            {/* Product List */}
-            <div className="space-y-4">
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className="flex items-center justify-between border-b pb-4"
-                >
-                  <div className="flex items-center space-x-8">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={124}
-                      height={80}
-                      className="rounded-md"
-                    />
-                    <div className="">
-                      <h2 className="text-[20px] text-Grey500 font-bold">
-                        {product.name}
-                      </h2>
-                      <p className="text-xs text-Grey400">
-                        {product.quantity} kilogram / Bag
+          <div className="bg-white p-4 rounded-[28px] h-auto shadow-md flex-1 space-x-8">
+            <div className="">
+              {/* Product List */}
+              <div className="space-y-4">
+                {products.length > 0 ? (
+                  products.map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex items-center justify-between border-b pb-4"
+                    >
+                      <div className="flex items-center space-x-8">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          width={124}
+                          height={80}
+                          className="rounded-md"
+                        />
+                        <div>
+                          <h2 className="text-[20px] text-Grey500 font-bold">
+                            {product.name}
+                          </h2>
+                          <p className="text-[16px] text-Grey400">
+                            {product.quantity} kilogram / Bag
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-[20px] font-bold text-Grey500 ml-2">
+                        ₦{product.price.toFixed(2)}
                       </p>
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => decrementQuantity(product.id)}
+                          className={`px-2 py-1 rounded-md font-extrabold ${
+                            product.quantity > 1
+                              ? "bg-Green500 text-Green50"
+                              : "bg-Grey100 text-Green50"
+                          }`}
+                        >
+                          -
+                        </button>
+                        <span className="text-lg font-semibold">
+                          {product.quantity}
+                        </span>
+                        <button
+                          onClick={() => incrementQuantity(product.id)}
+                          className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          onClick={() => deleteProduct(product.id)}
+                          className="text-Grey400 text-[16px] hover:text-red-600 ml-2"
+                        >
+                          x
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <p className="text-[20px] font-bold text-Grey500 ml-2">
-                    ₦{product.price.toFixed(2)}
+                  ))
+                ) : (
+                  <p className="text-center font-bold text-[20px] text-Green500">
+                    No products in your cart.
                   </p>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => decrementQuantity(product.id)}
-                      className={`px-2 py-1 rounded-md font-extrabold ${
-                        product.quantity > 1
-                          ? "bg-Green500 text-Green50"
-                          : "bg-Grey100 text-Green50"
-                      }`}
-                    >
-                      -
-                    </button>
-                    <span className="text-lg font-semibold">
-                      {product.quantity}
-                    </span>
-                    <button
-                      onClick={() => incrementQuantity(product.id)}
-                      className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <div className="">
-                    <button
-                      onClick={() => deleteProduct(product.id)}
-                      className="text-Grey400 hover:text-red-600 ml-2"
-                    >
-                      x
-                    </button>
-                  </div>
-                </div>
-              ))}
+                )}
+              </div>
             </div>
           </div>
           {/* Order Summary */}
-          <div className="pt-6 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
+          <div className="w-[350px] pt-6 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
             <div className="flex justify-between items-center border-b pb-2 mb-4">
               <h2 className="text-[20px] text-Grey500 font-bold">
                 Order summary
@@ -167,12 +175,12 @@ export default function Cart() {
               </p>
             </div>
 
-            <div className="flex justify-between items-center text-Grey400 text-[13px] border-b pb-2">
+            <div className="flex justify-between items-center text-[16px]  text-Grey400 border-b pb-2">
               <p>Subtotal:</p>
               <p>₦{totalPrice.toFixed(2)}</p>
             </div>
 
-            <div className="flex justify-between items-center text-Grey400 text-[13px] border-b pb-2">
+            <div className="flex justify-between items-center text-Grey400 text-[16px] border-b pb-2">
               <p>Other fees:</p>
               <p>₦0.00</p>
             </div>
@@ -194,7 +202,7 @@ export default function Cart() {
         <div className="mb-4 bg-white rounded-[28px] border p-4 flex justify-between items-center">
           <div className="text-Grey400 text-lg font-bold">
             <h1 className="text-Grey500 text-xl font-bold">Shopping Cart</h1>
-            <p>₦{totalPrice.toFixed(2)}</p>
+            <p className="text-[16px]">₦{totalPrice.toFixed(2)}</p>
           </div>
           <Link
             href="/products"
@@ -204,67 +212,73 @@ export default function Cart() {
           </Link>
         </div>
         <div className="flex flex-col space-y-4">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className=" bg-white rounded-[28px] border p-4 mb-4"
-            >
-              <div className="space-y-6">
-                <div className=" relative">
-                  <div className="flex flex-row items-center space-x-6">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={124}
-                      height={80}
-                      className="rounded-md"
-                    />
-                    <div className="text-Grey500">
-                      <h2 className="text-lg font-bold">{product.name}</h2>
-                      <p className="text-sm">
-                        {product.quantity} kilogram / Bag
-                      </p>
+          {products.length > 0 ? (
+            products.map((product) => (
+              <div
+                key={product.id}
+                className=" bg-white rounded-[28px] border p-4 mb-4"
+              >
+                <div className="space-y-6">
+                  <div className=" relative">
+                    <div className="flex flex-row items-center space-x-6">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={124}
+                        height={80}
+                        className="rounded-md"
+                      />
+                      <div className="text-Grey500">
+                        <h2 className="text-lg font-bold">{product.name}</h2>
+                        <p className="text-sm">
+                          {product.quantity} kilogram / Bag
+                        </p>
+                      </div>
+                    </div>
+                    <div className="">
+                      <button
+                        onClick={() => deleteProduct(product.id)}
+                        className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
+                      >
+                        x
+                      </button>
                     </div>
                   </div>
-                  <div className="">
-                    <button
-                      onClick={() => deleteProduct(product.id)}
-                      className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
-                    >
-                      x
-                    </button>
+                  {/* + & - buttons and product price */}
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => decrementQuantity(product.id)}
+                        className={`px-2 py-1 rounded-md font-extrabold ${
+                          product.quantity > 1
+                            ? "bg-Green500 text-Green50"
+                            : "bg-Green100 text-Green50"
+                        }`}
+                      >
+                        -
+                      </button>
+                      <span className="text-lg font-semibold">
+                        {product.quantity}
+                      </span>
+                      <button
+                        onClick={() => incrementQuantity(product.id)}
+                        className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <p className="text-lg font-bold text-Grey500 ml-2">
+                      ₦{product.price.toFixed(2)}
+                    </p>
                   </div>
-                </div>
-                {/* + & - buttons and product price */}
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => decrementQuantity(product.id)}
-                      className={`px-2 py-1 rounded-md font-extrabold ${
-                        product.quantity > 1
-                          ? "bg-Green500 text-Green50"
-                          : "bg-Green100 text-Green50"
-                      }`}
-                    >
-                      -
-                    </button>
-                    <span className="text-lg font-semibold">
-                      {product.quantity}
-                    </span>
-                    <button
-                      onClick={() => incrementQuantity(product.id)}
-                      className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <p className="text-lg font-bold text-Grey500 ml-2">
-                    ₦{product.price.toFixed(2)}
-                  </p>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-center font-bold text-[16px] text-Green500">
+              No products in your cart.
+            </p>
+          )}
         </div>
         {/* checkout button */}
         <div className="">

@@ -25,8 +25,13 @@ const ProductDetails = () => {
     description: "15g",
     price: "₦10,000.00",
   });
-
-  const notify = () => toast("One item has been added to cart!");
+  const notify = (event) => {
+    toast("One item has been added to cart!");
+  };
+  const handleCartClick = (event) => {
+    event.preventDefault(); // Prevent default Link behavior
+    notify(event);
+  };
   return (
     <div className="px-4 md:px-20 py-8 min-h-screen">
       <div className="bg-white rounded-[28px] p-4">
@@ -133,7 +138,7 @@ const ProductDetails = () => {
 
       {/* related products */}
       <div className="mt-8">
-        <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
+        <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px] overflow-y-scroll">
           <h1 className="text-Grey500 text-[20px] md:text-4xl font-nunito font-bold">
             Related Products
           </h1>
@@ -143,11 +148,13 @@ const ProductDetails = () => {
             </h1>
           </Link>
         </div>
-        <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
+        <Link
+          href={`/products/${products.id}`}
+          className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6"
+        >
           {products.map((product, index) => (
             <div
               key={index}
-              onClick={notify}
               className="bg-white shadow-md rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
             >
               <div className="relative w-full h-40 md:h-40">
@@ -169,14 +176,17 @@ const ProductDetails = () => {
                 <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
                   {product.price}
                 </p>
-                <div className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer">
+                <div
+                  onClick={handleCartClick}
+                  className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer"
+                >
                   <MdAddShoppingCart className="text-[20px]" />
                 </div>
               </div>
             </div>
           ))}
           <ToastContainer />
-        </div>
+        </Link>
       </div>
     </div>
   );

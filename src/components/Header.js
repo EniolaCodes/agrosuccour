@@ -56,9 +56,11 @@ const Header = () => {
       setMenuOpen(false);
     }
     if (productsRef.current && !productsRef.current.contains(event.target)) {
+      console.log("product closed");
       setProductsOpen(false);
     }
     if (cartRef.current && !cartRef.current.contains(event.target)) {
+      console.log("cart closed");
       setCartOpen(false);
     }
   };
@@ -122,7 +124,17 @@ const Header = () => {
     0
   );
   return (
-    <>
+    <div>
+      {(productsOpen || cartOpen) && (
+        <div
+          className="fixed inset-0 bg-Grey500 bg-opacity-50 z-40"
+          onClick={() => {
+            setProductsOpen(false);
+            setCartOpen(false);
+          }}
+        />
+      )}
+
       <header className=" hidden md:block px-20 py-4">
         <div className="w-full rounded-[28px] bg-Grey500 text-white py-4 px-6 flex items-center justify-between relative">
           <Link href="/" className="flex justify-center items-center space-x-2">
@@ -132,7 +144,7 @@ const Header = () => {
               width={40}
               height={40}
             />
-            <h1 className="text-3xl font-urbanist font-semibold text-Green100">
+            <h1 className="text-[33px] mt-4 font-urbanist font-semibold text-Green100">
               Agrosuccour
             </h1>
           </Link>
@@ -292,7 +304,7 @@ const Header = () => {
             {/* cart dropdown */}
             {cartOpen && (
               <div
-                className="px-4 py-2 bg-white rounded-[8px] border w-[400px] h-auto absolute z-50 top-16 right-4"
+                className="px-4 py-2 bg-white rounded-[8px] border w-[400px] h-auto absolute z-50 top-16 -right-10 overflow-y-scroll"
                 ref={cartRef}
               >
                 <div className="flex justify-between items-center mb-4">
@@ -300,10 +312,9 @@ const Header = () => {
                     Cart Overview
                   </h1>
                   <div className="flex items-center space-x-4 text-Grey400">
-                    <ImEnlarge2
-                      onClick={handleCartClick}
-                      className="text-2xl"
-                    />
+                    <Link href="/cart">
+                      <ImEnlarge2 className="text-2xl" />
+                    </Link>
                     <button className=" flex items-center border border-Grey300 rounded-[12px] space-x-2 p-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -610,7 +621,7 @@ const Header = () => {
           )}
         </div>
       </header>
-    </>
+    </div>
   );
 };
 
