@@ -4,9 +4,10 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { IoMenu, IoClose, IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { BsCart2 } from "react-icons/bs";
 import { FiSearch, FiPhone } from "react-icons/fi";
-import { FaShoppingCart } from "react-icons/fa";
 import { ImEnlarge2 } from "react-icons/im";
+import CartComponent from "@/components/CartComponent";
 
 const Header = () => {
   // Initial product data
@@ -285,140 +286,125 @@ const Header = () => {
           </div>
           {/* Cart */}
           <div onClick={toggleCart} className="relative">
-            <div className="flex items-center space-x-2 cursor-pointer border border-Grey300 p-2 rounded-[12px]">
-              <Image
-                src="/images/header_cart.svg"
-                alt="cart"
-                width={32}
-                height={32}
-              />
-              <div className="relative text-Green50 font-nunitoSans">
-                <h1 className="text-[13px] text-inherit text-Green50 font-nunitoSans">
-                  Cart
+            <CartComponent />
+          </div>
+          {/* cart dropdown */}
+          {cartOpen && (
+            <div
+              className="px-4 py-2 bg-white rounded-[8px] border w-[400px] h-auto absolute z-50 top-16 -right-10 overflow-y-scroll"
+              ref={cartRef}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="font-bold text-[20px] font-nunitoSans text-Grey400">
+                  Cart Overview
                 </h1>
-                <span className="absolute -top-3 right-1 bg-red-600 text-inherit rounded-full px-2 text-xs">
-                  4
-                </span>
-              </div>
-            </div>
-            {/* cart dropdown */}
-            {cartOpen && (
-              <div
-                className="px-4 py-2 bg-white rounded-[8px] border w-[400px] h-auto absolute z-50 top-16 -right-10 overflow-y-scroll"
-                ref={cartRef}
-              >
-                <div className="flex justify-between items-center mb-4">
-                  <h1 className="font-bold text-[20px] font-nunitoSans text-Grey400">
-                    Cart Overview
-                  </h1>
-                  <div className="flex items-center space-x-4 text-Grey400">
-                    <Link href="/cart">
-                      <ImEnlarge2 className="text-2xl" />
-                    </Link>
-                    <button className=" flex items-center border border-Grey300 rounded-[12px] space-x-2 p-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-4 h-4 text-[10px]"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                      <h1 className="text-[11px] font-nunitoSans">Cancel</h1>
-                    </button>
-                  </div>
-                </div>
-                <div className="border-b border-Grey50 mb-4" />
-                <div className="mb-4 font-nunitoSans flex justify-between items-center">
-                  <h1 className="text-Grey400 text-sm font-bold">
-                    {products.length} items
-                  </h1>
-                  <p className="text-[16px] font-bold bg-Green100 rounded-[6px] p-1 text-Green900">
-                    ₦{totalPrice.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col space-y-4">
-                  {products.map((product) => (
-                    <div
-                      key={product.id}
-                      className=" bg-white rounded-[8px] border p-4 mb-4"
+                <div className="flex items-center space-x-4 text-Grey400">
+                  <Link href="/cart">
+                    <ImEnlarge2 className="text-2xl" />
+                  </Link>
+                  <button className=" flex items-center border border-Grey300 rounded-[12px] space-x-2 p-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-4 h-4 text-[10px]"
                     >
-                      <div className="space-y-6">
-                        <div className=" relative">
-                          <div className="flex flex-row space-x-6">
-                            <Image
-                              src={product.image}
-                              alt={product.name}
-                              width={124}
-                              height={80}
-                              className="rounded-md"
-                            />
-                            <div className="">
-                              <h2 className="text-Grey500 text-[16px] font-bold">
-                                {product.name}
-                              </h2>
-                              <p className="text-[16px] text-Grey400">
-                                {product.quantity} kilogram / Bag
-                              </p>
-                            </div>
-                          </div>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    <h1 className="text-[11px] font-nunitoSans">Cancel</h1>
+                  </button>
+                </div>
+              </div>
+              <div className="border-b border-Grey50 mb-4" />
+              <div className="mb-4 font-nunitoSans flex justify-between items-center">
+                <h1 className="text-Grey400 text-sm font-bold">
+                  {products.length} items
+                </h1>
+                <p className="text-[16px] font-bold bg-Green100 rounded-[6px] p-1 text-Green900">
+                  ₦{totalPrice.toFixed(2)}
+                </p>
+              </div>
+              <div className="flex flex-col space-y-4">
+                {products.map((product) => (
+                  <div
+                    key={product.id}
+                    className=" bg-white rounded-[8px] border p-4 mb-4"
+                  >
+                    <div className="space-y-6">
+                      <div className=" relative">
+                        <div className="flex flex-row space-x-6">
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            width={124}
+                            height={80}
+                            className="rounded-md"
+                          />
                           <div className="">
-                            <button
-                              onClick={() => deleteProduct(product.id)}
-                              className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
-                            >
-                              x
-                            </button>
+                            <h2 className="text-Grey500 text-[16px] font-bold">
+                              {product.name}
+                            </h2>
+                            <p className="text-[16px] text-Grey400">
+                              {product.quantity} kilogram / Bag
+                            </p>
                           </div>
                         </div>
-                        {/* + & - buttons and product price */}
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center space-x-2">
-                            <button
-                              onClick={() => decrementQuantity(product.id)}
-                              className={`px-2 py-1 rounded-md font-extrabold ${
-                                product.quantity > 1
-                                  ? "bg-Green500 text-Green50"
-                                  : "bg-Grey100 text-Green50"
-                              }`}
-                            >
-                              -
-                            </button>
-                            <span className="text-lg text-Grey400 font-semibold">
-                              {product.quantity}
-                            </span>
-                            <button
-                              onClick={() => incrementQuantity(product.id)}
-                              className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
-                            >
-                              +
-                            </button>
-                          </div>
-                          <p className="text-lg font-bold text-Grey500 ml-2">
-                            ₦{product.price.toFixed(2)}
-                          </p>
+                        <div className="">
+                          <button
+                            onClick={() => deleteProduct(product.id)}
+                            className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
+                          >
+                            x
+                          </button>
                         </div>
                       </div>
+                      {/* + & - buttons and product price */}
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => decrementQuantity(product.id)}
+                            className={`px-2 py-1 rounded-md font-extrabold ${
+                              product.quantity > 1
+                                ? "bg-Green500 text-Green50"
+                                : "bg-Grey100 text-Green50"
+                            }`}
+                          >
+                            -
+                          </button>
+                          <span className="text-lg text-Grey400 font-semibold">
+                            {product.quantity}
+                          </span>
+                          <button
+                            onClick={() => incrementQuantity(product.id)}
+                            className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <p className="text-lg font-bold text-Grey500 ml-2">
+                          ₦{product.price.toFixed(2)}
+                        </p>
+                      </div>
                     </div>
-                  ))}
-                </div>
-                {/* checkout button */}
-                <div className="pb-6">
-                  <Link href="/checkout">
-                    <button className="mt-4 w-full h-[44px] bg-Green500 text-Grey500 text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
-                      Checkout ( ₦{totalPrice.toFixed(2)} )
-                    </button>
-                  </Link>
-                </div>
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
+              {/* checkout button */}
+              <div className="pb-6">
+                <Link href="/checkout">
+                  <button className="mt-4 w-full h-[44px] bg-Green500 text-Grey500 text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
+                    Checkout ( ₦{totalPrice.toFixed(2)} )
+                  </button>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </header>
       {/* mobile */}
@@ -440,16 +426,8 @@ const Header = () => {
                 </h1>
               </Link>
             </div>
-            {/* cart */}
-            <div className="flex items-center text-Green50 font-nunitoSans space-x-4 border border-Grey300 px-2 py-4 rounded-[12px]">
-              <FaShoppingCart className="text-2xl" />
-              <Link href="/cart" className="relative">
-                <h1>Cart</h1>
-                <span className="absolute -top-2 right-1 bg-red-600 rounded-full px-2 text-xs">
-                  4
-                </span>
-              </Link>
-            </div>
+            {/* cart component */}
+            <CartComponent />
           </div>
           {/* Search Bar */}
           <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative">
@@ -523,8 +501,8 @@ const Header = () => {
                   )}
                 </li>
                 {productsOpen && (
-                  <ul className="bg-white ml-4 space-y-4 mt-4 text-[13px] font-nunitoSans">
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1 ">
+                  <ul className="bg-white p-4 ml-4 space-y-4 mt-4 text-[13px] font-nunitoSans">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image
                         src="/images/box 1.svg"
                         width={20}
@@ -533,7 +511,7 @@ const Header = () => {
                       />
                       <Link href="/products/all">All Products</Link>
                     </li>
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1 w-full">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image
                         src="/images/apple 1.svg"
                         width={20}
@@ -542,7 +520,7 @@ const Header = () => {
                       />
                       <Link href="/products/fruits">Fruits</Link>
                     </li>
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image
                         src="/images/meat 1.svg"
                         width={20}
@@ -551,7 +529,7 @@ const Header = () => {
                       />
                       <Link href="/products/meat">Meat and Fish</Link>
                     </li>
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image
                         src="/images/cabbage 1.svg"
                         width={20}
@@ -560,7 +538,7 @@ const Header = () => {
                       />
                       <Link href="/products/vegetables">Vegetables</Link>
                     </li>
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image
                         src="/images/wine 1.svg"
                         width={20}
@@ -569,7 +547,7 @@ const Header = () => {
                       />
                       <Link href="/products/beverages">Drinks & Beverages</Link>
                     </li>
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image
                         src="/images/wheat-sack 1.svg"
                         width={20}
@@ -578,7 +556,7 @@ const Header = () => {
                       />
                       <Link href="/products/drygoods">Dry Goods</Link>
                     </li>
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image
                         src="/images/cooking-oil 1.svg"
                         width={20}
@@ -587,7 +565,7 @@ const Header = () => {
                       />
                       <Link href="/products/oils">Oils</Link>
                     </li>
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image
                         src="/images/milk 1.svg"
                         width={20}
@@ -596,7 +574,7 @@ const Header = () => {
                       />
                       <Link href="/products/dairy">Dairy</Link>
                     </li>
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image
                         src="/images/food 1.svg"
                         width={20}
@@ -605,7 +583,7 @@ const Header = () => {
                       />
                       <Link href="/products/baking">Baking Goods</Link>
                     </li>
-                    <li className="flex space-x-4 text-Grey400 hover:bg-Green100 px-6 py-1 mb-6">
+                    <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px]  mb-6">
                       <Image
                         src="/images/spice 1.svg"
                         width={20}

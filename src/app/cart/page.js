@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { MdAddShoppingCart } from "react-icons/md";
 
 export default function Cart() {
   // Initial product data
@@ -149,9 +150,17 @@ export default function Cart() {
                     </div>
                   ))
                 ) : (
-                  <p className="text-center font-bold text-[20px] text-Green500">
-                    No products in your cart.
-                  </p>
+                  <div className="flex flex-col items-center ">
+                    <Link
+                      href="/products"
+                      className="bg-white text-Green500   rounded-full p-4 hover:text-white hover:bg-Green500 transition duration-150"
+                    >
+                      <MdAddShoppingCart className=" text-[20px]" />
+                    </Link>
+                    <p className="text-center font-bold text-[16px] text-Grey500">
+                      Your cart is empty!
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
@@ -206,7 +215,7 @@ export default function Cart() {
           </div>
           <Link
             href="/products"
-            className="text-Green800 border border-Green500 hover:border-Green600 text-xs p-4 rounded-[12px]"
+            className="text-Green800 border border-Green500 hover:text-Green600 text-xs p-4 rounded-[12px]"
           >
             Continue Shopping
           </Link>
@@ -275,9 +284,17 @@ export default function Cart() {
               </div>
             ))
           ) : (
-            <p className="text-center font-bold text-[16px] text-Green500">
-              No products in your cart.
-            </p>
+            <div className="flex flex-col items-center ">
+              <Link
+                href="/products"
+                className="bg-white text-Green500   rounded-full p-4 hover:text-white hover:bg-Green500 transition duration-150"
+              >
+                <MdAddShoppingCart className=" text-[20px]" />
+              </Link>
+              <p className="text-center font-bold text-[16px] text-Grey500">
+                Your cart is empty!
+              </p>
+            </div>
           )}
         </div>
         {/* checkout button */}

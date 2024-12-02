@@ -98,10 +98,12 @@ const ProductDetails = () => {
               <p className="text-2xl font-bold text-Grey500">₦{totalPrice}</p>
             </div>
             {/* Add to Cart Button */}
-            <button className="w-full bg-Green500 text-Grey500 font-bold py-2 rounded-[12px] hover:bg-Green600 h-[56px] mt-8">
-              Add to cart
-            </button>
-
+            <Link href="/cart">
+              <button className="flex items-center justify-center gap-4 w-full bg-Green500 text-Grey500 font-bold py-2 rounded-[12px] hover:bg-Green600 h-[56px] mt-8">
+                <MdAddShoppingCart className="text-[20px]" />
+                <span>Add to cart</span>
+              </button>
+            </Link>
             {/* Product Description */}
             <div className="mt-16">
               <h2 className="font-bold text-[20px] font-nunitoSans text-Grey400">
@@ -143,7 +145,7 @@ const ProductDetails = () => {
             Related Products
           </h1>
           <Link href="/products">
-            <h1 className="text-Green500 text-[13px] md:text-[16px] font-nunitoSans">
+            <h1 className="text-Green500 hover:text-Green800 text-[13px] md:text-[16px] font-nunitoSans">
               View All
             </h1>
           </Link>

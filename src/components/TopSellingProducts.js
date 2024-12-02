@@ -17,7 +17,7 @@ const TopSellingProducts = () => {
     toast("Cart successfully updated");
   };
   const handleCartClick = (event) => {
-    event.preventDefault(); // Prevent default Link behavior
+    event.preventDefault();
     notify(event);
   };
 
@@ -28,12 +28,12 @@ const TopSellingProducts = () => {
           Top Selling Products
         </h1>
         <Link href="/products">
-          <h1 className="text-Green500 text-[16px] font-nunitoSans">
+          <h1 className="text-Green500 hover:text-Green800  text-[16px] font-nunitoSans">
             View All
           </h1>
         </Link>
       </div>
-      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6 overflow-y-scroll">
+      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
         {products.map((product, index) => (
           <Link
             href={`/products/${product.id}`}

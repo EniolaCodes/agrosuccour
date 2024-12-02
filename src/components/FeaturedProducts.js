@@ -34,12 +34,12 @@ const FeaturedProducts = () => {
           All Products
         </h1>
         <Link href="/products">
-          <h1 className="text-Green500 text-[16px] font-nunitoSans">
+          <h1 className="text-Green500 hover:text-Green800  text-[16px] font-nunitoSans">
             View All
           </h1>
         </Link>
       </div>
-      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-1 md:grid-cols-6 gap-6 overflow-y-scroll">
+      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-1 md:grid-cols-6 gap-6">
         {/* large image */}
         <div className="col-span-2 md:col-span-2 md:row-span-2 bg-Grey500 rounded-[12px] shadow-md overflow-hidden">
           <Image

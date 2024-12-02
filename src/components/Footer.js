@@ -40,17 +40,17 @@ const Footer = () => {
               Useful links
             </h3>
             <ul className="space-y-2 text-agroHeading opacity-80">
-              <li className="text-inherit">
+              <li className="text-inherit hover:text-Green500 ">
                 <Link href="/">Home</Link>
               </li>
-              <li className="text-inherit">
-                <Link href="/#about">About</Link>
+              <li className="text-inherit hover:text-Green500 ">
+                <Link href="/about">About</Link>
               </li>
-              <li className="text-inherit">
-                <Link href="/#products">Products</Link>
+              <li className="text-inherit hover:text-Green500 ">
+                <Link href="/products">Products</Link>
               </li>
-              <li className="text-inherit">
-                <Link href="/#carts">Carts</Link>
+              <li className="text-inherit hover:text-Green500 ">
+                <Link href="/cart">Cart</Link>
               </li>
             </ul>
           </div>
