@@ -26,7 +26,7 @@ const ProductDetails = () => {
     price: "₦10,000.00",
   });
   const notify = (event) => {
-    toast("One item has been added to cart!");
+    toast("Cart successfully updated");
   };
   const handleCartClick = (event) => {
     event.preventDefault(); // Prevent default Link behavior
@@ -40,7 +40,7 @@ const ProductDetails = () => {
         </h1>
         <div className=" flex flex-col md:flex-row md:space-x-8">
           {/* Sidebar for smaller images */}
-          <div className="hidden md:flex md:flex-col md:space-y-4 ">
+          <div className="hidden md:flex md:flex-col md:space-y-4 mt-2 ">
             {[1, 2, 3].map((_, index) => (
               <Image
                 key={index}
@@ -54,7 +54,7 @@ const ProductDetails = () => {
           </div>
 
           {/* Large Image */}
-          <div className="flex-1 mb-4 md:mb-0">
+          <div className="flex-1">
             <Image
               src="/images/meat 1.svg"
               alt="Large image"
@@ -66,14 +66,14 @@ const ProductDetails = () => {
 
           {/* Product Details */}
           <div className="flex-1 mt-6">
-            <h1 className="text-[20px] md:text-[31px] font-nunitoSans font-bold text-Grey500">
+            <h1 className="text-[20px] mb-2 md:text-[31px] font-nunitoSans font-bold text-Grey500">
               Pepper mixed for soup - Elo
             </h1>
             <p className="text-LightGrey text-sm md:text-[25px] opacity-80 font-nunito">
               1 kilogram / Bag
             </p>
             {/* Quantity Selector & Price */}
-            <div className="mt-4 flex items-center justify-between border border-Green500 p-3 rounded-[8px]">
+            <div className="mt-6 flex items-center justify-between border border-Green500 p-3 rounded-[8px]">
               <div className="flex items-center space-x-2">
                 <button
                   onClick={handleDecrement}
@@ -103,7 +103,7 @@ const ProductDetails = () => {
             </button>
 
             {/* Product Description */}
-            <div className="mt-10">
+            <div className="mt-16">
               <h2 className="font-bold text-[20px] font-nunitoSans text-Grey400">
                 Product Description
               </h2>
@@ -114,11 +114,11 @@ const ProductDetails = () => {
               </p>
             </div>
             {/* Contact Support */}
-            <div className="mt-4 p-4 bg-Grey500 rounded-[12px]">
+            <div className="flex flex-col items-center mt-4 p-4 bg-Grey400 rounded-[12px]">
               <p className="mb-4 text-[16px] font-nunitoSans font-bold text-Grey50">
                 Looking for more details about this item?
               </p>
-              <p className="mb-4 text-[10px] text-Grey100">
+              <p className="mb-4 text-[9px] md:text-[10px] text-Grey100">
                 Anything you want to know? We're here for you, and we'll reply
                 in 2 minutes or less.
               </p>
@@ -155,7 +155,7 @@ const ProductDetails = () => {
           {products.map((product, index) => (
             <div
               key={index}
-              className="bg-white shadow-md rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
+              className="bg-white rounded-[16px] p-4 shadow-custom hover:shadow-custom-hover transition-shadow duration-300"
             >
               <div className="relative w-full h-40 md:h-40">
                 <Image

@@ -33,6 +33,12 @@ module.exports = {
         nunito: ["Nunito", "sans-serif"],
         nunitoSans: ["Nunito Sans", "sans-serif"],
       },
+      boxShadow: {
+        custom:
+          "0 16px 32px -4px rgba(16, 32, 24, 0.1), 0 2px 4px 0 rgba(16, 32, 24, 0.04)",
+        "custom-hover":
+          "0 24px 48px -8px rgba(16, 32, 24, 0.12), 0 2px 4px 0 rgba(16, 32, 24, 0.04)",
+      },
     },
   },
   plugins: [],

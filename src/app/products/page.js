@@ -28,7 +28,7 @@ const Products = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  const notify = () => toast("One item has been added to cart!");
+  const notify = () => toast("Cart successfully updated");
   return (
     <div className="px-4 md:px-20 py-8">
       <div className="flex">
@@ -111,7 +111,7 @@ const Products = () => {
             </ul>
           </div>
         </div>
-        <div className="flex-1 overflow-y-scroll">
+        <div className="flex-1">
           <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
             <h1 className="text-Grey500 font-bold font-nunitotext-[20px] md:text-[25px]">
               All Products
@@ -125,7 +125,7 @@ const Products = () => {
             {products.map((product, index) => (
               <div
                 key={index}
-                className="bg-white shadow-md rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
+                className="bg-white  rounded-[16px] p-4 shadow-custom hover:shadow-custom-hover transition-shadow duration-300"
               >
                 <div className="relative w-full h-40 md:h-40">
                   <Image
@@ -200,7 +200,7 @@ const Products = () => {
                   </div>
                 </div>
                 {/* page indicator */}
-                <div className="text-Grey500 font-nunitoSans text-[13px] w-full text-right">
+                <div className="text-Grey500 font-nunitoSans text-[16px] w-full text-right">
                   Page{" "}
                   <input
                     type="number"

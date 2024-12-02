@@ -17,7 +17,7 @@ const FeaturedProducts = () => {
   // console.log(fetchProducts);
 
   const notify = (event) => {
-    toast("One item has been added to cart!");
+    toast("Cart successfully updated");
   };
   const handleCartClick = (event) => {
     event.preventDefault(); // Prevent default Link behavior
@@ -56,7 +56,7 @@ const FeaturedProducts = () => {
           <Link
             href={`/products/${product.id}`}
             key={index}
-            className="bg-white shadow-md rounded-[16px] p-4 hover:border border-Grey200 hover:border-solid transition duration-200 ease-in-out"
+            className="bg-white rounded-[16px] p-4 shadow-custom hover:shadow-custom-hover transition-shadow duration-300"
           >
             <div>
               <div className="relative w-full h-40 md:h-40">
