@@ -121,10 +121,10 @@ export default function Cart() {
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => decrementQuantity(product.id)}
-                          className={`px-2 py-1 rounded-md font-extrabold ${
+                          className={`px-3 py-1 rounded-md font-extrabold ${
                             product.quantity > 1
                               ? "bg-Green500 text-Green50"
-                              : "bg-Grey100 text-Green50"
+                              : "bg-Green200 text-Green50"
                           }`}
                         >
                           -
@@ -134,7 +134,7 @@ export default function Cart() {
                         </span>
                         <button
                           onClick={() => incrementQuantity(product.id)}
-                          className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
+                          className="bg-Green500 text-Green50 px-3 py-1 rounded-md font-bold"
                         >
                           +
                         </button>
@@ -258,10 +258,10 @@ export default function Cart() {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => decrementQuantity(product.id)}
-                        className={`px-2 py-1 rounded-md font-extrabold ${
+                        className={`px-5 py-1 rounded-md font-extrabold ${
                           product.quantity > 1
                             ? "bg-Green500 text-Green50"
-                            : "bg-Green100 text-Green50"
+                            : "bg-Green200 text-Green50"
                         }`}
                       >
                         -
@@ -271,7 +271,7 @@ export default function Cart() {
                       </span>
                       <button
                         onClick={() => incrementQuantity(product.id)}
-                        className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
+                        className="bg-Green500 text-Green50 px-5 py-1 rounded-md font-bold"
                       >
                         +
                       </button>

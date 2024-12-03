@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
@@ -7,18 +8,30 @@ import "react-toastify/dist/ReactToastify.css";
 
 const TopSellingProducts = () => {
   const products = Array(6).fill({
+    id: Math.random(),
     image: "/images/chicken.svg",
     title: "Product Name",
     description: "15g",
     price: "₦10,000.00",
   });
 
-  const notify = (event) => {
-    toast("Cart successfully updated");
+  const [cartState, setCartState] = useState(
+    Array(products.length).fill(false)
+  );
+  const notify = (message) => {
+    toast(message);
   };
-  const handleCartClick = (event) => {
-    event.preventDefault();
-    notify(event);
+
+  const toggleCart = (index) => {
+    const updatedCartState = [...cartState];
+    updatedCartState[index] = !updatedCartState[index];
+    setCartState(updatedCartState);
+
+    if (updatedCartState[index]) {
+      notify("Cart successfully updated");
+    } else {
+      notify("One item removed from cart");
+    }
   };
 
   return (
@@ -38,7 +51,7 @@ const TopSellingProducts = () => {
           <Link
             href={`/products/${product.id}`}
             key={index}
-            className="bg-white rounded-[16px] p-4 shadow-custom hover:shadow-customHover transition-shadow duration-300"
+            className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
           >
             <div className="relative w-full h-40 md:h-40">
               <Image
@@ -61,8 +74,15 @@ const TopSellingProducts = () => {
               </p>
 
               <div
-                onClickCapture={handleCartClick}
-                className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleCart(index);
+                }}
+                className={`rounded-full border p-2 cursor-pointer transition-colors ${
+                  cartState[index]
+                    ? "bg-Green500 text-white border-Green500"
+                    : "border-Green500 text-Green500"
+                }`}
               >
                 <MdAddShoppingCart className="text-[20px]" />
               </div>

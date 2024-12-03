@@ -128,7 +128,7 @@ const Header = () => {
     <div>
       {(productsOpen || cartOpen) && (
         <div
-          className="fixed inset-0 bg-Grey500 bg-opacity-50 z-40"
+          className="fixed inset-0 bg-Grey500 bg-opacity-70 z-40"
           onClick={() => {
             setProductsOpen(false);
             setCartOpen(false);
@@ -173,7 +173,7 @@ const Header = () => {
               className="mt-4 p-4 bg-white rounded-[8px] shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72"
             >
               <ul className="flex flex-col space-y-4 mt-6 mb-6 text-[13px] font-nunitoSans">
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/box 1.svg"
                     width={20}
@@ -182,7 +182,7 @@ const Header = () => {
                   />
                   <Link href="/products/all">All Products</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/apple 1.svg"
                     width={20}
@@ -191,7 +191,7 @@ const Header = () => {
                   />
                   <Link href="/products/fruits">Fruits</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/meat 1.svg"
                     width={20}
@@ -200,7 +200,7 @@ const Header = () => {
                   />
                   <Link href="/products/meat">Meat and Fish</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/cabbage 1.svg"
                     width={20}
@@ -209,7 +209,7 @@ const Header = () => {
                   />
                   <Link href="/products/vegetables">Vegetables</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/wine 1.svg"
                     width={20}
@@ -218,7 +218,7 @@ const Header = () => {
                   />
                   <Link href="/products/beverages">Drinks & Beverages</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/wheat-sack 1.svg"
                     width={20}
@@ -227,7 +227,7 @@ const Header = () => {
                   />
                   <Link href="/products/drygoods">Dry Goods</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/cooking-oil 1.svg"
                     width={20}
@@ -236,7 +236,7 @@ const Header = () => {
                   />
                   <Link href="/products/oils">Oils</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/milk 1.svg"
                     width={20}
@@ -245,7 +245,7 @@ const Header = () => {
                   />
                   <Link href="/products/dairy">Dairy</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/food 1.svg"
                     width={20}
@@ -254,7 +254,7 @@ const Header = () => {
                   />
                   <Link href="/products/baking">Baking Goods</Link>
                 </li>
-                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-4">
+                <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/spice 1.svg"
                     width={20}
@@ -387,10 +387,10 @@ const Header = () => {
                             <div className="flex items-center space-x-2">
                               <button
                                 onClick={() => decrementQuantity(product.id)}
-                                className={`px-2 py-1 rounded-md font-extrabold ${
+                                className={`px-3 py-1 rounded-md font-extrabold ${
                                   product.quantity > 1
                                     ? "bg-Green500 text-Green50"
-                                    : "bg-Grey100 text-Green50"
+                                    : "bg-Green200 text-Green50"
                                 }`}
                               >
                                 -
@@ -400,7 +400,7 @@ const Header = () => {
                               </span>
                               <button
                                 onClick={() => incrementQuantity(product.id)}
-                                className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
+                                className="bg-Green500 text-Green50 px-3 py-1 rounded-md font-bold"
                               >
                                 +
                               </button>
