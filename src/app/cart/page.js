@@ -88,7 +88,7 @@ export default function Cart() {
           </Link>
         </div>
         <div className="flex space-x-4">
-          <div className="bg-white p-4 rounded-[28px] h-auto shadow-md flex-1 space-x-8">
+          <div className="bg-white p-4 rounded-[28px] shadow-md flex-1 space-x-8">
             <div className="">
               {/* Product List */}
               <div className="space-y-4">
@@ -199,7 +199,7 @@ export default function Cart() {
               <p>₦{totalPrice.toFixed(2)}</p>
             </div>
             <Link href="/checkout">
-              <button className="mt-4 w-full h-[44px] bg-Green500 text-Grey500 text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+              <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
                 Checkout
               </button>
             </Link>
@@ -300,7 +300,7 @@ export default function Cart() {
         {/* checkout button */}
         <div className="">
           <Link href="/checkout">
-            <button className="mt-4 w-full bg-Green500 text-Grey500 font-medium py-2 rounded-[12px] hover:bg-[#5A9E3A] transition">
+            <button className="mt-4 w-full bg-Green500 text-white font-medium py-2 rounded-[12px] hover:bg-[#5A9E3A] transition">
               Checkout
             </button>
           </Link>

@@ -38,7 +38,7 @@ const TopSellingProducts = () => {
           <Link
             href={`/products/${product.id}`}
             key={index}
-            className="bg-white rounded-[16px] p-4 shadow-custom hover:shadow-custom-hover transition-shadow duration-300"
+            className="bg-white rounded-[16px] p-4 shadow-custom hover:shadow-customHover transition-shadow duration-300"
           >
             <div className="relative w-full h-40 md:h-40">
               <Image

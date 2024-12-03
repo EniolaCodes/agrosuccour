@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { IoMenu, IoClose, IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { BsCart2 } from "react-icons/bs";
+import { MdAddShoppingCart } from "react-icons/md";
 import { FiSearch, FiPhone } from "react-icons/fi";
 import { ImEnlarge2 } from "react-icons/im";
 import CartComponent from "@/components/CartComponent";
@@ -300,9 +300,12 @@ const Header = () => {
                 </h1>
                 <div className="flex items-center space-x-4 text-Grey400">
                   <Link href="/cart">
-                    <ImEnlarge2 className="text-2xl" />
+                    <ImEnlarge2 onClick={toggleCart} className="text-2xl" />
                   </Link>
-                  <button className=" flex items-center border border-Grey300 rounded-[12px] space-x-2 p-2">
+                  <button
+                    onClick={toggleCart}
+                    className=" flex items-center border border-Grey300 rounded-[12px] space-x-2 p-2"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -322,87 +325,104 @@ const Header = () => {
                 </div>
               </div>
               <div className="border-b border-Grey50 mb-4" />
-              <div className="mb-4 font-nunitoSans flex justify-between items-center">
-                <h1 className="text-Grey400 text-sm font-bold">
-                  {products.length} items
-                </h1>
-                <p className="text-[16px] font-bold bg-Green100 rounded-[6px] p-1 text-Green900">
-                  ₦{totalPrice.toFixed(2)}
-                </p>
-              </div>
-              <div className="flex flex-col space-y-4">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className=" bg-white rounded-[8px] border p-4 mb-4"
+              {/* Check if the cart is empty */}
+              {products.length === 0 ? (
+                <div className="flex flex-col items-center mb-6">
+                  <Link
+                    href="/products"
+                    className="bg-white text-Green500 rounded-full p-4 hover:text-white hover:bg-Green500 transition duration-150"
                   >
-                    <div className="space-y-6">
-                      <div className=" relative">
-                        <div className="flex flex-row space-x-6">
-                          <Image
-                            src={product.image}
-                            alt={product.name}
-                            width={124}
-                            height={80}
-                            className="rounded-md"
-                          />
-                          <div className="">
-                            <h2 className="text-Grey500 text-[16px] font-bold">
-                              {product.name}
-                            </h2>
-                            <p className="text-[16px] text-Grey400">
-                              {product.quantity} kilogram / Bag
+                    <MdAddShoppingCart className="text-[20px]" />
+                  </Link>
+                  <p className="text-center font-bold text-[16px] text-Grey500">
+                    Your cart is empty!
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-4 font-nunitoSans flex justify-between items-center">
+                    <h1 className="text-Grey400 text-sm font-bold">
+                      {products.length} items
+                    </h1>
+                    <p className="text-[16px] font-bold bg-Green100 rounded-[6px] p-1 text-Green900">
+                      ₦{totalPrice.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col space-y-4">
+                    {products.map((product) => (
+                      <div
+                        key={product.id}
+                        className=" bg-white rounded-[8px] border p-4 mb-4"
+                      >
+                        <div className="space-y-6">
+                          <div className=" relative">
+                            <div className="flex flex-row space-x-6">
+                              <Image
+                                src={product.image}
+                                alt={product.name}
+                                width={124}
+                                height={80}
+                                className="rounded-md"
+                              />
+                              <div className="">
+                                <h2 className="text-Grey500 text-[16px] font-bold">
+                                  {product.name}
+                                </h2>
+                                <p className="text-[16px] text-Grey400">
+                                  {product.quantity} kilogram / Bag
+                                </p>
+                              </div>
+                            </div>
+                            <div className="">
+                              <button
+                                onClick={() => deleteProduct(product.id)}
+                                className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
+                              >
+                                x
+                              </button>
+                            </div>
+                          </div>
+                          {/* + & - buttons and product price */}
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center space-x-2">
+                              <button
+                                onClick={() => decrementQuantity(product.id)}
+                                className={`px-2 py-1 rounded-md font-extrabold ${
+                                  product.quantity > 1
+                                    ? "bg-Green500 text-Green50"
+                                    : "bg-Grey100 text-Green50"
+                                }`}
+                              >
+                                -
+                              </button>
+                              <span className="text-lg text-Grey400 font-semibold">
+                                {product.quantity}
+                              </span>
+                              <button
+                                onClick={() => incrementQuantity(product.id)}
+                                className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
+                              >
+                                +
+                              </button>
+                            </div>
+                            <p className="text-lg font-bold text-Grey500 ml-2">
+                              ₦{product.price.toFixed(2)}
                             </p>
                           </div>
                         </div>
-                        <div className="">
-                          <button
-                            onClick={() => deleteProduct(product.id)}
-                            className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
-                          >
-                            x
-                          </button>
-                        </div>
                       </div>
-                      {/* + & - buttons and product price */}
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => decrementQuantity(product.id)}
-                            className={`px-2 py-1 rounded-md font-extrabold ${
-                              product.quantity > 1
-                                ? "bg-Green500 text-Green50"
-                                : "bg-Grey100 text-Green50"
-                            }`}
-                          >
-                            -
-                          </button>
-                          <span className="text-lg text-Grey400 font-semibold">
-                            {product.quantity}
-                          </span>
-                          <button
-                            onClick={() => incrementQuantity(product.id)}
-                            className="bg-Green500 text-Green50 px-2 py-1 rounded-md font-bold"
-                          >
-                            +
-                          </button>
-                        </div>
-                        <p className="text-lg font-bold text-Grey500 ml-2">
-                          ₦{product.price.toFixed(2)}
-                        </p>
-                      </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              {/* checkout button */}
-              <div className="pb-6">
-                <Link href="/checkout">
-                  <button className="mt-4 w-full h-[44px] bg-Green500 text-Grey500 text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
-                    Checkout ( ₦{totalPrice.toFixed(2)} )
-                  </button>
-                </Link>
-              </div>
+                  {/* checkout button */}
+                  <div className="pb-6">
+                    <Link href="/checkout">
+                      <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
+                        Checkout ( ₦{totalPrice.toFixed(2)} )
+                      </button>
+                    </Link>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>

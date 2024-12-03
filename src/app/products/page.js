@@ -125,7 +125,7 @@ const Products = () => {
             {products.map((product, index) => (
               <div
                 key={index}
-                className="bg-white  rounded-[16px] p-4 shadow-custom hover:shadow-custom-hover transition-shadow duration-300"
+                className="bg-white  rounded-[16px] p-4 shadow-custom hover:shadow-customHover transition-shadow duration-300"
               >
                 <div className="relative w-full h-40 md:h-40">
                   <Image
@@ -188,7 +188,7 @@ const Products = () => {
                     <button
                       onClick={handleNextPage}
                       disabled={currentPage === totalPages}
-                      className={`flex justify-center text-Grey500 items-center px-4 py-2 rounded-[12px] ${
+                      className={`flex justify-center text-white items-center px-4 py-2 rounded-[12px] ${
                         currentPage === totalPages
                           ? "bg-Grey200 cursor-not-allowed"
                           : "bg-Green500 hover:bg-Green600"
@@ -226,10 +226,10 @@ const Products = () => {
                   <button
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
-                    className={`flex justify-center items-center p-2 rounded ${
+                    className={`flex justify-center items-center text-white p-2 rounded-[12px] ${
                       currentPage === totalPages
                         ? "bg-Grey200 cursor-not-allowed"
-                        : "bg-Green500 hover:bg-green-600"
+                        : "bg-Green500 hover:bg-Green600"
                     }`}
                   >
                     Next page
@@ -268,13 +268,13 @@ const Products = () => {
                     onClick={handlePreviousPage}
                     className="bg-Green500 px-4 py-2 rounded-md  flex items-center"
                   >
-                    <IoChevronBackOutline className="text-Grey500" />
+                    <IoChevronBackOutline className="text-white" />
                   </button>
                   <button
                     onClick={handleNextPage}
                     className="bg-Green500 px-4 py-2 rounded-md  flex items-center"
                   >
-                    <IoChevronForwardOutline className="text-Grey500" />
+                    <IoChevronForwardOutline className="text-white" />
                   </button>
                 </div>
                 {/* page indicator */}
@@ -304,10 +304,10 @@ const Products = () => {
                   <button
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
-                    className={`flex justify-center items-center p-2 rounded ${
+                    className={`flex justify-center text-white items-center p-2 rounded-[12px] ${
                       currentPage === totalPages
                         ? "bg-Grey200 cursor-not-allowed"
-                        : "bg-Green500 hover:bg-green-600"
+                        : "bg-Green500 hover:bg-Green600"
                     }`}
                   >
                     Next page

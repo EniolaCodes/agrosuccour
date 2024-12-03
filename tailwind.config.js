@@ -36,8 +36,8 @@ module.exports = {
       boxShadow: {
         custom:
           "0 16px 32px -4px rgba(16, 32, 24, 0.1), 0 2px 4px 0 rgba(16, 32, 24, 0.04)",
-        "custom-hover":
-          "0 24px 48px -8px rgba(16, 32, 24, 0.12), 0 2px 4px 0 rgba(16, 32, 24, 0.04)",
+        customHover:
+          "0 40px 80px -16px rgba(16, 32, 24, 0.16), 0 2px 4px 0 rgba(16, 32, 24, 0.04)",
       },
     },
   },

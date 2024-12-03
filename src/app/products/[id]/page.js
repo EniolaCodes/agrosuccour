@@ -99,7 +99,7 @@ const ProductDetails = () => {
             </div>
             {/* Add to Cart Button */}
             <Link href="/cart">
-              <button className="flex items-center justify-center gap-4 w-full bg-Green500 text-Grey500 font-bold py-2 rounded-[12px] hover:bg-Green600 h-[56px] mt-8">
+              <button className="flex items-center justify-center gap-4 w-full bg-Green500 text-white font-bold py-2 rounded-[12px] hover:bg-Green600 h-[56px] mt-8">
                 <MdAddShoppingCart className="text-[20px]" />
                 <span>Add to cart</span>
               </button>
