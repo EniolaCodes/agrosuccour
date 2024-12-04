@@ -50,17 +50,21 @@ const Checkout = () => {
               onClick={() => setDeliveryMethod("delivery")}
             >
               <span className="flex items-center justify-center gap-2 text-Grey500 text-[16px] font-nunito">
-                {deliveryMethod === "delivery" ? (
-                  <>
-                    <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
-                      <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
-                    </div>
-                  </>
-                ) : (
-                  <div className="w-6 h-6 rounded-full border border-Grey300" />
-                )}
-                <PiFireTruck size={20} className="" />
-                Delivery
+                <div className="flex items-center space-x-6">
+                  {deliveryMethod === "delivery" ? (
+                    <>
+                      <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
+                        <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
+                      </div>
+                    </>
+                  ) : (
+                    <div className="w-6 h-6 rounded-full border border-Grey300" />
+                  )}
+                  <div className="flex items-center space-x-2">
+                    <PiFireTruck size={20} className="" />
+                    <p>Delivery</p>
+                  </div>
+                </div>
               </span>
             </button>
             <button
@@ -72,17 +76,21 @@ const Checkout = () => {
               onClick={() => setDeliveryMethod("pickup")}
             >
               <span className="flex items-center justify-center gap-2 text-Grey500 text-[16px] font-nunito">
-                {deliveryMethod === "pickup" ? (
-                  <>
-                    <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
-                      <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
-                    </div>
-                  </>
-                ) : (
-                  <div className="w-6 h-6 rounded-full border border-Grey300" />
-                )}
-                <BsBoxSeam size={20} />
-                Pick up
+                <div className="flex items-center space-x-6">
+                  {deliveryMethod === "pickup" ? (
+                    <>
+                      <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
+                        <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
+                      </div>
+                    </>
+                  ) : (
+                    <div className="w-6 h-6 rounded-full border border-Grey300" />
+                  )}
+                  <div className="flex items-center space-x-2">
+                    <BsBoxSeam size={20} />
+                    <p>Pick up</p>
+                  </div>
+                </div>
               </span>
             </button>
           </div>
@@ -90,18 +98,18 @@ const Checkout = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
             {/* Full Name */}
             <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium">
+              <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                 Full Name / Company Name
               </label>
               <div className="relative">
-                <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
                 <input
                   {...register("fullName", {
                     required: "Full name is required",
                   })}
                   type="text"
-                  className={`w-full pl-10 p-4 border rounded-lg focus:outline-none ${
-                    errors.fullName ? "border-red-500" : "border-gray-300"
+                  className={`w-full pl-10 p-4 font-nunitoSans border rounded-lg focus:outline-none ${
+                    errors.fullName ? "border-red-500" : "border-Grey100"
                   }`}
                   placeholder="Yussuf Olabayo"
                 />
@@ -115,9 +123,11 @@ const Checkout = () => {
 
             {/* Email */}
             <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium">Email</label>
+              <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
+                Email
+              </label>
               <div className="relative">
-                <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
                 <input
                   {...register("email", {
                     required: "Email is required",
@@ -127,8 +137,8 @@ const Checkout = () => {
                     },
                   })}
                   type="email"
-                  className={`w-full pl-10 p-4 border rounded-lg focus:outline-none ${
-                    errors.email ? "border-red-500" : "border-gray-300"
+                  className={`w-full pl-10 p-4 font-nunitoSans border rounded-lg focus:outline-none ${
+                    errors.email ? "border-red-500" : "border-Grey100"
                   }`}
                   placeholder="example123@gmail.com"
                 />
@@ -141,7 +151,7 @@ const Checkout = () => {
             </div>
             {/* Phone Number */}
             <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium">
+              <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                 Phone Number
               </label>
               <Controller
@@ -149,14 +159,14 @@ const Checkout = () => {
                 control={control}
                 rules={{ required: "Phone number is required" }}
                 render={({ field }) => (
-                  <div className="relative">
+                  <div className="relative custom-phone-input">
                     <PhoneInput
                       {...field}
                       country={"ng"} // Default country
                       placeholder="8000000000"
-                      containerClass="w-full"
-                      inputClass={`w-full pl-10 px-4 py-4 border rounded-lg focus:outline-none ${
-                        errors.phone ? "border-red-500" : "border-gray-300"
+                      containerClass={"w-full"}
+                      inputClass={`w-full  border font-nunitoSans rounded-lg focus:outline-none ${
+                        errors.phone ? "border-red-500" : "border-Grey100"
                       }`}
                     />
                   </div>
@@ -170,16 +180,16 @@ const Checkout = () => {
             </div>
             {/* Address */}
             <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium">
+              <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                 City Address
               </label>
               <div className="relative">
-                <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
                 <input
                   {...register("address", { required: "Address is required" })}
                   type="text"
-                  className={`w-full pl-10 p-4 border rounded-lg focus:outline-none ${
-                    errors.address ? "border-red-500" : "border-gray-300"
+                  className={`w-full pl-10 p-4 border font-nunitoSans rounded-lg focus:outline-none ${
+                    errors.address ? "border-red-500" : "border-Grey100"
                   }`}
                   placeholder="Address"
                 />
@@ -192,13 +202,15 @@ const Checkout = () => {
             </div>
             {/* State */}
             <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium">State</label>
+              <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
+                State
+              </label>
               <div className="relative">
-                <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
                 <select
                   {...register("state", { required: "State is required" })}
-                  className={`w-full pl-10 p-4 border rounded-lg focus:outline-none ${
-                    errors.state ? "border-red-500" : "border-gray-300"
+                  className={`w-full pl-10 p-4 border  font-nunitoSans rounded-lg focus:outline-none ${
+                    errors.state ? "border-red-500" : "border-Grey100"
                   }`}
                 >
                   <option value="Oyo">Oyo</option>
@@ -213,12 +225,11 @@ const Checkout = () => {
                 )}
               </div>
             </div>
-            <button
-              type="submit"
-              className="w-full py-2 mt-4 bg-green-500 text-white rounded-lg hover:bg-green-600"
-            >
-              Continue to Payment
-            </button>
+            <Link href="/payment">
+              <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+                Save and Continue
+              </button>
+            </Link>
           </form>
         </div>
         {/* right side */}
