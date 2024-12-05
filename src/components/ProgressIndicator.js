@@ -1,20 +1,18 @@
-import React from "react";
-
 const ProgressIndicator = ({ steps, currentStep }) => {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex progress-mobile items-center px-24">
       {steps.map((step, index) => (
-        <div key={index} className="flex items-center justify-center w-full">
+        <div key={index} className="flex items-center w-full">
           {/* Step Indicator */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center relative">
             <div
-              className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                index <= currentStep ? "bg-green-500" : "bg-gray-300"
+              className={`w-6 h-6 mt-6 rounded-full flex items-center justify-center ${
+                index <= currentStep ? "bg-Green500" : "bg-Green500/30"
               }`}
             ></div>
             <p
-              className={`text-sm mt-2 ${
-                index <= currentStep ? "text-green-500" : "text-gray-500"
+              className={`text-[10px]  mt-2 ${
+                index <= currentStep ? "text-Grey500" : "text-Grey500/30"
               }`}
             >
               {step}
@@ -24,15 +22,12 @@ const ProgressIndicator = ({ steps, currentStep }) => {
           {/* Connecting Line */}
           {index < steps.length - 1 && (
             <div
-              className={`flex-1 h-1 ${
-                index < currentStep ? "bg-green-500" : "bg-gray-300"
+              className={`flex-1 h-[2px] -ml-2 -mr-1 bg-gradient-to-r ${
+                index < currentStep
+                  ? "from-Green500 to-Green500/100"
+                  : "from-Green500/90 to-Green500/20"
               }`}
-              style={{
-                // marginLeft: "8px",
-                // marginRight: "8px",
-                alignSelf: "center",
-              }}
-            />
+            ></div>
           )}
         </div>
       ))}

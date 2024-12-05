@@ -9,7 +9,6 @@ import { FiMail, FiUser, FiMapPin, FiGlobe } from "react-icons/fi";
 import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import Select from "react-select";
 import ProgressIndicator from "@/components/ProgressIndicator";
 
 const Checkout = () => {
@@ -29,7 +28,7 @@ const Checkout = () => {
 
   const [deliveryMethod, setDeliveryMethod] = useState("delivery");
   return (
-    <div className="px-4 md:px-20 py-8 ">
+    <div className="px-4 md:px-52 py-8 ">
       <div className="flex flex-row space-x-6">
         <div className="bg-white flex-1 p-6 shadow-md rounded-[28px]">
           {/* Progress Bar */}
@@ -44,8 +43,8 @@ const Checkout = () => {
             <button
               className={`flex-1 py-2 border rounded-[12px] ${
                 deliveryMethod === "delivery"
-                  ? "bg-Grey100 border border-Grey50"
-                  : "bg-white border-Grey50"
+                  ? "bg-Grey50 border border-Grey400"
+                  : "bg-white border-Grey100"
               }`}
               onClick={() => setDeliveryMethod("delivery")}
             >
@@ -70,8 +69,8 @@ const Checkout = () => {
             <button
               className={`flex-1 py-2 border rounded-[12px] ${
                 deliveryMethod === "pickup"
-                  ? "bg-Grey100 border border-Grey50"
-                  : "bg-white border-Grey50"
+                  ? "bg-Grey50 border border-Grey400"
+                  : "bg-white border-Grey100"
               }`}
               onClick={() => setDeliveryMethod("pickup")}
             >
@@ -109,7 +108,9 @@ const Checkout = () => {
                   })}
                   type="text"
                   className={`w-full pl-10 p-4 font-nunitoSans border rounded-lg focus:outline-none ${
-                    errors.fullName ? "border-red-500" : "border-Grey100"
+                    errors.fullName
+                      ? "border-red-500"
+                      : "border-Grey200 hover:border-Grey400 "
                   }`}
                   placeholder="Yussuf Olabayo"
                 />
@@ -137,8 +138,10 @@ const Checkout = () => {
                     },
                   })}
                   type="email"
-                  className={`w-full pl-10 p-4 font-nunitoSans border rounded-lg focus:outline-none ${
-                    errors.email ? "border-red-500" : "border-Grey100"
+                  className={`w-full pl-10 p-4 font-nunitoSans  border rounded-lg focus:outline-none ${
+                    errors.email
+                      ? "border-red-500"
+                      : "border-Grey200 hover:border-Grey400"
                   }`}
                   placeholder="example123@gmail.com"
                 />
@@ -166,7 +169,9 @@ const Checkout = () => {
                       placeholder="8000000000"
                       containerClass={"w-full"}
                       inputClass={`w-full  border font-nunitoSans rounded-lg focus:outline-none ${
-                        errors.phone ? "border-red-500" : "border-Grey100"
+                        errors.phone
+                          ? "border-red-500"
+                          : "border-Grey200 hover:border-Grey400"
                       }`}
                     />
                   </div>
@@ -189,7 +194,9 @@ const Checkout = () => {
                   {...register("address", { required: "Address is required" })}
                   type="text"
                   className={`w-full pl-10 p-4 border font-nunitoSans rounded-lg focus:outline-none ${
-                    errors.address ? "border-red-500" : "border-Grey100"
+                    errors.address
+                      ? "border-red-500"
+                      : "border-Grey200 hover:border-Grey400"
                   }`}
                   placeholder="Address"
                 />
@@ -210,7 +217,9 @@ const Checkout = () => {
                 <select
                   {...register("state", { required: "State is required" })}
                   className={`w-full pl-10 p-4 border  font-nunitoSans rounded-lg focus:outline-none ${
-                    errors.state ? "border-red-500" : "border-Grey100"
+                    errors.state
+                      ? "border-red-500"
+                      : "border-Grey200 hover:border-Grey400"
                   }`}
                 >
                   <option value="Oyo">Oyo</option>
@@ -226,9 +235,14 @@ const Checkout = () => {
               </div>
             </div>
             <Link href="/payment">
-              <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+              <button className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
                 Save and Continue
               </button>
+              <div className="flex justify-end">
+                <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+                  Save and Continue
+                </button>
+              </div>
             </Link>
           </form>
         </div>
@@ -265,11 +279,6 @@ const Checkout = () => {
               <p className="">Total:</p>
               <p>₦7000</p>
             </div>
-            <Link href="/checkout">
-              <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                Save and Continue
-              </button>
-            </Link>
           </div>
           <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
             <div className="">

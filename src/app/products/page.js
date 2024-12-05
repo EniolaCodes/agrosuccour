@@ -68,7 +68,7 @@ const Products = () => {
                 <Image src="/images/box 1.svg" width={20} height={20} alt="" />
                 <Link href="/products/all">All Products</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-4 hover:rounded-[8px] ">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image
                   src="/images/apple 1.svg"
                   width={20}

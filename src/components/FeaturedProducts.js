@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-// import { useGetProducts } from "@/lib/models/product/hooks";
+import { useGetProducts } from "@/lib/models/product/hooks";
 import Image from "next/image";
 import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const FeaturedProducts = () => {
-  // const {data: fetchProducts, isSuccess} = useGetProducts({})
+  const { data: fetchProducts, isSuccess } = useGetProducts({});
   const products = Array(14).fill({
     id: Math.random(),
     image: "/images/singleProduct.svg",
@@ -16,7 +16,8 @@ const FeaturedProducts = () => {
     description: "15g",
     price: "₦10,000.00",
   });
-  // console.log(fetchProducts);
+  // const allProducts = fetchProducts?.result?.data;
+  console.log(fetchProducts);
 
   const [cartState, setCartState] = useState(
     Array(products.length).fill(false)
