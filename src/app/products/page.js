@@ -2,8 +2,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaShoppingCart } from "react-icons/fa";
+import { MdAddShoppingCart } from "react-icons/md";
 import { IoChevronForwardOutline, IoChevronBackOutline } from "react-icons/io5";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Products = () => {
   const totalPages = 10; // Total number of pages
@@ -25,6 +27,33 @@ const Products = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
+
+  const [cartState, setCartState] = useState(
+    Array(products.length).fill(false)
+  );
+  const notify = (message) => {
+    toast(message, {
+      position: "top-left",
+      style: {
+        backgroundColor: "#fff",
+        color: "#6BB244",
+        fontSize: "20px",
+        fontWeight: "bold",
+      },
+    });
+  };
+
+  const toggleCart = (index) => {
+    const updatedCartState = [...cartState];
+    updatedCartState[index] = !updatedCartState[index];
+    setCartState(updatedCartState);
+
+    if (updatedCartState[index]) {
+      notify("Cart successfully updated");
+    } else {
+      notify("One item removed from cart");
+    }
+  };
   return (
     <div className="px-4 md:px-20 py-8">
       <div className="flex">
@@ -35,11 +64,11 @@ const Products = () => {
               Select by category
             </h2>
             <ul className="flex flex-col space-y-4 mt-6 mb-6">
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-2">
                 <Image src="/images/box 1.svg" width={20} height={20} alt="" />
                 <Link href="/products/all">All Products</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image
                   src="/images/apple 1.svg"
                   width={20}
@@ -48,11 +77,11 @@ const Products = () => {
                 />
                 <Link href="/products/fruits">Fruits</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image src="/images/meat 1.svg" width={20} height={20} alt="" />
                 <Link href="/products/meat">Meat and Fish</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image
                   src="/images/cabbage 1.svg"
                   width={20}
@@ -61,11 +90,11 @@ const Products = () => {
                 />
                 <Link href="/products/vegetables">Vegetables</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image src="/images/wine 1.svg" width={20} height={20} alt="" />
                 <Link href="/products/beverages">Drinks & Beverages</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image
                   src="/images/wheat-sack 1.svg"
                   width={20}
@@ -74,7 +103,7 @@ const Products = () => {
                 />
                 <Link href="/products/drygoods">Dry Goods</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image
                   src="/images/cooking-oil 1.svg"
                   width={20}
@@ -83,15 +112,15 @@ const Products = () => {
                 />
                 <Link href="/products/oils">Oils</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image src="/images/milk 1.svg" width={20} height={20} alt="" />
                 <Link href="/products/dairy">Dairy</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image src="/images/food 1.svg" width={20} height={20} alt="" />
                 <Link href="/products/baking">Baking Goods</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image
                   src="/images/spice 1.svg"
                   width={20}
@@ -100,7 +129,7 @@ const Products = () => {
                 />
                 <Link href="/products/spices">Spices</Link>
               </li>
-              <li className="flex space-x-4 text-Grey400 hover:bg-Green400 px-6 py-1">
+              <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image src="/images/others.svg" width={20} height={20} alt="" />
                 <Link href="/products/others">Others</Link>
               </li>
@@ -119,9 +148,10 @@ const Products = () => {
           {/* all products */}
           <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {products.map((product, index) => (
-              <div
+              <Link
                 key={index}
-                className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
+                href={`/products/${product.id}`}
+                className="bg-white  rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
               >
                 <div className="relative w-full h-40 md:h-40">
                   <Image
@@ -144,14 +174,31 @@ const Products = () => {
                   <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
                     {product.price}
                   </p>
-                  <Link href={`/products/${product.id}`} className="">
-                    <div className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white  cursor-pointer">
-                      <FaShoppingCart className="w-4 h-4" />
-                    </div>
-                  </Link>
+
+                  <div
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleCart(index);
+                    }}
+                    className={`rounded-full border p-2 cursor-pointer transition-colors ${
+                      cartState[index]
+                        ? "bg-Green500 text-white border-Green500"
+                        : "border-Green500 text-Green500"
+                    }`}
+                  >
+                    <MdAddShoppingCart className="text-[20px]" />
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
+            <ToastContainer
+              position="top-left"
+              autoClose={3000}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
           </div>
           {/* desktop pagination */}
           <div className="hidden md:block mt-8">
@@ -181,7 +228,7 @@ const Products = () => {
                     <button
                       onClick={handleNextPage}
                       disabled={currentPage === totalPages}
-                      className={`flex justify-center text-Grey500 items-center px-4 py-2 rounded-[12px] ${
+                      className={`flex justify-center text-white items-center px-4 py-2 rounded-[12px] ${
                         currentPage === totalPages
                           ? "bg-Grey200 cursor-not-allowed"
                           : "bg-Green500 hover:bg-Green600"
@@ -193,7 +240,7 @@ const Products = () => {
                   </div>
                 </div>
                 {/* page indicator */}
-                <div className="text-Grey500 font-nunitoSans text-[13px] w-full text-right">
+                <div className="text-Grey500 font-nunitoSans text-[16px] w-full text-right">
                   Page{" "}
                   <input
                     type="number"
@@ -219,10 +266,10 @@ const Products = () => {
                   <button
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
-                    className={`flex justify-center items-center p-2 rounded ${
+                    className={`flex justify-center items-center text-white p-2 rounded-[12px] ${
                       currentPage === totalPages
                         ? "bg-Grey200 cursor-not-allowed"
-                        : "bg-Green500 hover:bg-green-600"
+                        : "bg-Green500 hover:bg-Green600"
                     }`}
                   >
                     Next page
@@ -261,13 +308,13 @@ const Products = () => {
                     onClick={handlePreviousPage}
                     className="bg-Green500 px-4 py-2 rounded-md  flex items-center"
                   >
-                    <IoChevronBackOutline className="text-Grey500" />
+                    <IoChevronBackOutline className="text-white" />
                   </button>
                   <button
                     onClick={handleNextPage}
                     className="bg-Green500 px-4 py-2 rounded-md  flex items-center"
                   >
-                    <IoChevronForwardOutline className="text-Grey500" />
+                    <IoChevronForwardOutline className="text-white" />
                   </button>
                 </div>
                 {/* page indicator */}
@@ -297,10 +344,10 @@ const Products = () => {
                   <button
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
-                    className={`flex justify-center items-center p-2 rounded ${
+                    className={`flex justify-center text-white items-center p-2 rounded-[12px] ${
                       currentPage === totalPages
                         ? "bg-Grey200 cursor-not-allowed"
-                        : "bg-Green500 hover:bg-green-600"
+                        : "bg-Green500 hover:bg-Green600"
                     }`}
                   >
                     Next page

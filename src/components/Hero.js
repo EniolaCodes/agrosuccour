@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -8,7 +9,7 @@ const Hero = () => {
   const slides = [
     {
       image: "/images/bg1.svg",
-      title: "Fresh Meats & Premium Proteins - Quality You Can Trust",
+      title: "Fresh Meats & Premium Proteins",
       description:
         "Explore premium meats and proteins from trusted farms. Choose from grass-fed beef, free-range poultry, seafood, and plant-based options—all sustainably sourced, fresh, and ready for delivery to elevate your meals.",
     },
@@ -55,16 +56,18 @@ const Hero = () => {
         </div>
       </div>
       {/* Slide Content */}
-      <div className="absolute inset-0 flex flex-col justify-center items-start z-10 ml-6 md:ml-20 px-4 md:px-8 max-w-lg">
-        <h1 className="text-2xl md:text-4xl font-nunito text-Green50 font-bold mb-4">
+      <div className="absolute inset-0 flex flex-col justify-center items-start z-10 ml-6 md:ml-20 px-4 md:px-8 md:mt-10 max-w-lg">
+        <h1 className="text-2xl md:text-5xl py-6 mt-6 font-nunito text-Green50 font-bold mb-2">
           {slides[currentIndex].title}
         </h1>
-        <p className="mb-6 text-sm md:text-lg text-agroHeading font-nunitoSans">
+        <p className="mb-6 opacity-80 text-sm md:text-lg text-agroHeading font-nunitoSans">
           {slides[currentIndex].description}
         </p>
-        <button className="bg-Green500 hover:bg-Green600 text-Grey500 font-nunitoSans text-lg font-bold px-6 py-3 rounded-[12px]">
-          Shop Now
-        </button>
+        <Link href="/products">
+          <button className="bg-Green500 hover:bg-Green600 text-white font-nunitoSans text-lg font-bold px-6 py-3 rounded-[12px]">
+            Shop Now
+          </button>
+        </Link>
       </div>
       {/* Slide Indicators */}
       <div className="absolute z-20 bottom-24 left-1/2 transform -translate-x-1/2 flex space-x-2">

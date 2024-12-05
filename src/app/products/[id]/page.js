@@ -2,7 +2,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaShoppingCart, FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
+import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -19,13 +20,40 @@ const ProductDetails = () => {
   };
 
   const products = Array(6).fill({
+    id: Math.random(),
     image: "/images/chicken.svg",
     title: "Product Name",
     description: "15g",
     price: "₦10,000.00",
   });
 
-  const notify = () => toast("One item has been added to cart!");
+  const [cartState, setCartState] = useState(
+    Array(products.length).fill(false)
+  );
+  const notify = (message) => {
+    toast(message, {
+      position: "top-left",
+      style: {
+        backgroundColor: "#fff",
+        color: "#6BB244",
+        fontSize: "20px",
+        fontWeight: "bold",
+      },
+    });
+  };
+
+  const toggleCart = (index) => {
+    const updatedCartState = [...cartState];
+    updatedCartState[index] = !updatedCartState[index];
+    setCartState(updatedCartState);
+
+    if (updatedCartState[index]) {
+      notify("Cart successfully updated");
+    } else {
+      notify("One item removed from cart");
+    }
+  };
+
   return (
     <div className="px-4 md:px-20 py-8 min-h-screen">
       <div className="bg-white rounded-[28px] p-4">
@@ -34,7 +62,7 @@ const ProductDetails = () => {
         </h1>
         <div className=" flex flex-col md:flex-row md:space-x-8">
           {/* Sidebar for smaller images */}
-          <div className="hidden md:flex md:flex-col md:space-y-4 ">
+          <div className="hidden md:flex md:flex-col md:space-y-4 mt-2 ">
             {[1, 2, 3].map((_, index) => (
               <Image
                 key={index}
@@ -48,7 +76,7 @@ const ProductDetails = () => {
           </div>
 
           {/* Large Image */}
-          <div className="flex-1 mb-4 md:mb-0">
+          <div className="flex-1">
             <Image
               src="/images/meat 1.svg"
               alt="Large image"
@@ -60,14 +88,14 @@ const ProductDetails = () => {
 
           {/* Product Details */}
           <div className="flex-1 mt-6">
-            <h1 className="text-[20px] md:text-[31px] font-nunitoSans font-bold text-Grey500">
+            <h1 className="text-[20px] mb-2 md:text-[31px] font-nunitoSans font-bold text-Grey500">
               Pepper mixed for soup - Elo
             </h1>
             <p className="text-LightGrey text-sm md:text-[25px] opacity-80 font-nunito">
               1 kilogram / Bag
             </p>
             {/* Quantity Selector & Price */}
-            <div className="mt-4 flex items-center justify-between border border-Green500 p-3 rounded-[8px]">
+            <div className="mt-6 flex items-center justify-between border border-Green500 p-3 rounded-[8px]">
               <div className="flex items-center space-x-2">
                 <button
                   onClick={handleDecrement}
@@ -92,12 +120,14 @@ const ProductDetails = () => {
               <p className="text-2xl font-bold text-Grey500">₦{totalPrice}</p>
             </div>
             {/* Add to Cart Button */}
-            <button className="w-full bg-Green500 text-Grey500 font-bold py-2 rounded-[12px] hover:bg-Green600 h-[56px] mt-8">
-              Add to cart
-            </button>
-
+            <Link href="/cart">
+              <button className="flex items-center justify-center gap-4 w-full bg-Green500 text-white font-bold py-2 rounded-[12px] hover:bg-Green600 h-[56px] mt-8">
+                <MdAddShoppingCart className="text-[20px]" />
+                <span>Add to cart</span>
+              </button>
+            </Link>
             {/* Product Description */}
-            <div className="mt-10">
+            <div className="mt-16">
               <h2 className="font-bold text-[20px] font-nunitoSans text-Grey400">
                 Product Description
               </h2>
@@ -108,11 +138,11 @@ const ProductDetails = () => {
               </p>
             </div>
             {/* Contact Support */}
-            <div className="mt-4 p-4 bg-Grey500 rounded-[12px]">
+            <div className="flex flex-col items-center mt-4 p-4 bg-Grey400 rounded-[12px]">
               <p className="mb-4 text-[16px] font-nunitoSans font-bold text-Grey50">
                 Looking for more details about this item?
               </p>
-              <p className="mb-4 text-[10px] text-Grey100">
+              <p className="mb-4 text-[9px] md:text-[10px] text-Grey100">
                 Anything you want to know? We're here for you, and we'll reply
                 in 2 minutes or less.
               </p>
@@ -132,21 +162,25 @@ const ProductDetails = () => {
 
       {/* related products */}
       <div className="mt-8">
-        <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
+        <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px] overflow-y-scroll">
           <h1 className="text-Grey500 text-[20px] md:text-4xl font-nunito font-bold">
             Related Products
           </h1>
           <Link href="/products">
-            <h1 className="text-Green500 text-[13px] md:text-[16px] font-nunitoSans">
+            <h1 className="text-Green500 hover:text-Green800 text-[13px] md:text-[16px] font-nunitoSans">
               View All
             </h1>
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
+        <Link
+          href={`/products/${products.id}`}
+          className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6"
+        >
           {products.map((product, index) => (
-            <div
+            <Link
+              href={`/products/${product.id}`}
               key={index}
-              className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
+              className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
             >
               <div className="relative w-full h-40 md:h-40">
                 <Image
@@ -167,20 +201,31 @@ const ProductDetails = () => {
                 <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
                   {product.price}
                 </p>
-                <Link
-                  href={`/products/${product.id}`}
-                  className=""
-                  onClick={notify}
+                <div
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleCart(index);
+                  }}
+                  className={`rounded-full border p-2 cursor-pointer transition-colors ${
+                    cartState[index]
+                      ? "bg-Green500 text-white border-Green500"
+                      : "border-Green500 text-Green500"
+                  }`}
                 >
-                  <div className="rounded-full border border-Green500 p-2 text-Green500  hover:bg-Green500 hover:text-white cursor-pointer">
-                    <FaShoppingCart className="w-4 h-4" />
-                  </div>
-                  <ToastContainer />
-                </Link>
+                  <MdAddShoppingCart className="text-[20px]" />
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
-        </div>
+          <ToastContainer
+            position="top-left"
+            autoClose={3000}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+        </Link>
       </div>
     </div>
   );

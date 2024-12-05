@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom styles for PhoneInput */
+.custom-phone-input .form-control {
+  width: 100% !important;
+  padding-top: 1.6rem !important;
+  padding-bottom: 1.6rem !important;
+}
 
-
-
+@media (max-width: 768px) {
+  .progress-mobile {
+    margin: 0;
+    padding: 0;
+  }
+}
