@@ -8,7 +8,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const FeaturedProducts = () => {
-  const { data: fetchProducts, isSuccess } = useGetProducts({});
+  const {
+    data: fetchProducts,
+    isLoading,
+    isError,
+    error,
+  } = useGetProducts({
+    params: "?limit=14",
+  });
   const products = Array(14).fill({
     id: Math.random(),
     image: "/images/singleProduct.svg",
@@ -16,7 +23,8 @@ const FeaturedProducts = () => {
     description: "15g",
     price: "₦10,000.00",
   });
-  // const allProducts = fetchProducts?.result?.data;
+  const allproducts = fetchProducts?.result?.data;
+
   console.log(fetchProducts);
 
   const [cartState, setCartState] = useState(
@@ -45,6 +53,8 @@ const FeaturedProducts = () => {
       notify("One item removed from cart");
     }
   };
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
 
   return (
     <div className="px-4 md:px-20 py-8">
@@ -74,7 +84,7 @@ const FeaturedProducts = () => {
           />
         </div>
         {/* Small Products Section Under Large Image */}
-        {products.map((product, index) => (
+        {allproducts.map((product, index) => (
           <Link
             href={`/products/${product.id}`}
             key={index}

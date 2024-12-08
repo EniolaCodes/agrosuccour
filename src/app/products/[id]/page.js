@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useGetSingleProducts } from "@/lib/models/product/hooks";
 import { FaWhatsapp } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,6 +11,18 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
+  const productId = useParams("id");
+  console.log(productId);
+  const {
+    data: fetchProductDetail,
+    isLoading,
+    isError,
+    error,
+  } = useGetSingleProducts({
+    productId: productId.id,
+  });
+
+  const singleProduct = fetchProductDetail?.result?.data;
   const pricePerUnit = 1200.99;
 
   const totalPrice = (quantity * pricePerUnit).toFixed(2);
@@ -54,6 +68,9 @@ const ProductDetails = () => {
     }
   };
 
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
+
   return (
     <div className="px-4 md:px-20 py-8 min-h-screen">
       <div className="bg-white rounded-[28px] p-4">
@@ -73,10 +90,21 @@ const ProductDetails = () => {
                 className="bg-Grey100 p-2 rounded-[16px]"
               />
             ))}
+            {/* {[1, 2, 3].map((_, index) => (
+              <Image
+                key={index}
+                src={singleProduct?.imageUrl}
+                alt={`Product Image ${index + 1}`}
+                width={170}
+                height={100}
+                className="bg-Grey100 p-2 rounded-[16px]"
+              />
+            ))} */}
           </div>
 
           {/* Large Image */}
           <div className="flex-1">
+            {singleProduct}
             <Image
               src="/images/meat 1.svg"
               alt="Large image"
@@ -102,7 +130,7 @@ const ProductDetails = () => {
                   className={`px-2 py-1 rounded-md font-extrabold ${
                     quantity > 1
                       ? "bg-Green500 text-Green50"
-                      : "bg-Grey100 text-Green50"
+                      : "bg-Green200 text-Green50"
                   }`}
                 >
                   -

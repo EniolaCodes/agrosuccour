@@ -3,13 +3,17 @@ import Link from "next/link";
 import { BsCart2 } from "react-icons/bs";
 
 const CartComponent = () => {
-  const pathname = usePathname(); // Get the current route path
+  const pathname = usePathname();
 
-  // Check if the current route is the cart page
-  const isCartPage = pathname === "/cart";
+  // Check if the current route is one of the specified pages
+  const isCartOrCheckoutOrPaymentOrReviewPage =
+    pathname === "/cart" ||
+    pathname === "/checkout" ||
+    pathname === "/payment" ||
+    pathname === "/review";
 
   return (
-    !isCartPage && (
+    !isCartOrCheckoutOrPaymentOrReviewPage && (
       <div className="flex items-center space-x-2 cursor-pointer border border-Grey300 p-2 rounded-[12px]">
         <BsCart2 className="text-3xl text-Green50" />
         <Link href="/cart" className="relative text-Green50 font-nunitoSans">

@@ -20,22 +20,19 @@ export const useGetProducts = ({ options }) => {
   });
 };
 
-// export const useGetSingleProducts = ({productId, options}) => {
-//     // const token = getCookie(USER_TOKEN);
+export const useGetSingleProducts = ({ productId }) => {
+  console.log("OUR GREAT PARAM", productId);
+  const fetchProducts = () =>
+    backendFetch({
+      endpoint: `/product/${productId}`,
+      // token: token
+    });
 
-//     const fetchProducts = () =>
-//         backendFetch({
-//             endpoint: `/product/${productId}/`,
-//             token: token
-//         });
-
-//     return useQuery({
-//         queryKey: ["FETCH_PRODUCT_LIST", productId],
-//         queryFn: () => fetchProducts(),
-//         ...{
-//             staleTime: Infinity,
-//             enabled: !!productId,
-//             ...options
-//         }
-//     });
-// };
+  return useQuery({
+    queryKey: ["FETCH_PRODUCT_DETAIL"],
+    queryFn: () => fetchProducts(),
+    ...{
+      staleTime: Infinity,
+    },
+  });
+};
