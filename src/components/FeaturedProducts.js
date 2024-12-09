@@ -25,7 +25,7 @@ const FeaturedProducts = () => {
   });
   const allproducts = fetchProducts?.result?.data;
 
-  console.log(fetchProducts);
+  console.log(allproducts);
 
   const [cartState, setCartState] = useState(
     Array(products.length).fill(false)

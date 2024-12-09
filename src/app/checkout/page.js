@@ -138,7 +138,7 @@ const Checkout = () => {
                     },
                   })}
                   type="email"
-                  className={`w-full pl-10 p-4 font-nunitoSans  border rounded-lg focus:outline-none ${
+                  className={`w-full pl-10 p-4 font-nunitoSans  border rounded-[8px] focus:outline-none ${
                     errors.email
                       ? "border-red-500"
                       : "border-Grey200 hover:border-Grey400"

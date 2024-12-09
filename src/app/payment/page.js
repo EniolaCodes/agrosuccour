@@ -2,7 +2,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { FiMail, FiUser, FiMapPin, FiPhone, FiCopy } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
+import { PiFireTruck } from "react-icons/pi";
+import { MdOutlinePayment } from "react-icons/md";
 import { BsQuestionLg } from "react-icons/bs";
 import { RiCalendarEventFill } from "react-icons/ri";
 import ProgressIndicator from "@/components/ProgressIndicator";
@@ -148,20 +152,16 @@ const Payment = () => {
               <div className="space-y-4">
                 <div
                   onClick={() => setSelectedPaymentMethod("debit-card")}
-                  className={`mb-8 border hover:border-Grey400  bg-Grey200 ${
+                  className={`mb-8 border bg-Grey100 hover:border-Grey200"  ${
                     selectedPaymentMethod === "debit-card"
                       ? " border"
-                      : "border-gray-300"
-                  } p-4 rounded-[8px] flex justify-between items-center cursor-pointer`}
+                      : "border-Grey200"
+                  } p-2 rounded-[8px] flex justify-between items-center cursor-pointer`}
                 >
                   <div className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      name="payment-method"
-                      checked={selectedPaymentMethod === "debit-card"}
-                      onChange={() => setSelectedPaymentMethod("debit-card")}
-                      className="accent-green-500"
-                    />
+                    <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
+                      <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
+                    </div>
                     <span className="text-[16px] text-Grey500 font-nunitoSans font-bold">
                       Debit Card
                     </span>
@@ -192,51 +192,71 @@ const Payment = () => {
                 {selectedPaymentMethod === "debit-card" && (
                   <div className="space-y-4">
                     <div className="relative">
-                      <FiMail className="absolute left-3 top-[43px] transform -translate-y-1/2 text text-Grey200" />
-                      <p>Card Number</p>
+                      <FiMail className="absolute left-3 top-[50px] transform -translate-y-1/2 text text-Grey200" />
+                      <p className="text-Grey500 text-[16px] mb-2 font-bold">
+                        Card Number
+                      </p>
                       <input
                         type="text"
                         placeholder="5199 8080 8080 8080"
-                        className="w-full pl-10 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
+                        className="w-full pl-10 p-2 border border-Grey200 rounded-lg focus:outline-none  hover:border-Grey400"
                       />
                     </div>
                     <div className="flex space-x-4 w-full">
                       <div className="flex-1 flex-row">
-                        <p>Expiration date</p>
+                        <p className="text-Grey500 text-[16px] mb-2 font-bold">
+                          Expiration date
+                        </p>
                         <div className="relative">
                           <RiCalendarEventFill className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                          <select className="w-1/2 border border-gray-300 rounded-md p-2 pl-10 focus:ring-2 focus:ring-green-500">
+                          <select className="w-1/2 border border-Grey200 rounded-lg p-2 pl-10 focus:outline-none  border:border-Grey400">
                             <option>MM</option>
                             <option>01</option>
                             <option>02</option>
                             <option>03</option>
+                            <option>04</option>
+                            <option>05</option>
+                            <option>06</option>
+                            <option>07</option>
+                            <option>08</option>
+                            <option>09</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
                           </select>
-                          <RiCalendarEventFill className="absolute left-[280px] top-1/2 transform -translate-y-1/2 text-Grey200" />
-                          <select className="w-1/2 border border-gray-300 rounded-md p-2 pl-12 focus:ring-2 focus:ring-green-500">
+                          <RiCalendarEventFill className="absolute left-[190px] top-1/2 transform -translate-y-1/2 text-Grey200" />
+                          <select className="w-1/2 border border-Grey200 rounded-lg p-2 pl-12 focus:outline-none  hover:border-Grey400">
                             <option>YY</option>
                             <option>2024</option>
                             <option>2025</option>
+                            <option>2026</option>
+                            <option>2027</option>
                           </select>
                         </div>
                       </div>
                       <div className="flex-1 relative">
-                        <p>CRV</p>
+                        <p className="text-Grey500 text-[16px] font-bold mb-2">
+                          CRV
+                        </p>
                         <input
                           type="text"
                           placeholder="572"
-                          className="w-1/3 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-green-500"
+                          className="w-1/3 border border-gray-300 rounded-lg p-2 focus:outline-none  hover:border-Grey400"
                         />
                         <BsQuestionLg
                           size={20}
-                          className="absolute transform -translate-y-1/2 bottom-1 left-36 bg-Grey200 rounded-full p-1 text-white "
+                          className="absolute transform -translate-y-1/2 bottom-0.5 left-20  bg-Grey200 rounded-full p-1 text-white "
                         />
                       </div>
                     </div>
                     <div className="relative">
-                      <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
+                      <FiUser className="absolute left-3 bottom-3 transform -translate-y-1/2 text-Grey200" />
+                      <p className="text-Grey500 text-[16px] font-bold mb-2">
+                        Name on Card
+                      </p>
                       <input
                         type="text"
-                        className="w-full pl-10 p-4 font-nunitoSans border rounded-lg focus:outline-none"
+                        className="w-full pl-10 p-4 font-nunitoSans border rounded-lg focus:outline-none  hover:border-Grey400"
                         placeholder="Yussuf Olabayo"
                       />
                     </div>
@@ -245,9 +265,13 @@ const Payment = () => {
                         type="checkbox"
                         checked={saveCard}
                         onChange={() => setSaveCard(!saveCard)}
-                        className="accent-Green500"
+                        className={`bg-Grey500 text-white rounded-md ${
+                          saveCard ? "bg-Grey500 text-white" : ""
+                        }`}
                       />
-                      <span>Save Card</span>
+                      <span className="text-Green900 text-[13px]">
+                        Save Card
+                      </span>
                     </label>
                   </div>
                 )}
@@ -255,29 +279,27 @@ const Payment = () => {
                 <div
                   onClick={() => setSelectedPaymentMethod("bank-transfer")}
                   className={`border ${
-                    selectedPaymentMethod === "bank-transfer" ? "" : ""
-                  } p-4 rounded-md flex items-center cursor-pointer`}
+                    selectedPaymentMethod === "bank-transfer"
+                      ? "border"
+                      : "border-Grey200"
+                  } p-4 rounded-md flex bg-Grey100 border hover:border-Grey200 items-center cursor-pointer`}
                 >
-                  <input
-                    type="radio"
-                    name="payment-method"
-                    checked={selectedPaymentMethod === "bank-transfer"}
-                    onChange={() => setSelectedPaymentMethod("bank-transfer")}
-                    className="accent-green-500"
-                  />
-                  <span className="ml-2 text-sm font-medium">
+                  <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
+                    <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
+                  </div>
+                  <span className="ml-2 text-[16px] text-Grey500 font-bold font-nunitoSans">
                     Direct bank transfer
                   </span>
                 </div>
                 {/* Bank Transfer Details */}
                 {selectedPaymentMethod === "bank-transfer" && (
-                  <div className="mt-4">
-                    <p className="text-sm text-gray-600 mb-4">
+                  <div className="mt-4 font-nunitoSans">
+                    <p className="text-[11px] text-Grey400 mb-4">
                       To complete your order, please pay directly into our
                       account. Use your Order ID as a reference. Your order will
                       ship as soon as we confirm your payment.
                     </p>
-                    <div className="flex flex-col space-y-4">
+                    <div className="flex flex-col space-y-4 text-[11px] text-Grey400">
                       {bankDetails.map((detail, index) => (
                         <div
                           key={index}
@@ -286,7 +308,7 @@ const Payment = () => {
                           <span className="text-sm">{detail}</span>
                           <FiCopy
                             size={20}
-                            className="text-gray-500 cursor-pointer"
+                            className="text-Grey400 cursor-pointer"
                             onClick={() => handleCopy(detail)}
                           />
                         </div>
@@ -298,8 +320,107 @@ const Payment = () => {
             </section>
           </section>
         </div>
+
         {/* right side */}
+        <div className="hidden md:flex flex-col gap-6">
+          {/* Order Summary */}
+          <div className="w-[350px] pt-6 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
+            <div className="flex justify-between items-center border-b pb-2 mb-4">
+              <h2 className="text-[20px] text-Grey500 font-bold">
+                Order summary
+              </h2>
+              <p className="text-Grey400 text-[13px]">8 items</p>
+            </div>
+
+            <div className="mb-4 border-b pb-2 font-nunitoSans">
+              <p className="text-Grey500 text-[16px]">Delivery fees:</p>
+              <p className="text-[11px] text-Grey300 w-[260px]">
+                Your trusted source for fresh produce, essentials, bulk
+                purchasing, and farming
+              </p>
+            </div>
+
+            <div className="flex justify-between items-center text-[16px]  text-Grey400 border-b pb-2">
+              <p>Subtotal:</p>
+              <p>₦6000</p>
+            </div>
+
+            <div className="flex justify-between items-center text-Grey400 text-[16px] border-b pb-2">
+              <p>Other fees:</p>
+              <p>₦0.00</p>
+            </div>
+
+            <div className="flex justify-between items-center text-Grey400 font-bold text-[16px] font-nunitoSans border-b pb-2">
+              <p className="">Total:</p>
+              <p>₦7000</p>
+            </div>
+            <Link href="/review">
+              <button className="hidden md:block mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+                Review your order
+              </button>
+            </Link>
+          </div>
+          <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
+            <div className="">
+              <div className="flex space-x-8">
+                <PiFireTruck
+                  size={20}
+                  className="text-Green500 font-semibold"
+                />
+                <div className="font-nunitoSans space-y-2 mb-6">
+                  <h1 className="text-Green400 text-bold text-[16px] ">
+                    Quick Delivery
+                  </h1>
+                  <p className="text-Grey50 text-[13px]">
+                    Efficient order processing and timely delivery
+                  </p>
+                </div>
+              </div>
+              <hr className="w-full bg-Grey100" />
+            </div>
+            <div className="mt-6">
+              <div className="flex space-x-8">
+                <MdOutlinePayment
+                  size={20}
+                  className="text-Green500 font-semibold"
+                />
+                <div className="font-nunitoSans space-y-2">
+                  <h1 className="text-Green400 text-bold text-[16px] ">
+                    Secured Payment
+                  </h1>
+                  <p className="text-Grey50 text-[13px]">
+                    Secure payment processing for your peace of mind.
+                  </p>
+                </div>
+              </div>
+              <hr className="w-full bg-Grey100 mt-6" />
+            </div>
+            <div className="mt-6">
+              <div className="flex space-x-8">
+                <FaWhatsapp size={20} className="text-Green500 font-semibold" />
+                <div className="font-nunitoSans space-y-2">
+                  <h1 className="text-Green400 text-bold text-[16px] ">
+                    Contact us
+                  </h1>
+                  <p className="text-Grey50 text-[13px]">
+                    Reach out on +2340706375930. We will reply in 2mins.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <Link
+        href="/review"
+        className="block md:hidden mt-8 bg-Green50 fixed bottom-0 w-full"
+      >
+        <div className="p-8">
+          <button className=" mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+            Review your order
+          </button>
+        </div>
+      </Link>
     </div>
   );
 };

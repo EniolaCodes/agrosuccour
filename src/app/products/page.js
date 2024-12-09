@@ -2,12 +2,24 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useGetProducts } from "@/lib/models/product/hooks";
 import { MdAddShoppingCart } from "react-icons/md";
 import { IoChevronForwardOutline, IoChevronBackOutline } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Products = () => {
+  const {
+    data: fetchProducts,
+    isLoading,
+    isError,
+    error,
+  } = useGetProducts({
+    params: "?limit=16",
+  });
+
+  const allproducts = fetchProducts?.result?.data;
+
   const totalPages = 10; // Total number of pages
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -54,6 +66,9 @@ const Products = () => {
       notify("One item removed from cart");
     }
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
   return (
     <div className="px-4 md:px-20 py-8">
       <div className="flex">
@@ -147,7 +162,7 @@ const Products = () => {
           </div>
           {/* all products */}
           <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {products.map((product, index) => (
+            {allproducts.map((product, index) => (
               <Link
                 key={index}
                 href={`/products/${product.id}`}

@@ -19,7 +19,7 @@ const ProductDetails = () => {
     isError,
     error,
   } = useGetSingleProducts({
-    productId: productId.id,
+    productId: productId.product_id,
   });
 
   const singleProduct = fetchProductDetail?.result?.data;
