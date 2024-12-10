@@ -32,7 +32,7 @@ const Checkout = () => {
       <div className="flex flex-row space-x-6">
         <div className="bg-white flex-1 p-6 shadow-md rounded-[28px]">
           {/* Progress Bar */}
-          <div className="">
+          <div className="w-full flex justify-center">
             <ProgressIndicator steps={steps} currentStep={currentStep} />
           </div>
           <h2 className="text-2xl font-nunito text-Grey500 font-bold mt-6">

@@ -41,21 +41,23 @@ const Review = () => {
     <div className="px-4 md:px-52 py-8 ">
       <div className="flex flex-row space-x-6">
         <div className="flex flex-col flex-1">
-          {/* Progress Bar */}
-          <div className="mb-8">
-            <ProgressIndicator steps={steps} currentStep={currentStep} />
-          </div>
-          <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
-            <h1 className="text-Grey500 font-semibold font-nunito text-[25px]">
-              Review your order
-            </h1>
-            <p className="text-Grey400 text-[13px]">8 items</p>
+          <div className=" mb-6 bg-white p-4 rounded-[28px]">
+            {/* Progress Bar */}
+            <div className="w-full flex justify-center">
+              <ProgressIndicator steps={steps} currentStep={currentStep} />
+            </div>
+            <div className="flex justify-between items-center mt-4">
+              <h1 className="text-Grey500 font-semibold font-nunito text-[25px]">
+                Review your order
+              </h1>
+              <p className="text-Grey400 text-[13px]">8 items</p>
+            </div>
           </div>
           <div className="bg-white  p-6 shadow-md rounded-[28px]">
             {products.map((product) => (
               <div
                 key={product.id}
-                className="flex items-center border-b border-gray-300 py-4"
+                className="flex items-center relative border-b border-gray-300 py-4"
               >
                 <div className="">
                   <Image
@@ -72,10 +74,10 @@ const Review = () => {
                   </h3>
                   <p className="text-[16px] text-Grey400">{product.weight}</p>
                 </div>
-                <div className="flex flex-col items-center">
-                  <span className="bg-red-300 text-white text-xs font-bold px-2 py-1 ml-10  rounded-full mb-4">
-                    {product.quantity}
-                  </span>
+                <span className="bg-[#F26262] text-white text-xs font-bold absolute px-2 py-1 top-2 right-0 rounded-full mb-4">
+                  {product.quantity}
+                </span>
+                <div className="flex items-center">
                   <p className="text-[20px] font-bold text-Grey500">
                     ₦{product.price}
                   </p>

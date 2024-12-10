@@ -44,7 +44,7 @@ const OrderCompleted = () => {
             {products.map((product) => (
               <div
                 key={product.id}
-                className="flex items-center border-b border-gray-300 py-4"
+                className="flex items-center relative border-b border-gray-300 py-4"
               >
                 <div className="">
                   <Image
@@ -61,10 +61,10 @@ const OrderCompleted = () => {
                   </h3>
                   <p className="text-[16px] text-Grey400">{product.weight}</p>
                 </div>
-                <div className="flex flex-col items-center">
-                  <span className="bg-Green900 text-white text-xs font-bold px-2 py-1 ml-10  rounded-full mb-4">
-                    {product.quantity}
-                  </span>
+                <span className="bg-Grey400 text-white text-xs font-bold px-2 py-1 absolute top-2 right-0 rounded-full mb-4">
+                  {product.quantity}
+                </span>
+                <div className="flex  items-center">
                   <p className="text-[20px] font-bold text-Grey500">
                     ₦{product.price}
                   </p>

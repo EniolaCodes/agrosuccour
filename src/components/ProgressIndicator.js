@@ -1,6 +1,6 @@
 const ProgressIndicator = ({ steps, currentStep }) => {
   return (
-    <div className="flex progress-mobile items-center px-24">
+    <div className="flex progress-mobile w-[300px]">
       {steps.map((step, index) => (
         <div key={index} className="flex items-center w-full">
           {/* Step Indicator */}

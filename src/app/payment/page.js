@@ -51,16 +51,17 @@ const Payment = () => {
   const currentStep = 1;
 
   return (
-    <div className="px-4 md:px-52 py-8 ">
+    <div className="px-4 md:px-52 py-8 overflow-y-auto">
       <div className="flex flex-row space-x-6">
         <div className="bg-white flex-1 p-6 shadow-md rounded-[28px]">
           {/* Progress Bar */}
-          <div className="">
+
+          <div className="w-full flex justify-center">
             <ProgressIndicator steps={steps} currentStep={currentStep} />
           </div>
           {/* shipping info */}
           <section>
-            <h2 className="text-[25px] font-nunito font-bold mb-4">
+            <h2 className="text-[25px] text-Grey500 font-nunito font-bold mt-4 mb-4">
               Where to send your order
             </h2>
             <div className="">
@@ -68,46 +69,46 @@ const Payment = () => {
                 addresses.map((address, index) => (
                   <div
                     key={index}
-                    className="p-4 rounded-[8px] shadow mb-4 bg-Green100"
+                    className="p-4 rounded-[8px] shadow mb-4 bg-Grey50"
                   >
                     <div className="flex justify-between font-nunitoSans mb-2">
                       <h3 className="text-[20px] text-Grey500 ">
                         {address.name}
                       </h3>
-                      <div className="flex space-x-4 text-[13px]">
+                      <div className="flex space-x-4 font-bold text-[16px]">
                         <button
                           onClick={redirectToCheckout}
-                          className="text-Green900"
+                          className="text-Green900 button"
                         >
                           Edit
                         </button>
                         <button
                           onClick={handleDeleteAll}
-                          className="text-Grey200"
+                          className="text-red-500 button"
                         >
                           Delete
                         </button>
                       </div>
                     </div>
                     <div className="bg-Grey200 w-full h-px mb-2" />
-                    <div className="space-y-2 text-Grey400 text-[13px]">
-                      <div className="flex items-center space-x-2">
+                    <div className="space-y-2 text-Grey400">
+                      <div className="flex items-center text-[14px] space-x-2">
                         <FiUser />
                         <p className=" ">{address.name}</p>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center text-[14px] space-x-2">
                         <FiMail />
                         <p className="">{address.email}</p>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center text-[14px] space-x-2">
                         <FiMapPin />
                         <p className="">{address.address}</p>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center text-[14px] space-x-2">
                         <FiPhone />
                         <p className="">{address.phone}</p>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center text-[14px] space-x-2">
                         <Image
                           src="/images/nigeria 1.svg"
                           width={20}
@@ -143,7 +144,7 @@ const Payment = () => {
                 <h2 className="text-[25px] font-nunito text-Grey500 font-bold mb-2">
                   Choose a payment method
                 </h2>
-                <p className="text-[11px] font-nunitoSans text-Grey400 mb-6 w-[397px]">
+                <p className="text-[13px] font-nunitoSans text-Grey400 mb-6 w-[397px]">
                   You will not be charged until you review this order on the
                   next page. All transactions are secure and encrypted.
                 </p>
@@ -152,15 +153,23 @@ const Payment = () => {
               <div className="space-y-4">
                 <div
                   onClick={() => setSelectedPaymentMethod("debit-card")}
-                  className={`mb-8 border bg-Grey100 hover:border-Grey200"  ${
+                  className={`mb-8 border bg-Grey50 hover:border-Grey50"  ${
                     selectedPaymentMethod === "debit-card"
                       ? " border"
-                      : "border-Grey200"
+                      : "border-Grey50"
                   } p-2 rounded-[8px] flex justify-between items-center cursor-pointer`}
                 >
                   <div className="flex items-center space-x-2">
-                    <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
-                      <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
+                    <div
+                      className={`relative w-6 h-6 rounded-full ${
+                        selectedPaymentMethod === "debit-card"
+                          ? "border-2 border-Green500"
+                          : "border-2 border-Grey100"
+                      }`}
+                    >
+                      {selectedPaymentMethod === "debit-card" && (
+                        <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
+                      )}
                     </div>
                     <span className="text-[16px] text-Grey500 font-nunitoSans font-bold">
                       Debit Card
@@ -192,7 +201,7 @@ const Payment = () => {
                 {selectedPaymentMethod === "debit-card" && (
                   <div className="space-y-4">
                     <div className="relative">
-                      <FiMail className="absolute left-3 top-[50px] transform -translate-y-1/2 text text-Grey200" />
+                      <FiMail className="absolute left-3 top-[55px] transform -translate-y-1/2 text text-Grey200" />
                       <p className="text-Grey500 text-[16px] mb-2 font-bold">
                         Card Number
                       </p>
@@ -209,7 +218,7 @@ const Payment = () => {
                         </p>
                         <div className="relative">
                           <RiCalendarEventFill className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                          <select className="w-1/2 border border-Grey200 rounded-lg p-2 pl-10 focus:outline-none  border:border-Grey400">
+                          <select className="w-[100px] md:w-1/2 border border-Grey200 rounded-lg p-2 pl-10 focus:outline-none  border:border-Grey400">
                             <option>MM</option>
                             <option>01</option>
                             <option>02</option>
@@ -224,8 +233,8 @@ const Payment = () => {
                             <option>11</option>
                             <option>12</option>
                           </select>
-                          <RiCalendarEventFill className="absolute left-[190px] top-1/2 transform -translate-y-1/2 text-Grey200" />
-                          <select className="w-1/2 border border-Grey200 rounded-lg p-2 pl-12 focus:outline-none  hover:border-Grey400">
+                          <RiCalendarEventFill className="absolute left-[110px] md:left-[190px] top-1/2 transform -translate-y-1/2 text-Grey200" />
+                          <select className="w-[100px] md:w-1/2 border border-Grey200 rounded-lg p-2 pl-12 focus:outline-none  hover:border-Grey400">
                             <option>YY</option>
                             <option>2024</option>
                             <option>2025</option>
@@ -241,7 +250,7 @@ const Payment = () => {
                         <input
                           type="text"
                           placeholder="572"
-                          className="w-1/3 border border-gray-300 rounded-lg p-2 focus:outline-none  hover:border-Grey400"
+                          className="w-[110px] md:w-1/3 border border-gray-300 rounded-lg p-2 focus:outline-none  hover:border-Grey400"
                         />
                         <BsQuestionLg
                           size={20}
@@ -281,11 +290,19 @@ const Payment = () => {
                   className={`border ${
                     selectedPaymentMethod === "bank-transfer"
                       ? "border"
-                      : "border-Grey200"
-                  } p-4 rounded-md flex bg-Grey100 border hover:border-Grey200 items-center cursor-pointer`}
+                      : "border-Grey50"
+                  } p-4 rounded-md flex bg-Grey50 border hover:border-Grey50 items-center cursor-pointer`}
                 >
-                  <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
-                    <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
+                  <div
+                    className={`relative w-6 h-6 rounded-full ${
+                      selectedPaymentMethod === "bank-transfer"
+                        ? "border-2 border-Green500"
+                        : "border-2 border-Grey100"
+                    }`}
+                  >
+                    {selectedPaymentMethod === "bank-transfer" && (
+                      <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
+                    )}
                   </div>
                   <span className="ml-2 text-[16px] text-Grey500 font-bold font-nunitoSans">
                     Direct bank transfer
@@ -415,7 +432,7 @@ const Payment = () => {
         href="/review"
         className="block md:hidden mt-8 bg-Green50 fixed bottom-0 w-full"
       >
-        <div className="p-8">
+        <div className="p-2">
           <button className=" mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
             Review your order
           </button>
