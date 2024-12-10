@@ -10,7 +10,8 @@ const CartComponent = () => {
     pathname === "/cart" ||
     pathname === "/checkout" ||
     pathname === "/payment" ||
-    pathname === "/review";
+    pathname === "/review" ||
+    pathname === "/ordercompleted";
 
   return (
     !isCartOrCheckoutOrPaymentOrReviewPage && (

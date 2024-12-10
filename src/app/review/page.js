@@ -1,9 +1,6 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { FiMail, FiUser, FiMapPin, FiPhone, FiCopy } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { PiFireTruck } from "react-icons/pi";
 import { MdOutlinePayment } from "react-icons/md";
@@ -119,7 +116,7 @@ const Review = () => {
               <p className="">Total:</p>
               <p>₦7000</p>
             </div>
-            <Link href="/review">
+            <Link href="/ordercompleted">
               <button className="hidden md:block mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
                 Place your order
               </button>
@@ -177,7 +174,7 @@ const Review = () => {
         </div>
       </div>
       <Link
-        href="/review"
+        href="/ordercompleted"
         className="block md:hidden mt-8 bg-Green50 fixed bottom-0 w-full"
       >
         <div className="p-8">
