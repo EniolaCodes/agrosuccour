@@ -81,7 +81,7 @@ const Products = () => {
             <ul className="flex flex-col space-y-4 mt-6 mb-6">
               <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-2">
                 <Image src="/images/box 1.svg" width={20} height={20} alt="" />
-                <Link href="/products/all">All Products</Link>
+                <Link href="/products">All Products</Link>
               </li>
               <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image
@@ -165,7 +165,7 @@ const Products = () => {
             {allproducts.map((product, index) => (
               <Link
                 key={index}
-                href={`/products/${product.id}`}
+                href={`/products/${product.product_id}`}
                 className="bg-white  rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
               >
                 <div className="relative w-full h-40 md:h-40">

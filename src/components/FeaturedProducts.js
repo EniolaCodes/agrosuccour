@@ -86,7 +86,7 @@ const FeaturedProducts = () => {
         {/* Small Products Section Under Large Image */}
         {allproducts.map((product, index) => (
           <Link
-            href={`/products/${product.id}`}
+            href={`/products/${product.product_id}`}
             key={index}
             className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
           >

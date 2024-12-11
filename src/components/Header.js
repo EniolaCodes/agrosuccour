@@ -8,6 +8,7 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { FiSearch, FiPhone } from "react-icons/fi";
 import { ImEnlarge2 } from "react-icons/im";
 import CartComponent from "@/components/CartComponent";
+import { useSession } from "@/components/providers/SessionProvider";
 
 const Header = () => {
   // Initial product data
@@ -41,6 +42,12 @@ const Header = () => {
       image: "/images/rice.svg",
     },
   ];
+
+  const sessionId = useSession();
+  useEffect(() => {
+    console.log("Session ID in Header:", sessionId);
+    // Fetch review data associated with the sessionId
+  }, [sessionId]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
@@ -180,7 +187,7 @@ const Header = () => {
                     height={20}
                     alt=""
                   />
-                  <Link href="/products/all">All Products</Link>
+                  <Link href="/products">All Products</Link>
                 </li>
                 <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
@@ -416,7 +423,7 @@ const Header = () => {
                   {/* checkout button */}
                   <div className="pb-6">
                     <Link href="/checkout">
-                      <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
+                      <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
                         Checkout ( ₦{totalPrice.toFixed(2)} )
                       </button>
                     </Link>
@@ -529,7 +536,7 @@ const Header = () => {
                         height={20}
                         alt=""
                       />
-                      <Link href="/products/all">All Products</Link>
+                      <Link href="/products">All Products</Link>
                     </li>
                     <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 rounded-[8px] ">
                       <Image

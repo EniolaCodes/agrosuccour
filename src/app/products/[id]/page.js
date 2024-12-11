@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useGetProducts } from "@/lib/models/product/hooks";
 import { useGetSingleProducts } from "@/lib/models/product/hooks";
 import { FaWhatsapp } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
@@ -12,17 +13,24 @@ import "react-toastify/dist/ReactToastify.css";
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const productId = useParams("id");
-  console.log(productId);
+  console.log(productId, "product id is here");
   const {
     data: fetchProductDetail,
     isLoading,
     isError,
     error,
   } = useGetSingleProducts({
-    productId: productId.product_id,
+    productId: productId.id,
   });
 
+  const { data: fetchProducts } = useGetProducts({
+    params: "?limit=6",
+  });
+  const allproducts = fetchProducts?.result?.data;
+  console.log(allproducts, "this is all");
+
   const singleProduct = fetchProductDetail?.result?.data;
+  console.log(singleProduct, "our single product");
   const pricePerUnit = 1200.99;
 
   const totalPrice = (quantity * pricePerUnit).toFixed(2);
@@ -200,13 +208,10 @@ const ProductDetails = () => {
             </h1>
           </Link>
         </div>
-        <Link
-          href={`/products/${products.id}`}
-          className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6"
-        >
-          {products.map((product, index) => (
+        <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
+          {allproducts.map((product, index) => (
             <Link
-              href={`/products/${product.id}`}
+              href={`/products/${product.product_id}`}
               key={index}
               className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
             >
@@ -226,9 +231,10 @@ const ProductDetails = () => {
                 <p className=" text-Grey200">{product.description}</p>
               </div>
               <div className="flex justify-between items-center">
-                <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
+                <p className="mt-2 text-Grey500 font-nunitoSans text-[20px] font-bold">
                   {product.price}
                 </p>
+
                 <div
                   onClick={(e) => {
                     e.preventDefault();
@@ -253,7 +259,7 @@ const ProductDetails = () => {
             pauseOnHover
             theme="light"
           />
-        </Link>
+        </div>
       </div>
     </div>
   );

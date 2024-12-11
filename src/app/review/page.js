@@ -1,14 +1,22 @@
 "use client";
 import Image from "next/image";
+import { useEffect } from "react";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import { PiFireTruck } from "react-icons/pi";
 import { MdOutlinePayment } from "react-icons/md";
 import ProgressIndicator from "@/components/ProgressIndicator";
+import { useSession } from "@/components/providers/SessionProvider";
 
 const Review = () => {
   const steps = ["DELIVERY", "PAYMENT", "REVIEW"];
   const currentStep = 2;
+
+  const sessionId = useSession();
+  useEffect(() => {
+    console.log("Session ID in Review Page:", sessionId);
+    // Fetch review data associated with the sessionId
+  }, [sessionId]);
 
   const products = [
     {

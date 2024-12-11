@@ -72,7 +72,7 @@ const TopSellingProducts = () => {
       <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
         {allproducts.map((product, index) => (
           <Link
-            href={`/products/${product.id}`}
+            href={`/products/${product.product_id}`}
             key={index}
             className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
           >

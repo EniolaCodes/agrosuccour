@@ -1,10 +1,18 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
+import { useSession } from "@/components/providers/SessionProvider";
 
 export default function Cart() {
+  const sessionId = useSession();
+
+  useEffect(() => {
+    console.log("Session ID in Cart Page:", sessionId);
+    // Fetch cart data using sessionId
+  }, [sessionId]);
+
   // Initial product data
   const initialProducts = [
     {
@@ -332,7 +340,6 @@ export default function Cart() {
             <p>Other fees:</p>
             <p>₦0.00</p>
           </div>
-
           <div className="flex justify-between items-center text-Grey500 text-[20px] font-bold border-b pb-2">
             <p className="text-medium">Total:</p>
             <p>₦{totalPrice.toFixed(2)}</p>
