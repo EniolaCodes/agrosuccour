@@ -6,7 +6,8 @@ export const useGetProducts = ({options, params}) => {
 console.log('OUR GREAT PARAM', params)
     const fetchProducts = () =>
         backendFetch({
-            endpoint: `/product/${params}`,
+            endpoint: `/product/`,
+            // endpoint: `/product/${params}`,
             // token: token
         });
 

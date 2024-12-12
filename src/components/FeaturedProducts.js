@@ -1,14 +1,15 @@
 "use client";
-// import { useGetProducts } from "@/lib/models/product/hooks";
+import { useGetProducts } from "@/lib/models/product/hooks";
 import Image from "next/image";
 import Link from "next/link";
 import { FaShoppingCart } from "react-icons/fa";
 
 const FeaturedProducts = () => {
-  // const {data: fetchProducts, isSuccess} = useGetProducts({})
+  const {data: fetchProducts, isSuccess} = useGetProducts({})
 //   const {data: fetchProducts, isSuccess} = useGetProducts({
 //     params: `?limit=5`
 //   })
+  console.log('data : ', fetchProducts)
   const products = Array(14).fill({
     product_id: 1,
     image: "/images/singleProduct.svg",
@@ -16,7 +17,7 @@ const FeaturedProducts = () => {
     description: "15g",
     price: "₦10,000.00",
   });
-  // console.log(fetchProducts);
+  console.log(fetchProducts);
 
   return (
     <div className="px-4 md:px-20 py-8">
@@ -47,14 +48,14 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Small Products Section Under Large Image */}
-        {products.map((product, index) => (
+        {fetchProducts?.result?.data?.map((product, index) => (
           <div
             key={index}
             className="bg-Green50 rounded-[16px] p-4 hover:border border-Grey300 hover:border-solid transition duration-200 ease-in-out"
           >
             <div className="relative w-full h-40 md:h-40">
               <Image
-                src={product.image}
+                src={product.image_url}
                 alt={product.title}
                 layout="fill"
                 objectFit="cover"

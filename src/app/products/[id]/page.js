@@ -15,6 +15,7 @@ const ProductDetails = () => {
   const {data: fetchProductDetail, isSuccess} = useGetSingleProducts({
      productId: productId.id
   })
+  const singleProduct = fetchProductDetail?.result?.data ;
   console.log('OUR PRODUCT DETAIL IS : ', fetchProductDetail)
   console.log('OUR PRODUCT Category IS : ', fetchProductDetail?.result?.category)
   const pricePerUnit = 1200.99;
@@ -70,7 +71,7 @@ const ProductDetails = () => {
           {/* Product Details */}
           <div className="flex-1 mt-6">
             <h1 className="text-[20px] md:text-[31px] font-nunitoSans font-bold text-Grey500">
-              {fetchProductDetail?.result?.product_name}
+              {singleProduct?.product_name}
             </h1>
             <p className="text-LightGrey text-sm md:text-[25px] opacity-80 font-nunito">
               1 kilogram / Bag
@@ -98,7 +99,7 @@ const ProductDetails = () => {
                   +
                 </button>
               </div>
-              <p className="text-2xl font-bold text-Grey500">₦{totalPrice}</p>
+              <p className="text-2xl font-bold text-Grey500">₦{singleProduct?.price}</p>
             </div>
             {/* Add to Cart Button */}
             <button className="w-full bg-Green500 text-Grey500 font-bold py-2 rounded-[12px] hover:bg-Green600 h-[56px] mt-8">
@@ -111,9 +112,10 @@ const ProductDetails = () => {
                 Product Description
               </h2>
               <p className="text-[13px] font-nunitoSans text-Grey200">
-                Your trusted source for fresh produce, essentials, bulk
+                {/* Your trusted source for fresh produce, essentials, bulk
                 purchasing, and farming support—delivering quality, convenience,
-                and customer satisfaction.
+                and customer satisfaction. */}
+                {singleProduct?.description}
               </p>
             </div>
             {/* Contact Support */}
@@ -159,8 +161,8 @@ const ProductDetails = () => {
             >
               <div className="relative w-full h-40 md:h-40">
                 <Image
-                  src={product.image}
-                  alt={product.title}
+                //   src={singleProduct?.image}
+                //   alt={singleProduct?.title}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-lg"
@@ -168,16 +170,16 @@ const ProductDetails = () => {
               </div>
               <div className="flex flex-col">
                 <h3 className="mt-4 text-sm text-Grey400 font-bold">
-                  {product.title}
+                  {singleProduct?.title}
                 </h3>
-                <p className=" text-Grey200">{product.description}</p>
+                <p className=" text-Grey200">{singleProduct?.description}</p>
               </div>
               <div className="flex justify-between items-center">
                 <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
-                  {product.price}
+                  {singleProduct?.price}
                 </p>
                 <Link
-                  href={`/products/${product.id}`}
+                  href={`/products/${singleProduct?.id}`}
                   className=""
                   onClick={notify}
                 >
