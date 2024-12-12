@@ -11,14 +11,14 @@ console.log('OUR GREAT PARAM', params)
             // token: token
         });
 
-    return useQuery({
-        queryKey: ["FETCH_PRODUCT_LIST"],
-        queryFn: () => fetchProducts(),
-        ...{
-            staleTime: Infinity,
-            ...options
-        }
-    });
+  return useQuery({
+    queryKey: ["FETCH_PRODUCT_LIST"],
+    queryFn: () => fetchProducts(),
+    ...{
+      staleTime: Infinity,
+      ...options,
+    },
+  });
 };
 
 export const useGetSingleProducts = ({productId}) => {
@@ -53,13 +53,11 @@ export const useGetSingleProducts = ({productId}) => {
 //             token: token
 //         });
 
-//     return useQuery({
-//         queryKey: ["FETCH_PRODUCT_LIST", poductId],
-//         queryFn: () => fetchProducts(),
-//         ...{
-//             staleTime: Infinity,
-//             enabled: !!poductId,
-//             ...options
-//         }
-//     });
-// };
+  return useQuery({
+    queryKey: ["FETCH_PRODUCT_DETAIL"],
+    queryFn: () => fetchProducts(),
+    ...{
+      staleTime: Infinity,
+    },
+  });
+};

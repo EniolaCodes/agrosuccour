@@ -14,6 +14,8 @@ module.exports = {
         agroWhite: "#E8F5E9",
         Green50: "#F0F7EC",
         Green100: "#D1E7C5",
+        Green200: "#B2D7A9",
+        Green300: "#9CCB82",
         Green400: "#89C169",
         Green500: "#6BB244",
         Green600: "#61A23E",
@@ -31,6 +33,12 @@ module.exports = {
         urbanist: ["Urbanist", "sans-serif"],
         nunito: ["Nunito", "sans-serif"],
         nunitoSans: ["Nunito Sans", "sans-serif"],
+      },
+      boxShadow: {
+        custom:
+          "0 16px 32px -4px rgba(16, 32, 24, 0.1), 0 2px 4px 0 rgba(16, 32, 24, 0.04)",
+        customHover:
+          "0 40px 80px -16px rgba(16, 32, 24, 0.16), 0 2px 4px 0 rgba(16, 32, 24, 0.04)",
       },
     },
   },

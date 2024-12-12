@@ -13,7 +13,7 @@ const Footer = () => {
     >
       <div className="flex flex-col space-y-10 md:flex-row md:space-x-28">
         <div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             <Image
               src="/images/logo.svg"
               alt="Agrosuccour Logo"
@@ -21,7 +21,10 @@ const Footer = () => {
               height={50}
               className=""
             />
-            <h2 className="text-3xl font-urbanist font-semibold text-Green100">
+            <h2
+              className="text-[33px] mt-6
+            font-urbanist font-semibold text-Green100"
+            >
               Agrosuccour
             </h2>
           </div>
@@ -37,17 +40,17 @@ const Footer = () => {
               Useful links
             </h3>
             <ul className="space-y-2 text-agroHeading opacity-80">
-              <li className="text-inherit">
+              <li className="text-inherit hover:text-Green500 ">
                 <Link href="/">Home</Link>
               </li>
-              <li className="text-inherit">
-                <Link href="/#about">About</Link>
+              <li className="text-inherit hover:text-Green500 ">
+                <Link href="/about">About</Link>
               </li>
-              <li className="text-inherit">
-                <Link href="/#products">Products</Link>
+              <li className="text-inherit hover:text-Green500 ">
+                <Link href="/products">Products</Link>
               </li>
-              <li className="text-inherit">
-                <Link href="/#carts">Carts</Link>
+              <li className="text-inherit hover:text-Green500 ">
+                <Link href="/cart">Cart</Link>
               </li>
             </ul>
           </div>
@@ -78,9 +81,11 @@ const Footer = () => {
                   placeholder="Enter your email"
                   className="w-full p-2 text-Grey200 rounded-[12px] border-none focus:outline-none "
                 />
-                <button className="absolute right-0 top-0 bottom-0 text-[16px] bg-Green500 hover:bg-Green600 text-Grey500 text-center px-4 py-2 rounded-[12px] m-0.5">
-                  Subscribe
-                </button>
+                <Link href="/products">
+                  <button className="absolute right-0 top-0 bottom-0 text-[16px] bg-Green500 hover:bg-Green600 text-white text-center px-4 py-2 rounded-[12px] m-0.5">
+                    Subscribe
+                  </button>
+                </Link>
               </div>
             </form>
           </div>
