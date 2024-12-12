@@ -119,12 +119,12 @@ export default function Cart() {
                             {product.name}
                           </h2>
                           <p className="text-[16px] text-Grey400">
-                            {product.quantity} kilogram / Bag
+                            1 kilogram / Bag
                           </p>
                         </div>
                       </div>
                       <p className="text-[20px] font-bold text-Grey500 ml-2">
-                        ₦{product.price.toFixed(2)}
+                        ₦{(product.price * product.quantity).toFixed(2)}
                       </p>
                       <div className="flex items-center space-x-2">
                         <button
@@ -247,9 +247,7 @@ export default function Cart() {
                       />
                       <div className="text-Grey500">
                         <h2 className="text-lg font-bold">{product.name}</h2>
-                        <p className="text-sm">
-                          {product.quantity} kilogram / Bag
-                        </p>
+                        <p className="text-sm">1 kilogram / Bag</p>
                       </div>
                     </div>
                     <div className="">
@@ -285,7 +283,7 @@ export default function Cart() {
                       </button>
                     </div>
                     <p className="text-lg font-bold text-Grey500 ml-2">
-                      ₦{product.price.toFixed(2)}
+                      ₦{(product.price * product.quantity).toFixed(2)}
                     </p>
                   </div>
                 </div>

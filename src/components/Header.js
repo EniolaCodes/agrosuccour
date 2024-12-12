@@ -413,7 +413,7 @@ const Header = () => {
                               </button>
                             </div>
                             <p className="text-lg font-bold text-Grey500 ml-2">
-                              ₦{product.price.toFixed(2)}
+                              ₦{(product.price * product.quantity).toFixed(2)}
                             </p>
                           </div>
                         </div>
