@@ -6,6 +6,7 @@ import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/app/context/CartContext";
 
 const FeaturedProducts = () => {
   const {
@@ -27,9 +28,8 @@ const FeaturedProducts = () => {
 
   console.log(allproducts);
 
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
+  const { cartItems, toggleCartItem } = useCart();
+
   const notify = (message) => {
     toast(message, {
       position: "top-left",
@@ -42,17 +42,16 @@ const FeaturedProducts = () => {
     });
   };
 
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
-
-    if (updatedCartState[index]) {
+  const toggleCart = (product) => {
+    const exists = cartItems.some((item) => item.id === product.id);
+    toggleCartItem(product); // Update the cart state
+    if (!exists) {
       notify("Cart successfully updated");
     } else {
       notify("One item removed from cart");
     }
   };
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
 
@@ -84,7 +83,7 @@ const FeaturedProducts = () => {
           />
         </div>
         {/* Small Products Section Under Large Image */}
-        {allproducts.map((product, index) => (
+        {products.map((product, index) => (
           <Link
             href={`/products/${product.product_id}`}
             key={index}
@@ -113,10 +112,10 @@ const FeaturedProducts = () => {
                 <div
                   onClick={(e) => {
                     e.preventDefault();
-                    toggleCart(index);
+                    toggleCart(product);
                   }}
                   className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                    cartState[index]
+                    cartItems.some((item) => item.id === product.id)
                       ? "bg-Green500 text-white border-Green500"
                       : "border-Green500 text-Green500"
                   }`}

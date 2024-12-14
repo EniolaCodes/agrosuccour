@@ -6,6 +6,7 @@ import { useGetProducts } from "@/lib/models/product/hooks";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/app/context/CartContext";
 
 const TopSellingProducts = () => {
   const {
@@ -27,9 +28,8 @@ const TopSellingProducts = () => {
 
   console.log(fetchProducts);
 
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
+  const { cartItems, toggleCartItem } = useCart();
+
   const notify = (message) => {
     toast(message, {
       position: "top-left",
@@ -42,12 +42,10 @@ const TopSellingProducts = () => {
     });
   };
 
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
-
-    if (updatedCartState[index]) {
+  const toggleCart = (product) => {
+    const exists = cartItems.some((item) => item.id === product.id);
+    toggleCartItem(product); // Update the cart state
+    if (!exists) {
       notify("Cart successfully updated");
     } else {
       notify("One item removed from cart");
@@ -99,10 +97,10 @@ const TopSellingProducts = () => {
               <div
                 onClick={(e) => {
                   e.preventDefault();
-                  toggleCart(index);
+                  toggleCart(product);
                 }}
                 className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                  cartState[index]
+                  cartItems.some((item) => item.id === product.id)
                     ? "bg-Green500 text-white border-Green500"
                     : "border-Green500 text-Green500"
                 }`}

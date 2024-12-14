@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TansStackProvider from "@/components/providers/TansStackProvider";
 import SessionProvider from "@/components/providers/SessionProvider";
+import { CartProvider } from "./context/CartContext";
 
 // export const metadata = {
 //   title: "AgroSuccour",
@@ -24,13 +25,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="bg-Grey50">
-        <SessionProvider>
-          <TansStackProvider>
-            <Header />
-            {children}
-            {!hiddenFooterPaths.includes(pathname) && <Footer />}
-          </TansStackProvider>
-        </SessionProvider>
+        <CartProvider>
+          <SessionProvider>
+            <TansStackProvider>
+              <Header />
+              {children}
+              {!hiddenFooterPaths.includes(pathname) && <Footer />}
+            </TansStackProvider>
+          </SessionProvider>
+        </CartProvider>
       </body>
     </html>
   );

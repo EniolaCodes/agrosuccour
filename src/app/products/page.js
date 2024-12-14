@@ -162,7 +162,7 @@ const Products = () => {
           </div>
           {/* all products */}
           <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allproducts.map((product, index) => (
+            {products.map((product, index) => (
               <Link
                 key={index}
                 href={`/products/${product.product_id}`}
