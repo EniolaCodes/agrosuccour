@@ -34,11 +34,9 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { BsCart2 } from "react-icons/bs";
-import { useCart } from "@/app/context/CartContext";
 
 const CartComponent = () => {
-  const pathname = usePathname();
-  const { cartItems } = useCart(); // Get cart count from context
+  const pathname = usePathname(); // Get the current route path
 
   // Check if the current route is the cart page
   const isCartPage = pathname === "/cart";
@@ -52,7 +50,7 @@ const CartComponent = () => {
             Cart
           </h1>
           <span className="absolute top-0 right-1 bg-red-600 text-white rounded-full px-2 text-xs">
-            {cartItems.length}
+            4
           </span>
         </Link>
       </div>
