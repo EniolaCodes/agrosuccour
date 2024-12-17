@@ -14,7 +14,7 @@ const FeaturedProducts = () => {
     isError,
     error,
   } = useGetProducts({
-    params: "?limit=14",
+    params: "?limit=26",
   });
   const products = Array(14).fill({
     id: Math.random(),
@@ -93,8 +93,8 @@ const FeaturedProducts = () => {
             <div>
               <div className="relative w-full h-40 md:h-40">
                 <Image
-                  src={product.image}
-                  alt={product.title}
+                  src={product.image_url}
+                  alt={product.image_url}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-lg"

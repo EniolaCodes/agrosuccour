@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useGetProducts } from "@/lib/models/product/hooks";
+import { useGetProducts, useGetTopSellingProducts } from "@/lib/models/product/hooks";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,7 +13,7 @@ const TopSellingProducts = () => {
     isLoading,
     isError,
     error,
-  } = useGetProducts({
+  } = useGetTopSellingProducts({
     params: "?limit=6",
   });
   const products = Array(6).fill({
@@ -23,10 +23,8 @@ const TopSellingProducts = () => {
     description: "15g",
     price: "₦10,000.00",
   });
-  const allproducts = fetchProducts?.result?.data;
-
-  console.log(fetchProducts);
-
+  const topsellingProducts = fetchProducts?.result?.data;
+  console.log('topsellingProducts : ', topsellingProducts)
   const [cartState, setCartState] = useState(
     Array(products.length).fill(false)
   );
@@ -70,7 +68,7 @@ const TopSellingProducts = () => {
         </Link>
       </div>
       <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
-        {allproducts.map((product, index) => (
+        {topsellingProducts.map((product, index) => (
           <Link
             href={`/products/${product.product_id}`}
             key={index}
@@ -78,8 +76,8 @@ const TopSellingProducts = () => {
           >
             <div className="relative w-full h-40 md:h-40">
               <Image
-                src={product.image}
-                alt={product.title}
+                src={product.image_url}
+                alt={product.image_url}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-lg"

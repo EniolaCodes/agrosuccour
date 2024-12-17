@@ -3,19 +3,16 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useGetProducts } from "@/lib/models/product/hooks";
-import { useGetSingleProducts } from "@/lib/models/product/hooks";
 import { FaWhatsapp } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useParams } from "next/navigation";
 import { useGetProducts, useGetSingleProducts } from "@/lib/models/product/hooks";
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const productId = useParams("id");
-  console.log(productId, "product id is here");
+  console.log(productId.id, "product id is here");
   const {
     data: fetchProductDetail,
     isLoading,
@@ -32,7 +29,7 @@ const ProductDetails = () => {
   console.log(allproducts, "this is all");
 
   const singleProduct = fetchProductDetail?.result?.data;
-  console.log(singleProduct, "our single product");
+//   console.log(singleProduct, "our single product");
   const pricePerUnit = 1200.99;
 
   const totalPrice = (quantity * pricePerUnit).toFixed(2);
@@ -114,9 +111,9 @@ const ProductDetails = () => {
 
           {/* Large Image */}
           <div className="flex-1">
-            {singleProduct}
+            {/* src="/images/meat 1.svg" */}
             <Image
-              src="/images/meat 1.svg"
+              src={singleProduct?.image_url}
               alt="Large image"
               width={600}
               height={100}
@@ -127,7 +124,8 @@ const ProductDetails = () => {
           {/* Product Details */}
           <div className="flex-1 mt-6">
             <h1 className="text-[20px] mb-2 md:text-[31px] font-nunitoSans font-bold text-Grey500">
-              Pepper mixed for soup - Elo
+              {/* Pepper mixed for soup - Elo */}
+              {singleProduct?.product_name}
             </h1>
             <p className="text-LightGrey text-sm md:text-[25px] opacity-80 font-nunito">
               1 kilogram / Bag
@@ -214,14 +212,14 @@ const ProductDetails = () => {
         <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
           {allproducts.map((product, index) => (
             <Link
-              href={`/products/${product.product_id}`}
-              key={index}
+              href={`/products/${product?.product_id}`}
+              key={product.product_id}
               className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
             >
               <div className="relative w-full h-40 md:h-40">
                 <Image
-                //   src={singleProduct?.image}
-                //   alt={singleProduct?.title}
+                  src={product?.image_url}
+                  alt={product?.product_name}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-lg"
@@ -229,13 +227,13 @@ const ProductDetails = () => {
               </div>
               <div className="flex flex-col">
                 <h3 className="mt-4 text-sm text-Grey400 font-bold">
-                  {singleProduct?.title}
+                  {product?.product_name}
                 </h3>
-                <p className=" text-Grey200">{singleProduct?.description}</p>
+                <p className=" text-Grey200">{product?.description}</p>
               </div>
               <div className="flex justify-between items-center">
                 <p className="mt-2 text-Grey500 font-nunitoSans text-[20px] font-bold">
-                  {product.price}
+                  {product?.price}
                 </p>
 
                 <div

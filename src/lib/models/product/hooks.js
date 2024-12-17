@@ -6,7 +6,7 @@ export const useGetProducts = ({options, params}) => {
 console.log('OUR GREAT PARAM', params)
     const fetchProducts = () =>
         backendFetch({
-            endpoint: `/product/`,
+            endpoint: `/product/${params}`,
             // endpoint: `/product/${params}`,
             // token: token
         });
@@ -30,6 +30,26 @@ console.log('OUR GREAT PARAM', params)
   });
 };
 
+export const useGetTopSellingProducts = ({options, params}) => {
+    // const token = getCookie(USER_TOKEN);
+console.log('OUR GREAT PARAM', params)
+    const fetchProducts = () =>
+        backendFetch({
+            endpoint: `/product/${params}`,
+            // endpoint: `/product/${params}`,
+            // token: token
+        });
+
+    return useQuery({
+        queryKey: ["FETCH_TOPSELLING_PRODUCT_LIST", params],
+        queryFn: () => fetchProducts(),
+        ...{
+            staleTime: Infinity,
+            ...options
+        }
+    });
+};
+
 export const useGetSingleProducts = ({productId}) => {
     // const token = getCookie(USER_TOKEN);
     console.log('OUR GREAT PARAM', productId)
@@ -40,11 +60,11 @@ export const useGetSingleProducts = ({productId}) => {
         });
 
     return useQuery({
-        queryKey: ["FETCH_PRODUCT_DETAIL"],
+        queryKey: ["FETCH_PRODUCT_DETAIL", productId],
         queryFn: () => fetchProducts(),
         ...{
             staleTime: Infinity,
-
+            enabled: !!productId,
         }
     });
 };
