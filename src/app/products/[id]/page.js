@@ -9,6 +9,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/app/context/CartContext";
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
@@ -26,6 +27,9 @@ const ProductDetails = () => {
   const { data: fetchProducts } = useGetProducts({
     params: "?limit=6",
   });
+
+  const { cartItems, toggleCartItem } = useCart();
+
   const allproducts = fetchProducts?.result?.data;
   console.log(allproducts, "this is all");
 
@@ -41,38 +45,13 @@ const ProductDetails = () => {
     if (quantity > 1) setQuantity((prev) => prev - 1);
   };
 
-  const products = Array(6).fill({
-    id: Math.random(),
-    image: "/images/chicken.svg",
-    title: "Product Name",
-    description: "15g",
-    price: "₦10,000.00",
-  });
+  const toggleCart = (productId) => {
+    toggleCartItem(productId);
 
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
-  const notify = (message) => {
-    toast(message, {
-      position: "top-left",
-      style: {
-        backgroundColor: "#fff",
-        color: "#6BB244",
-        fontSize: "20px",
-        fontWeight: "bold",
-      },
-    });
-  };
-
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
-
-    if (updatedCartState[index]) {
-      notify("Cart successfully updated");
+    if (cartItems.includes(productId)) {
+      toast.error("Item removed from cart");
     } else {
-      notify("One item removed from cart");
+      toast.success("Item added to cart");
     }
   };
 
@@ -209,7 +188,7 @@ const ProductDetails = () => {
           </Link>
         </div>
         <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
-          {allproducts.map((product, index) => (
+          {allproducts.slice(0, 6).map((product, index) => (
             <Link
               href={`/products/${product.product_id}`}
               key={index}
@@ -238,10 +217,10 @@ const ProductDetails = () => {
                 <div
                   onClick={(e) => {
                     e.preventDefault();
-                    toggleCart(index);
+                    toggleCart(product.product_id);
                   }}
                   className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                    cartState[index]
+                    cartItems.includes(product.product_id)
                       ? "bg-Green500 text-white border-Green500"
                       : "border-Green500 text-Green500"
                   }`}

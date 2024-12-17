@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetProducts } from "@/lib/models/product/hooks";
@@ -7,30 +7,20 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { IoChevronForwardOutline, IoChevronBackOutline } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/app/context/CartContext";
 
 const Products = () => {
-  const {
-    data: fetchProducts,
-    isLoading,
-    isError,
-    error,
-  } = useGetProducts({
-    params: "?limit=16",
-  });
+  const { data: fetchProducts } = useGetProducts({});
+  const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const { cartItems, toggleCartItem } = useCart();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const allproducts = fetchProducts?.result?.data;
 
-  const totalPages = 10; // Total number of pages
-  const [currentPage, setCurrentPage] = useState(1);
-
-  // Example product data (replace with actual data fetching)
-  const products = Array.from({ length: 16 }, (_, index) => ({
-    name: `Product ${index + 1 + (currentPage - 1) * 16}`,
-    price: "₦10,000.99",
-    image: "/images/singleProduct.svg",
-    title: "Product Name",
-    description: "15g",
-  }));
+  // const PRODUCTS_PER_PAGE = 20;
 
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -40,32 +30,42 @@ const Products = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
-  const notify = (message) => {
-    toast(message, {
-      position: "top-left",
-      style: {
-        backgroundColor: "#fff",
-        color: "#6BB244",
-        fontSize: "20px",
-        fontWeight: "bold",
-      },
-    });
-  };
+  const toggleCart = (productId) => {
+    toggleCartItem(productId);
 
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
-
-    if (updatedCartState[index]) {
-      notify("Cart successfully updated");
+    if (cartItems.includes(productId)) {
+      toast.error("Item removed from cart");
     } else {
-      notify("One item removed from cart");
+      toast.success("Item added to cart");
     }
   };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     setIsError(false);
+
+  //     try {
+  //       const response = await fetch("/products/");
+  //       const data = await response.json();
+  //       setProducts(data.products);
+  //       setTotalPages(Math.ceil(data.products.length / PRODUCTS_PER_PAGE));
+  //     } catch (err) {
+  //       setIsError(true);
+  //       console.error(err);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  // const getProductsForCurrentPage = () => {
+  //   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  //   const endIndex = Math.min(startIndex + PRODUCTS_PER_PAGE, products.length);
+  //   return products.slice(startIndex, endIndex);
+  // };
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
@@ -157,12 +157,12 @@ const Products = () => {
               All Products
             </h1>
             <p className="text-Grey400 text-[13px] md:text-[16px] font-nunitoSans">
-              1500 items
+              40 items
             </p>
           </div>
           {/* all products */}
           <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {products.map((product, index) => (
+            {allproducts.slice(0, 20).map((product, index) => (
               <Link
                 key={index}
                 href={`/products/${product.product_id}`}
@@ -193,10 +193,10 @@ const Products = () => {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
-                      toggleCart(index);
+                      toggleCart(product.product_id);
                     }}
                     className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                      cartState[index]
+                      cartItems.includes(product.product_id)
                         ? "bg-Green500 text-white border-Green500"
                         : "border-Green500 text-Green500"
                     }`}

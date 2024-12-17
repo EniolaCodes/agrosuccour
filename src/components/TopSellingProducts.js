@@ -30,25 +30,13 @@ const TopSellingProducts = () => {
 
   const { cartItems, toggleCartItem } = useCart();
 
-  const notify = (message) => {
-    toast(message, {
-      position: "top-left",
-      style: {
-        backgroundColor: "#fff",
-        color: "#6BB244",
-        fontSize: "20px",
-        fontWeight: "bold",
-      },
-    });
-  };
+  const toggleCart = (productId) => {
+    toggleCartItem(productId);
 
-  const toggleCart = (product) => {
-    const exists = cartItems.some((item) => item.id === product.id);
-    toggleCartItem(product); // Update the cart state
-    if (!exists) {
-      notify("Cart successfully updated");
+    if (cartItems.includes(productId)) {
+      toast.error("Item removed from cart");
     } else {
-      notify("One item removed from cart");
+      toast.success("Item added to cart");
     }
   };
 
@@ -68,7 +56,7 @@ const TopSellingProducts = () => {
         </Link>
       </div>
       <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
-        {allproducts.map((product, index) => (
+        {allproducts.slice(0, 6).map((product, index) => (
           <Link
             href={`/products/${product.product_id}`}
             key={index}
@@ -97,10 +85,10 @@ const TopSellingProducts = () => {
               <div
                 onClick={(e) => {
                   e.preventDefault();
-                  toggleCart(product);
+                  toggleCart(product.product_id);
                 }}
                 className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                  cartItems.some((item) => item.id === product.id)
+                  cartItems.includes(product.product_id)
                     ? "bg-Green500 text-white border-Green500"
                     : "border-Green500 text-Green500"
                 }`}
