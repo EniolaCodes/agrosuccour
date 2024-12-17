@@ -7,7 +7,11 @@ import { FaWhatsapp } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useGetProducts, useGetSingleProducts } from "@/lib/models/product/hooks";
+import {
+  useGetProducts,
+  useGetSingleProducts,
+} from "@/lib/models/product/hooks";
+import { useCart } from "@/app/context/CartContext";
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
@@ -29,7 +33,7 @@ const ProductDetails = () => {
   console.log(allproducts, "this is all");
 
   const singleProduct = fetchProductDetail?.result?.data;
-//   console.log(singleProduct, "our single product");
+  //   console.log(singleProduct, "our single product");
   const pricePerUnit = 1200.99;
 
   const totalPrice = (quantity * pricePerUnit).toFixed(2);
@@ -48,30 +52,15 @@ const ProductDetails = () => {
     price: "₦10,000.00",
   });
 
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
-  const notify = (message) => {
-    toast(message, {
-      position: "top-left",
-      style: {
-        backgroundColor: "#fff",
-        color: "#6BB244",
-        fontSize: "20px",
-        fontWeight: "bold",
-      },
-    });
-  };
+  const { cartItems, toggleCartItem } = useCart();
 
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
+  const toggleCart = (productId) => {
+    toggleCartItem(productId);
 
-    if (updatedCartState[index]) {
-      notify("Cart successfully updated");
+    if (!cartItems.includes(productId)) {
+      toast.success("Cart successfully updated");
     } else {
-      notify("One item removed from cart");
+      toast.error("One item has been removed from cart");
     }
   };
 
@@ -87,7 +76,7 @@ const ProductDetails = () => {
         <div className=" flex flex-col md:flex-row md:space-x-8">
           {/* Sidebar for smaller images */}
           <div className="hidden md:flex md:flex-col md:space-y-4 mt-2 ">
-            {[1, 2, 3].map((_, index) => (
+            {/* {[1, 2, 3].map((_, index) => (
               <Image
                 key={index}
                 src="/images/meat 1.svg"
@@ -96,28 +85,28 @@ const ProductDetails = () => {
                 height={100}
                 className="bg-Grey100 p-2 rounded-[16px]"
               />
-            ))}
-            {/* {[1, 2, 3].map((_, index) => (
+            ))} */}
+            {[1, 2, 3].map((_, index) => (
               <Image
                 key={index}
-                src={singleProduct?.imageUrl}
+                src={singleProduct?.image_url}
                 alt={`Product Image ${index + 1}`}
-                width={170}
+                width={220}
                 height={100}
                 className="bg-Grey100 p-2 rounded-[16px]"
               />
-            ))} */}
+            ))}
           </div>
 
           {/* Large Image */}
-          <div className="flex-1">
+          <div className="h-[430px] mt-12 w-full md:w-auto flex items-center justify-center">
             {/* src="/images/meat 1.svg" */}
             <Image
               src={singleProduct?.image_url}
               alt="Large image"
-              width={600}
-              height={100}
-              className="bg-Grey100 p-2 rounded-[16px]"
+              width={100}
+              height={200}
+              className="bg-Grey100 p-2 rounded-[16px] object-cover h-full w-full"
             />
           </div>
 
@@ -153,7 +142,9 @@ const ProductDetails = () => {
                   +
                 </button>
               </div>
-              <p className="text-2xl font-bold text-Grey500">₦{singleProduct?.price}</p>
+              <p className="text-2xl font-bold text-Grey500">
+                ₦{(singleProduct?.price * quantity).toLocaleString()}
+              </p>
             </div>
             {/* Add to Cart Button */}
             <Link href="/cart">
@@ -239,10 +230,10 @@ const ProductDetails = () => {
                 <div
                   onClick={(e) => {
                     e.preventDefault();
-                    toggleCart(index);
+                    toggleCart(product.product_id);
                   }}
                   className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                    cartState[index]
+                    cartItems.includes(product.product_id)
                       ? "bg-Green500 text-white border-Green500"
                       : "border-Green500 text-Green500"
                   }`}

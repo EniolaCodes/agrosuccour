@@ -5,14 +5,12 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  const toggleCartItem = (product) => {
+  const toggleCartItem = (productId) => {
     setCartItems((prev) => {
-      const exists = prev.some((item) => item.id === product.id);
-      if (exists) {
-        return prev.filter((item) => item.id !== product.id);
-      } else {
-        return [...prev, product];
-      }
+      const exists = prev.includes(productId);
+      return exists
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId];
     });
   };
 

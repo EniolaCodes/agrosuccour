@@ -15,40 +15,22 @@ const FeaturedProducts = () => {
     isError,
     error,
   } = useGetProducts({
-    params: "?limit=26",
+    params: "?limit=14",
   });
-  const products = Array(14).fill({
-    id: Math.random(),
-    image: "/images/singleProduct.svg",
-    title: "Product Name",
-    description: "15g",
-    price: "₦10,000.00",
-  });
+
   const allproducts = fetchProducts?.result?.data;
 
   console.log(allproducts);
 
   const { cartItems, toggleCartItem } = useCart();
 
-  const notify = (message) => {
-    toast(message, {
-      position: "top-left",
-      style: {
-        backgroundColor: "#fff",
-        color: "#6BB244",
-        fontSize: "20px",
-        fontWeight: "bold",
-      },
-    });
-  };
+  const toggleCart = (productId) => {
+    toggleCartItem(productId);
 
-  const toggleCart = (product) => {
-    const exists = cartItems.some((item) => item.id === product.id);
-    toggleCartItem(product); // Update the cart state
-    if (!exists) {
-      notify("Cart successfully updated");
+    if (!cartItems.includes(productId)) {
+      toast.success("Cart successfully updated");
     } else {
-      notify("One item removed from cart");
+      toast.error("One item has been removed from cart");
     }
   };
 
@@ -83,7 +65,7 @@ const FeaturedProducts = () => {
           />
         </div>
         {/* Small Products Section Under Large Image */}
-        {products.map((product, index) => (
+        {allproducts.map((product, index) => (
           <Link
             href={`/products/${product.product_id}`}
             key={index}
@@ -112,10 +94,10 @@ const FeaturedProducts = () => {
                 <div
                   onClick={(e) => {
                     e.preventDefault();
-                    toggleCart(product);
+                    toggleCart(product.product_id);
                   }}
                   className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                    cartItems.some((item) => item.id === product.id)
+                    cartItems.includes(product.product_id)
                       ? "bg-Green500 text-white border-Green500"
                       : "border-Green500 text-Green500"
                   }`}
