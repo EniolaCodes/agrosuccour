@@ -2,11 +2,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useGetProducts } from "@/lib/models/product/hooks";
+import {
+  useGetProducts,
+  useGetTopSellingProducts,
+} from "@/lib/models/product/hooks";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useCart } from "@/app/context/CartContext";
 
 const TopSellingProducts = () => {
   const {
@@ -14,7 +16,7 @@ const TopSellingProducts = () => {
     isLoading,
     isError,
     error,
-  } = useGetProducts({
+  } = useGetTopSellingProducts({
     params: "?limit=6",
   });
   const products = Array(6).fill({
@@ -24,12 +26,11 @@ const TopSellingProducts = () => {
     description: "15g",
     price: "₦10,000.00",
   });
-  const allproducts = fetchProducts?.result?.data;
-
-  console.log(fetchProducts);
-
-  const { cartItems, toggleCartItem } = useCart();
-
+  const topsellingProducts = fetchProducts?.result?.data;
+  console.log("topsellingProducts : ", topsellingProducts);
+  const [cartState, setCartState] = useState(
+    Array(products.length).fill(false)
+  );
   const notify = (message) => {
     toast(message, {
       position: "top-left",
@@ -42,10 +43,12 @@ const TopSellingProducts = () => {
     });
   };
 
-  const toggleCart = (product) => {
-    const exists = cartItems.some((item) => item.id === product.id);
-    toggleCartItem(product); // Update the cart state
-    if (!exists) {
+  const toggleCart = (index) => {
+    const updatedCartState = [...cartState];
+    updatedCartState[index] = !updatedCartState[index];
+    setCartState(updatedCartState);
+
+    if (updatedCartState[index]) {
       notify("Cart successfully updated");
     } else {
       notify("One item removed from cart");
@@ -68,7 +71,7 @@ const TopSellingProducts = () => {
         </Link>
       </div>
       <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
-        {allproducts.map((product, index) => (
+        {topsellingProducts.map((product, index) => (
           <Link
             href={`/products/${product.product_id}`}
             key={index}
@@ -76,8 +79,8 @@ const TopSellingProducts = () => {
           >
             <div className="relative w-full h-40 md:h-40">
               <Image
-                src={product.image}
-                alt={product.title}
+                src={product.image_url}
+                alt={product.image_url}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-lg"
@@ -97,10 +100,10 @@ const TopSellingProducts = () => {
               <div
                 onClick={(e) => {
                   e.preventDefault();
-                  toggleCart(product);
+                  toggleCart(index);
                 }}
                 className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                  cartItems.some((item) => item.id === product.id)
+                  cartState[index]
                     ? "bg-Green500 text-white border-Green500"
                     : "border-Green500 text-Green500"
                 }`}

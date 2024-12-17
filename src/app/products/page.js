@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetProducts } from "@/lib/models/product/hooks";
@@ -9,19 +9,24 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Products = () => {
+    const totalPages = 10; // Total number of pages
+  const [currentPage, setCurrentPage] = useState(1);
+
   const {
     data: fetchProducts,
     isLoading,
     isError,
     error,
+    refetch,
   } = useGetProducts({
-    params: "?limit=16",
+    params: `?limit=8&page=${currentPage}`,
   });
 
   const allproducts = fetchProducts?.result?.data;
 
-  const totalPages = 10; // Total number of pages
-  const [currentPage, setCurrentPage] = useState(1);
+    useEffect(() => {
+        refetch();
+        }, [currentPage, refetch]);
 
   // Example product data (replace with actual data fetching)
   const products = Array.from({ length: 16 }, (_, index) => ({
@@ -170,8 +175,8 @@ const Products = () => {
               >
                 <div className="relative w-full h-40 md:h-40">
                   <Image
-                    src={product.image}
-                    alt={product.title}
+                    src={product.image_url}
+                    alt={product.product_name}
                     layout="fill"
                     objectFit="cover"
                     className="rounded-lg"
