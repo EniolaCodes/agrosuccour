@@ -6,45 +6,44 @@ import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/app/context/CartContext";
 
 const FeaturedProducts = () => {
-  const { data: fetchProducts, isSuccess } = useGetProducts({});
-  const products = Array(14).fill({
-    id: Math.random(),
-    image: "/images/singleProduct.svg",
-    title: "Product Name",
-    description: "15g",
-    price: "₦10,000.00",
+  const {
+    data: fetchProducts,
+    isLoading,
+    isError,
+    error,
+  } = useGetProducts({
+    params: "?limit=10",
   });
-  // const allProducts = fetchProducts?.result?.data;
-  console.log(fetchProducts);
+  // const products = Array(14).fill({
+  //   id: Math.random(),
+  //   image: "/images/singleProduct.svg",
+  //   title: "Product Name",
+  //   description: "15g",
+  //   price: "₦10,000.00",
+  // });
+  const allproducts = fetchProducts?.result?.data;
 
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
-  const notify = (message) => {
-    toast(message, {
-      position: "top-left",
-      style: {
-        backgroundColor: "#fff",
-        color: "#6BB244",
-        fontSize: "20px",
-        fontWeight: "bold",
-      },
-    });
-  };
+  console.log(allproducts);
 
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
+  const { cartItems, toggleCartItem } = useCart();
 
-    if (updatedCartState[index]) {
-      notify("Cart successfully updated");
+  console.log("Cart Items: ", cartItems);
+
+  const toggleCart = (productId) => {
+    toggleCartItem(productId);
+
+    if (cartItems.includes(productId)) {
+      toast.error("Item removed from cart");
     } else {
-      notify("One item removed from cart");
+      toast.success("Item added to cart");
     }
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
 
   return (
     <div className="px-4 md:px-20 py-8">
@@ -74,9 +73,9 @@ const FeaturedProducts = () => {
           />
         </div>
         {/* Small Products Section Under Large Image */}
-        {products.map((product, index) => (
+        {allproducts.slice(0, 14).map((product, index) => (
           <Link
-            href={`/products/${product.id}`}
+            href={`/products/${product.product_id}`}
             key={index}
             className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
           >
@@ -103,10 +102,10 @@ const FeaturedProducts = () => {
                 <div
                   onClick={(e) => {
                     e.preventDefault();
-                    toggleCart(index);
+                    toggleCart(product.product_id);
                   }}
                   className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                    cartState[index]
+                    cartItems.includes(product.product_id)
                       ? "bg-Green500 text-white border-Green500"
                       : "border-Green500 text-Green500"
                   }`}

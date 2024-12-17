@@ -1,6 +1,6 @@
 const ProgressIndicator = ({ steps, currentStep }) => {
   return (
-    <div className="flex progress-mobile items-center px-24">
+    <div className="flex progress-mobile w-[300px]">
       {steps.map((step, index) => (
         <div key={index} className="flex items-center w-full">
           {/* Step Indicator */}
@@ -11,7 +11,7 @@ const ProgressIndicator = ({ steps, currentStep }) => {
               }`}
             ></div>
             <p
-              className={`text-[10px]  mt-2 ${
+              className={`text-[10px]  mt-2 ${
                 index <= currentStep ? "text-Grey500" : "text-Grey500/30"
               }`}
             >
@@ -23,9 +23,9 @@ const ProgressIndicator = ({ steps, currentStep }) => {
           {index < steps.length - 1 && (
             <div
               className={`flex-1 h-[2px] -ml-2 -mr-1 bg-gradient-to-r ${
-                index < currentStep
-                  ? "from-Green500 to-Green500/100"
-                  : "from-Green500/90 to-Green500/20"
+                index <= currentStep
+                  ? "from-Green500 to-Green500"
+                  : "from-Green500/20 to-Green500/90"
               }`}
             ></div>
           )}

@@ -1,14 +1,40 @@
 "use client";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useGetProducts } from "@/lib/models/product/hooks";
+import { useGetSingleProducts } from "@/lib/models/product/hooks";
 import { FaWhatsapp } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/app/context/CartContext";
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
+  const productId = useParams("id");
+  console.log(productId, "product id is here");
+  const {
+    data: fetchProductDetail,
+    isLoading,
+    isError,
+    error,
+  } = useGetSingleProducts({
+    productId: productId.id,
+  });
+
+  const { data: fetchProducts } = useGetProducts({
+    params: "?limit=6",
+  });
+
+  const { cartItems, toggleCartItem } = useCart();
+
+  const allproducts = fetchProducts?.result?.data;
+  console.log(allproducts, "this is all");
+
+  const singleProduct = fetchProductDetail?.result?.data;
+  console.log(singleProduct, "our single product");
   const pricePerUnit = 1200.99;
 
   const totalPrice = (quantity * pricePerUnit).toFixed(2);
@@ -19,40 +45,18 @@ const ProductDetails = () => {
     if (quantity > 1) setQuantity((prev) => prev - 1);
   };
 
-  const products = Array(6).fill({
-    id: Math.random(),
-    image: "/images/chicken.svg",
-    title: "Product Name",
-    description: "15g",
-    price: "₦10,000.00",
-  });
+  const toggleCart = (productId) => {
+    toggleCartItem(productId);
 
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
-  const notify = (message) => {
-    toast(message, {
-      position: "top-left",
-      style: {
-        backgroundColor: "#fff",
-        color: "#6BB244",
-        fontSize: "20px",
-        fontWeight: "bold",
-      },
-    });
-  };
-
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
-
-    if (updatedCartState[index]) {
-      notify("Cart successfully updated");
+    if (cartItems.includes(productId)) {
+      toast.error("Item removed from cart");
     } else {
-      notify("One item removed from cart");
+      toast.success("Item added to cart");
     }
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
 
   return (
     <div className="px-4 md:px-20 py-8 min-h-screen">
@@ -73,10 +77,21 @@ const ProductDetails = () => {
                 className="bg-Grey100 p-2 rounded-[16px]"
               />
             ))}
+            {/* {[1, 2, 3].map((_, index) => (
+              <Image
+                key={index}
+                src={singleProduct?.imageUrl}
+                alt={`Product Image ${index + 1}`}
+                width={170}
+                height={100}
+                className="bg-Grey100 p-2 rounded-[16px]"
+              />
+            ))} */}
           </div>
 
           {/* Large Image */}
           <div className="flex-1">
+            {singleProduct}
             <Image
               src="/images/meat 1.svg"
               alt="Large image"
@@ -102,7 +117,7 @@ const ProductDetails = () => {
                   className={`px-2 py-1 rounded-md font-extrabold ${
                     quantity > 1
                       ? "bg-Green500 text-Green50"
-                      : "bg-Grey100 text-Green50"
+                      : "bg-Green200 text-Green50"
                   }`}
                 >
                   -
@@ -172,13 +187,10 @@ const ProductDetails = () => {
             </h1>
           </Link>
         </div>
-        <Link
-          href={`/products/${products.id}`}
-          className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6"
-        >
-          {products.map((product, index) => (
+        <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
+          {allproducts.slice(0, 6).map((product, index) => (
             <Link
-              href={`/products/${product.id}`}
+              href={`/products/${product.product_id}`}
               key={index}
               className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
             >
@@ -198,16 +210,17 @@ const ProductDetails = () => {
                 <p className=" text-Grey200">{product.description}</p>
               </div>
               <div className="flex justify-between items-center">
-                <p className="mt-2 text-Grey500 font-nunitoSans text-[16px] font-bold">
+                <p className="mt-2 text-Grey500 font-nunitoSans text-[20px] font-bold">
                   {product.price}
                 </p>
+
                 <div
                   onClick={(e) => {
                     e.preventDefault();
-                    toggleCart(index);
+                    toggleCart(product.product_id);
                   }}
                   className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                    cartState[index]
+                    cartItems.includes(product.product_id)
                       ? "bg-Green500 text-white border-Green500"
                       : "border-Green500 text-Green500"
                   }`}
@@ -225,7 +238,7 @@ const ProductDetails = () => {
             pauseOnHover
             theme="light"
           />
-        </Link>
+        </div>
       </div>
     </div>
   );
