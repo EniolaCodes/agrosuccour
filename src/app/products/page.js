@@ -1,15 +1,32 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useGetProducts } from "@/lib/models/product/hooks";
 import { MdAddShoppingCart } from "react-icons/md";
 import { IoChevronForwardOutline, IoChevronBackOutline } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Products = () => {
-  const totalPages = 10; // Total number of pages
+    const totalPages = 10; // Total number of pages
   const [currentPage, setCurrentPage] = useState(1);
+
+  const {
+    data: fetchProducts,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetProducts({
+    params: `?limit=8&page=${currentPage}`,
+  });
+
+  const allproducts = fetchProducts?.result?.data;
+
+    useEffect(() => {
+        refetch();
+        }, [currentPage, refetch]);
 
   // Example product data (replace with actual data fetching)
   const products = Array.from({ length: 16 }, (_, index) => ({
@@ -54,6 +71,9 @@ const Products = () => {
       notify("One item removed from cart");
     }
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
   return (
     <div className="px-4 md:px-20 py-8">
       <div className="flex">
@@ -66,7 +86,7 @@ const Products = () => {
             <ul className="flex flex-col space-y-4 mt-6 mb-6">
               <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-2">
                 <Image src="/images/box 1.svg" width={20} height={20} alt="" />
-                <Link href="/products/all">All Products</Link>
+                <Link href="/products">All Products</Link>
               </li>
               <li className="flex space-x-4 text-Grey400 hover:bg-Green200 p-2 hover:rounded-[8px] ">
                 <Image
@@ -150,13 +170,13 @@ const Products = () => {
             {products.map((product, index) => (
               <Link
                 key={index}
-                href={`/products/${product.id}`}
+                href={`/products/${product.product_id}`}
                 className="bg-white  rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
               >
                 <div className="relative w-full h-40 md:h-40">
                   <Image
-                    src={product.image}
-                    alt={product.title}
+                    src={product.image_url}
+                    alt={product.product_name}
                     layout="fill"
                     objectFit="cover"
                     className="rounded-lg"

@@ -6,9 +6,17 @@ import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/app/context/CartContext";
 
 const FeaturedProducts = () => {
-  const { data: fetchProducts, isSuccess } = useGetProducts({});
+  const {
+    data: fetchProducts,
+    isLoading,
+    isError,
+    error,
+  } = useGetProducts({
+    params: "?limit=26",
+  });
   const products = Array(14).fill({
     id: Math.random(),
     image: "/images/singleProduct.svg",
@@ -16,12 +24,12 @@ const FeaturedProducts = () => {
     description: "15g",
     price: "₦10,000.00",
   });
-  // const allProducts = fetchProducts?.result?.data;
-  console.log(fetchProducts);
+  const allproducts = fetchProducts?.result?.data;
 
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
+  console.log(allproducts);
+
+  const { cartItems, toggleCartItem } = useCart();
+
   const notify = (message) => {
     toast(message, {
       position: "top-left",
@@ -34,17 +42,18 @@ const FeaturedProducts = () => {
     });
   };
 
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
-
-    if (updatedCartState[index]) {
+  const toggleCart = (product) => {
+    const exists = cartItems.some((item) => item.id === product.id);
+    toggleCartItem(product); // Update the cart state
+    if (!exists) {
       notify("Cart successfully updated");
     } else {
       notify("One item removed from cart");
     }
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
 
   return (
     <div className="px-4 md:px-20 py-8">
@@ -76,15 +85,15 @@ const FeaturedProducts = () => {
         {/* Small Products Section Under Large Image */}
         {products.map((product, index) => (
           <Link
-            href={`/products/${product.id}`}
+            href={`/products/${product.product_id}`}
             key={index}
             className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
           >
             <div>
               <div className="relative w-full h-40 md:h-40">
                 <Image
-                  src={product.image}
-                  alt={product.title}
+                  src={product.image_url}
+                  alt={product.image_url}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-lg"
@@ -103,10 +112,10 @@ const FeaturedProducts = () => {
                 <div
                   onClick={(e) => {
                     e.preventDefault();
-                    toggleCart(index);
+                    toggleCart(product);
                   }}
                   className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                    cartState[index]
+                    cartItems.some((item) => item.id === product.id)
                       ? "bg-Green500 text-white border-Green500"
                       : "border-Green500 text-Green500"
                   }`}

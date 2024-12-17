@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
 import { PiFireTruck } from "react-icons/pi";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiMail, FiUser, FiMapPin, FiGlobe } from "react-icons/fi";
+
 import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -32,7 +32,7 @@ const Checkout = () => {
       <div className="flex flex-row space-x-6">
         <div className="bg-white flex-1 p-6 shadow-md rounded-[28px]">
           {/* Progress Bar */}
-          <div className="">
+          <div className="w-full flex justify-center">
             <ProgressIndicator steps={steps} currentStep={currentStep} />
           </div>
           <h2 className="text-2xl font-nunito text-Grey500 font-bold mt-6">
@@ -138,7 +138,7 @@ const Checkout = () => {
                     },
                   })}
                   type="email"
-                  className={`w-full pl-10 p-4 font-nunitoSans  border rounded-lg focus:outline-none ${
+                  className={`w-full pl-10 p-4 font-nunitoSans  border rounded-[8px] focus:outline-none ${
                     errors.email
                       ? "border-red-500"
                       : "border-Grey200 hover:border-Grey400"

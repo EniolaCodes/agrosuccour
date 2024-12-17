@@ -2,11 +2,23 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  useGetProducts,
+  useGetTopSellingProducts,
+} from "@/lib/models/product/hooks";
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const TopSellingProducts = () => {
+  const {
+    data: fetchProducts,
+    isLoading,
+    isError,
+    error,
+  } = useGetTopSellingProducts({
+    params: "?limit=6",
+  });
   const products = Array(6).fill({
     id: Math.random(),
     image: "/images/chicken.svg",
@@ -14,12 +26,21 @@ const TopSellingProducts = () => {
     description: "15g",
     price: "₦10,000.00",
   });
-
+  const topsellingProducts = fetchProducts?.result?.data;
+  console.log("topsellingProducts : ", topsellingProducts);
   const [cartState, setCartState] = useState(
     Array(products.length).fill(false)
   );
   const notify = (message) => {
-    toast(message);
+    toast(message, {
+      position: "top-left",
+      style: {
+        backgroundColor: "#fff",
+        color: "#6BB244",
+        fontSize: "20px",
+        fontWeight: "bold",
+      },
+    });
   };
 
   const toggleCart = (index) => {
@@ -34,6 +55,9 @@ const TopSellingProducts = () => {
     }
   };
 
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
+
   return (
     <div className="px-4 md:px-20 py-8">
       <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
@@ -47,16 +71,16 @@ const TopSellingProducts = () => {
         </Link>
       </div>
       <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
-        {products.map((product, index) => (
+        {topsellingProducts.map((product, index) => (
           <Link
-            href={`/products/${product.id}`}
+            href={`/products/${product.product_id}`}
             key={index}
             className="bg-white rounded-[16px] p-4 hover:shadow-customHover transition-shadow duration-300"
           >
             <div className="relative w-full h-40 md:h-40">
               <Image
-                src={product.image}
-                alt={product.title}
+                src={product.image_url}
+                alt={product.image_url}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-lg"
@@ -89,7 +113,14 @@ const TopSellingProducts = () => {
             </div>
           </Link>
         ))}
-        <ToastContainer />
+        <ToastContainer
+          position="top-left"
+          autoClose={3000}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </div>
     </div>
   );

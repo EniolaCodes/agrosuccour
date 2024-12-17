@@ -9,9 +9,16 @@
   padding-bottom: 1.6rem !important;
 }
 
+.button {
+  text-decoration: none;
+}
+
 @media (max-width: 768px) {
   .progress-mobile {
     margin: 0;
     padding: 0;
+  }
+  .button {
+    text-decoration: underline;
   }
 }
