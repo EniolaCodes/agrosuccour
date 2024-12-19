@@ -7,9 +7,10 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { IoChevronForwardOutline, IoChevronBackOutline } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/app/context/CartContext";
 
 const Products = () => {
-    const totalPages = 10; // Total number of pages
+  const totalPages = 10; // Total number of pages
   const [currentPage, setCurrentPage] = useState(1);
 
   const {
@@ -19,23 +20,14 @@ const Products = () => {
     error,
     refetch,
   } = useGetProducts({
-    params: `?limit=8&page=${currentPage}`,
+    params: `?limit=20&page=${currentPage}`,
   });
 
   const allproducts = fetchProducts?.result?.data;
 
-    useEffect(() => {
-        refetch();
-        }, [currentPage, refetch]);
-
-  // Example product data (replace with actual data fetching)
-  const products = Array.from({ length: 16 }, (_, index) => ({
-    name: `Product ${index + 1 + (currentPage - 1) * 16}`,
-    price: "₦10,000.99",
-    image: "/images/singleProduct.svg",
-    title: "Product Name",
-    description: "15g",
-  }));
+  useEffect(() => {
+    refetch();
+  }, [currentPage, refetch]);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -45,33 +37,17 @@ const Products = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
-  const notify = (message) => {
-    toast(message, {
-      position: "top-left",
-      style: {
-        backgroundColor: "#fff",
-        color: "#6BB244",
-        fontSize: "20px",
-        fontWeight: "bold",
-      },
-    });
-  };
+  const { cartItems, toggleCartItem } = useCart();
 
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
+  const toggleCart = (productId) => {
+    toggleCartItem(productId);
 
-    if (updatedCartState[index]) {
-      notify("Cart successfully updated");
+    if (!cartItems.includes(productId)) {
+      toast.success("Cart successfully updated");
     } else {
-      notify("One item removed from cart");
+      toast.error("One item has been removed from cart");
     }
   };
-
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
   return (
@@ -167,7 +143,7 @@ const Products = () => {
           </div>
           {/* all products */}
           <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {products.map((product, index) => (
+            {allproducts.map((product, index) => (
               <Link
                 key={index}
                 href={`/products/${product.product_id}`}
@@ -198,10 +174,10 @@ const Products = () => {
                   <div
                     onClick={(e) => {
                       e.preventDefault();
-                      toggleCart(index);
+                      toggleCart(product.product_id);
                     }}
                     className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                      cartState[index]
+                      cartItems.includes(product.product_id)
                         ? "bg-Green500 text-white border-Green500"
                         : "border-Green500 text-Green500"
                     }`}

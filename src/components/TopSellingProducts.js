@@ -9,6 +9,7 @@ import {
 import { MdAddShoppingCart } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/app/context/CartContext";
 
 const TopSellingProducts = () => {
   const {
@@ -19,39 +20,18 @@ const TopSellingProducts = () => {
   } = useGetTopSellingProducts({
     params: "?limit=6",
   });
-  const products = Array(6).fill({
-    id: Math.random(),
-    image: "/images/chicken.svg",
-    title: "Product Name",
-    description: "15g",
-    price: "₦10,000.00",
-  });
+
   const topsellingProducts = fetchProducts?.result?.data;
   console.log("topsellingProducts : ", topsellingProducts);
-  const [cartState, setCartState] = useState(
-    Array(products.length).fill(false)
-  );
-  const notify = (message) => {
-    toast(message, {
-      position: "top-left",
-      style: {
-        backgroundColor: "#fff",
-        color: "#6BB244",
-        fontSize: "20px",
-        fontWeight: "bold",
-      },
-    });
-  };
+  const { cartItems, toggleCartItem } = useCart();
 
-  const toggleCart = (index) => {
-    const updatedCartState = [...cartState];
-    updatedCartState[index] = !updatedCartState[index];
-    setCartState(updatedCartState);
+  const toggleCart = (productId) => {
+    toggleCartItem(productId);
 
-    if (updatedCartState[index]) {
-      notify("Cart successfully updated");
+    if (!cartItems.includes(productId)) {
+      toast.success("Cart successfully updated");
     } else {
-      notify("One item removed from cart");
+      toast.error("One item has been removed from cart");
     }
   };
 
@@ -100,10 +80,10 @@ const TopSellingProducts = () => {
               <div
                 onClick={(e) => {
                   e.preventDefault();
-                  toggleCart(index);
+                  toggleCart(product.product_id);
                 }}
                 className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                  cartState[index]
+                  cartItems.includes(product.product_id)
                     ? "bg-Green500 text-white border-Green500"
                     : "border-Green500 text-Green500"
                 }`}
