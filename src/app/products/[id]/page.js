@@ -171,8 +171,8 @@ const ProductDetails = () => {
                 Looking for more details about this item?
               </p>
               <p className="mb-4 text-[9px] md:text-[10px] text-Grey100">
-                Anything you want to know? We're here for you, and we'll reply
-                in 2 minutes or less.
+                Anything you want to know? We&apos;re here for you, and
+                we&apos;ll reply in 2 minutes or less.
               </p>
               <div className="">
                 <a
