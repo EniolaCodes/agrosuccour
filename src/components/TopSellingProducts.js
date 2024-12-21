@@ -26,9 +26,10 @@ const TopSellingProducts = () => {
   const { cartItems, toggleCartItem } = useCart();
 
   const toggleCart = (productId) => {
+    const isAlreadyInCart = cartItems.includes(productId);
     toggleCartItem(productId);
 
-    if (!cartItems.includes(productId)) {
+    if (!isAlreadyInCart) {
       toast.success("Cart successfully updated");
     } else {
       toast.error("One item has been removed from cart");
