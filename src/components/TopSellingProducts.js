@@ -23,6 +23,7 @@ const TopSellingProducts = () => {
 
   const topsellingProducts = fetchProducts?.result?.data;
   console.log("topsellingProducts : ", topsellingProducts);
+
   const { cartItems, toggleCartItem } = useCart();
 
   const toggleCart = (productId) => {

@@ -18,11 +18,13 @@ export const CartProvider = ({ children }) => {
 
   const toggleCartItem = (productId) => {
     setCartItems((prevCartItems) => {
+      console.log("insideContextCartItem", prevCartItems);
       if (prevCartItems.includes(productId)) {
         return prevCartItems.filter((id) => id !== productId); // Remove the item
       }
-      return [...prevCartItems, productId]; // Add the item
+      return [...prevCartItems, productId, "here"]; // Add the item
     });
+    console.log("insideContext", productId);
   };
 
   return (
