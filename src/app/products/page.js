@@ -40,14 +40,16 @@ const Products = () => {
   const { cartItems, toggleCartItem } = useCart();
 
   const toggleCart = (productId) => {
+    const isAlreadyInCart = cartItems.includes(productId);
     toggleCartItem(productId);
 
-    if (!cartItems.includes(productId)) {
+    if (!isAlreadyInCart) {
       toast.success("Cart successfully updated");
     } else {
       toast.error("One item has been removed from cart");
     }
   };
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
   return (

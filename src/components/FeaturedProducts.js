@@ -22,6 +22,8 @@ const FeaturedProducts = () => {
 
   const { cartItems, toggleCartItem } = useCart();
 
+  console.log("Cart Items Featured: ", cartItems);
+
   const toggleCart = (productId) => {
     if (toggleCartItem) {
       toggleCartItem(productId);
@@ -55,7 +57,7 @@ const FeaturedProducts = () => {
           </h1>
         </Link>
       </div>
-      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-1 md:grid-cols-6 gap-6">
+      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
         {/* large image */}
         <div className="col-span-2 md:col-span-2 md:row-span-2 bg-Grey500 rounded-[12px] shadow-md overflow-hidden">
           <Image
