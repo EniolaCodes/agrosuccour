@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   useGetProducts,
@@ -243,14 +243,7 @@ const ProductDetails = () => {
               </div>
             </Link>
           ))}
-          <ToastContainer
-            position="top-left"
-            autoClose={3000}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
+
         </div>
       </div>
     </div>

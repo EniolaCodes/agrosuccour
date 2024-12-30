@@ -4,7 +4,7 @@ import { useGetProducts } from "@/lib/models/product/hooks";
 import Image from "next/image";
 import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCart } from "@/app/context/CartContext";
 
@@ -18,19 +18,22 @@ const FeaturedProducts = () => {
     params: "?limit=14",
   });
 
-  const allproducts = fetchProducts?.result?.data;
-
-  console.log(allproducts);
+  const allproducts = fetchProducts?.result?.data || [];
 
   const { cartItems, toggleCartItem } = useCart();
 
   const toggleCart = (productId) => {
-    toggleCartItem(productId);
+    if (toggleCartItem) {
+      toggleCartItem(productId);
 
-    if (!cartItems.includes(productId)) {
-      toast.success("Cart successfully updated");
+      if (!cartItems.includes(productId)) {
+        toast.success("Cart successfully updated");
+        // console.log('("Cart successfully updated")')
+      } else {
+        toast.error("One item has been removed from cart");
+      }
     } else {
-      toast.error("One item has been removed from cart");
+      console.error("toggleCartItem is undefined");
     }
   };
 
@@ -108,17 +111,11 @@ const FeaturedProducts = () => {
             </div>
           </Link>
         ))}
-        <ToastContainer
-          position="top-left"
-          autoClose={3000}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+
       </div>
     </div>
   );
 };
 
 export default FeaturedProducts;
+

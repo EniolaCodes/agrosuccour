@@ -7,7 +7,7 @@ import {
   useGetTopSellingProducts,
 } from "@/lib/models/product/hooks";
 import { MdAddShoppingCart } from "react-icons/md";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCart } from "@/app/context/CartContext";
 
@@ -93,14 +93,7 @@ const TopSellingProducts = () => {
             </div>
           </Link>
         ))}
-        <ToastContainer
-          position="top-left"
-          autoClose={3000}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+
       </div>
     </div>
   );
