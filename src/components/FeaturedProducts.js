@@ -4,7 +4,7 @@ import { useGetProducts } from "@/lib/models/product/hooks";
 import Image from "next/image";
 import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCart } from "@/app/context/CartContext";
 
@@ -18,19 +18,24 @@ const FeaturedProducts = () => {
     params: "?limit=14",
   });
 
-  const allproducts = fetchProducts?.result?.data;
-
-  console.log(allproducts);
+  const allproducts = fetchProducts?.result?.data || [];
 
   const { cartItems, toggleCartItem } = useCart();
 
-  const toggleCart = (productId) => {
-    toggleCartItem(productId);
+  console.log("Cart Items Featured: ", cartItems);
 
-    if (!cartItems.includes(productId)) {
-      toast.success("Cart successfully updated");
+  const toggleCart = (productId) => {
+    if (toggleCartItem) {
+      toggleCartItem(productId);
+
+      if (!cartItems.includes(productId)) {
+        toast.success("Cart successfully updated");
+        // console.log('("Cart successfully updated")')
+      } else {
+        toast.error("One item has been removed from cart");
+      }
     } else {
-      toast.error("One item has been removed from cart");
+      console.error("toggleCartItem is undefined");
     }
   };
 
@@ -52,7 +57,7 @@ const FeaturedProducts = () => {
           </h1>
         </Link>
       </div>
-      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-1 md:grid-cols-6 gap-6">
+      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
         {/* large image */}
         <div className="col-span-2 md:col-span-2 md:row-span-2 bg-Grey500 rounded-[12px] shadow-md overflow-hidden">
           <Image
@@ -108,17 +113,11 @@ const FeaturedProducts = () => {
             </div>
           </Link>
         ))}
-        <ToastContainer
-          position="top-left"
-          autoClose={3000}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+
       </div>
     </div>
   );
 };
 
 export default FeaturedProducts;
+

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useGetProducts } from "@/lib/models/product/hooks";
 import { MdAddShoppingCart } from "react-icons/md";
 import { IoChevronForwardOutline, IoChevronBackOutline } from "react-icons/io5";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCart } from "@/app/context/CartContext";
 
@@ -40,14 +40,16 @@ const Products = () => {
   const { cartItems, toggleCartItem } = useCart();
 
   const toggleCart = (productId) => {
+    const isAlreadyInCart = cartItems.includes(productId);
     toggleCartItem(productId);
 
-    if (!cartItems.includes(productId)) {
+    if (!isAlreadyInCart) {
       toast.success("Cart successfully updated");
     } else {
       toast.error("One item has been removed from cart");
     }
   };
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
   return (
@@ -187,14 +189,7 @@ const Products = () => {
                 </div>
               </Link>
             ))}
-            <ToastContainer
-              position="top-left"
-              autoClose={3000}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            />
+
           </div>
           {/* desktop pagination */}
           <div className="hidden md:block mt-8">
