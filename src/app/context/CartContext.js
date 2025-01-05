@@ -18,7 +18,7 @@ export const CartProvider = ({ children }) => {
 
   const toggleCartItem = (productId) => {
     setCartItems((prev) => {
-      console.log('Our previous array: ', prev);
+      console.log("Our previous array: ", prev);
       const exists = prev.includes(productId);
       return exists
         ? prev.filter((id) => id !== productId)
@@ -37,7 +37,7 @@ export const CartProvider = ({ children }) => {
 export const useCart = () => {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 };
