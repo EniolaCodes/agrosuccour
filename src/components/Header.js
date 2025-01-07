@@ -93,7 +93,9 @@ const Header = () => {
     toggleMenu(); // Close the menu
     router.push("/cart"); // Redirect to the cart page
   };
-  const { cartItems } = useCart();
+  const { cart } = useCart();
+
+  const isCartEmpty = !cart.items || cart.items.length === 0;
 
   // Function to increment quantity
   const incrementQuantity = (id) => {
@@ -123,8 +125,12 @@ const Header = () => {
   };
 
   // Calculate total price
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+  // const totalPrice = (cart.items || []).reduce(
+  //   (total, item) => total + (item.price || 0) * item.quantity,
+  //   0
+  // );
+  const totalPrice = (products || []).reduce(
+    (total, product) => total + (product.price || 0) * product.quantity,
     0
   );
 
@@ -330,7 +336,7 @@ const Header = () => {
               </div>
               <div className="border-b border-Grey50 mb-4" />
               {/* Check if the cart is empty */}
-              {cartItems.length === 0 ? (
+              {isCartEmpty ? (
                 <div className="flex flex-col items-center mb-6">
                   <Link
                     href="/products"
@@ -349,7 +355,7 @@ const Header = () => {
                       {products.length} items
                     </h1>
                     <p className="text-[16px] font-bold bg-Green100 rounded-[6px] p-1 text-Green900">
-                      ₦{totalPrice.toFixed(2)}
+                      ₦{(totalPrice || 0).toFixed(2)}
                     </p>
                   </div>
                   <div className="flex flex-col space-y-4">
