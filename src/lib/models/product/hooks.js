@@ -19,15 +19,6 @@ console.log('OUR GREAT PARAM', params)
             ...options
         }
     });
-
-  return useQuery({
-    queryKey: ["FETCH_PRODUCT_LIST"],
-    queryFn: () => fetchProducts(),
-    ...{
-      staleTime: Infinity,
-      ...options,
-    },
-  });
 };
 
 export const useGetTopSellingProducts = ({options, params}) => {
@@ -68,6 +59,29 @@ export const useGetSingleProducts = ({productId}) => {
         }
     });
 };
+
+export const useFetchCartProducts = (cartItems) => {
+    const fetchProducts = async () => {
+      const fetchedProducts = await Promise.all(
+        cartItems.map((item) =>
+          backendFetch({ endpoint: `/product/${item.product_id}` }).then(
+            (product) => ({
+              ...product,
+              quantity: item.quantity,
+            })
+          )
+        )
+      );
+      return fetchedProducts;
+    };
+
+    return useQuery({
+      queryKey: ["cartProducts", cartItems],
+      queryFn: fetchProducts,
+      enabled: cartItems.length > 0, // Only fetch when cartItems is populated
+      staleTime: Infinity,
+    });
+  };
 
 // To be used later on
 // export const useGetSingleProducts = ({poductId, options}) => {

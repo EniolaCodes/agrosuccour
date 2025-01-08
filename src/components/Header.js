@@ -9,44 +9,22 @@ import { FiSearch, FiPhone } from "react-icons/fi";
 import { ImEnlarge2 } from "react-icons/im";
 import CartComponent from "@/components/CartComponent";
 import { useCart } from "@/app/context/CartContext";
+import { useFetchCartProducts, useGetSingleProducts } from "@/lib/models/product/hooks";
 
 const Header = () => {
-  // Initial product data
-  const initialProducts = [
-    {
-      id: 1,
-      name: "Pepper",
-      quantity: 1,
-      price: 1200.99,
-      image: "/images/elo.svg",
-    },
-    {
-      id: 2,
-      name: "Full Chicken",
-      quantity: 2,
-      price: 1200.99,
-      image: "/images/chicken.svg",
-    },
-    {
-      id: 3,
-      name: "Fresh Fishes",
-      quantity: 1,
-      price: 1200.99,
-      image: "/images/fish.svg",
-    },
-    {
-      id: 4,
-      name: "Cabbage",
-      quantity: 1,
-      price: 1200.99,
-      image: "/images/rice.svg",
-    },
-  ];
-
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);;
+
+  // Fetch the cart from local storage
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const storedCartItems = storedCart.items
+    setCartItems(storedCart.items);
+  }, []);
+ const { data: cartedProducts = [], isLoading, isError } = useFetchCartProducts(cartItems);
 
   const menuRef = useRef(null);
   const productsRef = useRef(null);
@@ -352,31 +330,31 @@ const Header = () => {
                 <>
                   <div className="mb-4 font-nunitoSans flex justify-between items-center">
                     <h1 className="text-Grey400 text-sm font-bold">
-                      {products.length} items
+                      {cartedProducts.length} items
                     </h1>
                     <p className="text-[16px] font-bold bg-Green100 rounded-[6px] p-1 text-Green900">
                       ₦{(totalPrice || 0).toFixed(2)}
                     </p>
                   </div>
                   <div className="flex flex-col space-y-4">
-                    {products.map((product) => (
+                    {cartedProducts.map((product) => (
                       <div
-                        key={product.id}
+                        key={product.result.data.product_id}
                         className=" bg-white rounded-[8px] border p-4 mb-4"
                       >
                         <div className="space-y-6">
                           <div className=" relative">
                             <div className="flex flex-row space-x-6">
                               <Image
-                                src={product.image}
-                                alt={product.name}
+                                src={product.result.data.image_url}
+                                alt={product.result.data.product_name}
                                 width={124}
                                 height={80}
                                 className="rounded-md"
                               />
                               <div className="">
                                 <h2 className="text-Grey500 text-[16px] font-bold">
-                                  {product.name}
+                                  {product.result.data.product_name}
                                 </h2>
                                 <p className="text-[16px] text-Grey400">
                                   {product.quantity} kilogram / Bag
