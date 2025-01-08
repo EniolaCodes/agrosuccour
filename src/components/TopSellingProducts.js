@@ -24,15 +24,18 @@ const TopSellingProducts = () => {
   const topsellingProducts = fetchProducts?.result?.data;
   console.log("topsellingProducts : ", topsellingProducts);
 
-  const { cartItems, toggleCartItem } = useCart();
+  const { cart, addItemToCart, removeItemFromCart } = useCart();
 
   const toggleCart = (productId) => {
-    const isAlreadyInCart = cartItems.includes(productId);
-    toggleCartItem(productId);
+    const isAlreadyInCart = cart.items.some(
+      (item) => item.product_id === productId
+    );
 
     if (!isAlreadyInCart) {
+      addItemToCart(productId, 1);
       toast.success("Cart successfully updated");
     } else {
+      removeItemFromCart(productId);
       toast.error("One item has been removed from cart");
     }
   };
@@ -85,7 +88,9 @@ const TopSellingProducts = () => {
                   toggleCart(product.product_id);
                 }}
                 className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                  cartItems.includes(product.product_id)
+                  (cart.items || []).some(
+                    (item) => item.product_id === product.product_id
+                  )
                     ? "bg-Green500 text-white border-Green500"
                     : "border-Green500 text-Green500"
                 }`}
@@ -95,7 +100,6 @@ const TopSellingProducts = () => {
             </div>
           </Link>
         ))}
-
       </div>
     </div>
   );

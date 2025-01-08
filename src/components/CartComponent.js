@@ -5,7 +5,11 @@ import { useCart } from "@/app/context/CartContext";
 
 const CartComponent = () => {
   const pathname = usePathname();
-  const { cartItems } = useCart(); // Get cart count from context
+  const { cart } = useCart(); // Get cart count from context
+  const cartCount = cart.items.reduce(
+    (count, item) => count + item.quantity,
+    0
+  );
 
   // Check if the current route is one of the specified pages
   const isCartOrCheckoutOrPaymentOrReviewPage =
@@ -24,7 +28,7 @@ const CartComponent = () => {
             Cart
           </h1>
           <span className="absolute top-0 right-1 bg-red-600 text-white rounded-full px-2 text-xs">
-            {cartItems.length}
+            {cartCount}
           </span>
         </Link>
       </div>

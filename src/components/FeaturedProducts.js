@@ -4,7 +4,7 @@ import { useGetProducts } from "@/lib/models/product/hooks";
 import Image from "next/image";
 import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCart } from "@/app/context/CartContext";
 
@@ -20,22 +20,19 @@ const FeaturedProducts = () => {
 
   const allproducts = fetchProducts?.result?.data || [];
 
-  const { cartItems, toggleCartItem } = useCart();
-
-  console.log("Cart Items Featured: ", cartItems);
+  const { cart, addItemToCart, removeItemFromCart } = useCart();
 
   const toggleCart = (productId) => {
-    if (toggleCartItem) {
-      toggleCartItem(productId);
+    const isAlreadyInCart = cart.items.some(
+      (item) => item.product_id === productId
+    );
 
-      if (!cartItems.includes(productId)) {
-        toast.success("Cart successfully updated");
-        // console.log('("Cart successfully updated")')
-      } else {
-        toast.error("One item has been removed from cart");
-      }
+    if (!isAlreadyInCart) {
+      addItemToCart(productId, 1);
+      toast.success("Cart successfully updated");
     } else {
-      console.error("toggleCartItem is undefined");
+      removeItemFromCart(productId);
+      toast.error("One item has been removed from cart");
     }
   };
 
@@ -102,7 +99,7 @@ const FeaturedProducts = () => {
                     toggleCart(product.product_id);
                   }}
                   className={`rounded-full border p-2 cursor-pointer transition-colors ${
-                    cartItems.includes(product.product_id)
+                    (cart.items || []).some((item) => item.product_id === product.product_id)
                       ? "bg-Green500 text-white border-Green500"
                       : "border-Green500 text-Green500"
                   }`}
@@ -113,11 +110,9 @@ const FeaturedProducts = () => {
             </div>
           </Link>
         ))}
-
       </div>
     </div>
   );
 };
 
 export default FeaturedProducts;
-

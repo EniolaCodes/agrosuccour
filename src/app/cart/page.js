@@ -3,15 +3,10 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
-import { useSession } from "@/components/providers/SessionProvider";
+import { useCart } from "@/app/context/CartContext";
 
 export default function Cart() {
-  const sessionId = useSession();
-
-  useEffect(() => {
-    console.log("Session ID in Cart Page:", sessionId);
-    // Fetch cart data using sessionId
-  }, [sessionId]);
+  const { cart } = useCart();
 
   // Initial product data
   const initialProducts = [
@@ -75,8 +70,8 @@ export default function Cart() {
   };
 
   // Calculate total price
-  const totalPrice = products.reduce(
-    (total, product) => total + product.price * product.quantity,
+  const totalPrice = (products || []).reduce(
+    (total, product) => total + (product.price || 0) * product.quantity,
     0
   );
 
@@ -331,7 +326,7 @@ export default function Cart() {
 
           <div className="flex justify-between items-center text-Grey400 text-sm border-b pb-2">
             <p>Subtotal:</p>
-            <p>₦{totalPrice.toFixed(2)}</p>
+            <p> ₦{(totalPrice || 0).toFixed(2)}</p>
           </div>
 
           <div className="flex justify-between items-center text-Grey400 text-sm border-b pb-2">
@@ -340,7 +335,7 @@ export default function Cart() {
           </div>
           <div className="flex justify-between items-center text-Grey500 text-[20px] font-bold border-b pb-2">
             <p className="text-medium">Total:</p>
-            <p>₦{totalPrice.toFixed(2)}</p>
+            <p> ₦{(totalPrice || 0).toFixed(2)}</p>
           </div>
         </div>
       </div>
