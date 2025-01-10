@@ -18,33 +18,40 @@ const Header = () => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const { removeItemFromCart } = useCart();
-  const { data: cartedProducts = [], isLoading, isError, refetch: refetchCartProducts } = useFetchCartProducts(cartItems);
+  const {
+    data: cartedProducts = [],
+    isLoading,
+    isError,
+    refetch: refetchCartProducts,
+  } = useFetchCartProducts(cartItems);
 
-// ---------------------------------------------------------------
-// useEffect(() => {
-//     const updateCartItems = () => {
-//       const storedCart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
-//       setCartItems(storedCart.items);
-//       refetchCartProducts();
-//     };
+  // ---------------------------------------------------------------
+  // useEffect(() => {
+  //     const updateCartItems = () => {
+  //       const storedCart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
+  //       setCartItems(storedCart.items);
+  //       refetchCartProducts();
+  //     };
 
-//     // Listen for storage changes
-//     window.addEventListener("storage", updateCartItems);
+  //     // Listen for storage changes
+  //     window.addEventListener("storage", updateCartItems);
 
-//     // Initial fetch
-//     updateCartItems();
-//     // Set up an interval to check for updates
-//     const intervalId = setInterval(updateCartItems, 1000);
+  //     // Initial fetch
+  //     updateCartItems();
+  //     // Set up an interval to check for updates
+  //     const intervalId = setInterval(updateCartItems, 1000);
 
-//     return () => {
-//       window.removeEventListener("storage", updateCartItems);
-//       clearInterval(intervalId);
-//     };
-//   }, [refetchCartProducts]);
+  //     return () => {
+  //       window.removeEventListener("storage", updateCartItems);
+  //       clearInterval(intervalId);
+  //     };
+  //   }, [refetchCartProducts]);
 
-useEffect(() => {
+  useEffect(() => {
     const updateCartItems = () => {
-      const storedCart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
+      const storedCart = JSON.parse(localStorage.getItem("cart")) || {
+        items: [],
+      };
       setCartItems(storedCart.items);
       refetchCartProducts();
     };
@@ -56,7 +63,7 @@ useEffect(() => {
       }
     };
 
-    updateCartItems();    // Update cart items when the component mounts
+    updateCartItems(); // Update cart items when the component mounts
 
     window.addEventListener("storage", handleStorageChange); // Add storage event listener
 
@@ -90,95 +97,126 @@ useEffect(() => {
     }
   }, [cartItems, refetchCartProducts]);
 
+  // const updateLocalStorage = (updatedProducts) => {
+  //   const cartItems = updatedProducts.map((product) => ({
+  //     id: product.result.data.product_id,
+  //     quantity: product.quantity,
+  //   }));
+  //   localStorage.setItem("cart", JSON.stringify({ items: cartItems }));
+  // };
+
   const updateLocalStorage = (updatedProducts) => {
-    const cartItems = updatedProducts.map(product => ({
-      id: product.result.data.product_id,
-      quantity: product.quantity
-    }));
-    localStorage.setItem("cart", JSON.stringify({ items: cartItems }));
+    localStorage.setItem("cartProducts", JSON.stringify(updatedProducts));
   };
 
-    const menuRef = useRef(null);
-    const productsRef = useRef(null);
-    const cartRef = useRef(null);
+  const menuRef = useRef(null);
+  const productsRef = useRef(null);
+  const cartRef = useRef(null);
 
-    const handleClickOutside = (event) => {
-        //check if click is outside of the desktop menu
-        if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(false);
-        }
-        if (productsRef.current && !productsRef.current.contains(event.target)) {
-        console.log("product closed");
-        setProductsOpen(false);
-        }
-        if (cartRef.current && !cartRef.current.contains(event.target)) {
-        console.log("cart closed");
-        setCartOpen(false);
-        }
+  const handleClickOutside = (event) => {
+    //check if click is outside of the desktop menu
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+    if (productsRef.current && !productsRef.current.contains(event.target)) {
+      console.log("product closed");
+      setProductsOpen(false);
+    }
+    if (cartRef.current && !cartRef.current.contains(event.target)) {
+      console.log("cart closed");
+      setCartOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
 
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const toggleProducts = () => setProductsOpen((prev) => !prev);
+  const toggleCart = () => setCartOpen((prev) => !prev);
+  const router = useRouter();
 
-    const toggleMenu = () => setMenuOpen((prev) => !prev);
-    const toggleProducts = () => setProductsOpen((prev) => !prev);
-    const toggleCart = () => setCartOpen((prev) => !prev);
-    const router = useRouter();
+  const handleHomeClick = () => {
+    toggleMenu(); // Close the menu
+    router.push("/"); // Redirect to the home page
+  };
 
-    const handleHomeClick = () => {
-        toggleMenu(); // Close the menu
-        router.push("/"); // Redirect to the home page
-    };
+  const handleAboutClick = () => {
+    toggleMenu(); // Close the menu
+    router.push("/about"); // Redirect to the home page
+  };
+  const handleCartClick = () => {
+    toggleMenu(); // Close the menu
+    router.push("/cart"); // Redirect to the cart page
+  };
+  const { cart } = useCart();
 
-    const handleAboutClick = () => {
-        toggleMenu(); // Close the menu
-        router.push("/about"); // Redirect to the home page
-    };
-    const handleCartClick = () => {
-        toggleMenu(); // Close the menu
-        router.push("/cart"); // Redirect to the cart page
-    };
-    const { cart } = useCart();
+  const isCartEmpty = !cart.items || cart.items.length === 0;
 
-    const isCartEmpty = !cart.items || cart.items.length === 0;
+  // Function to increment quantity
+  // const incrementQuantity = (id) => {
+  //   const updatedProducts = products.map((product) =>
+  //     product.result.data.product_id === id
+  //       ? { ...product, quantity: product.quantity + 1 }
+  //       : product
+  //   );
+  //   setProducts(updatedProducts);
+  //   updateLocalStorage(updatedProducts);
+  // };
 
-    // Function to increment quantity
-    const incrementQuantity = (id) => {
-        const updatedProducts = products.map((product) =>
-          product.result.data.product_id === id
-            ? { ...product, quantity: product.quantity + 1 }
-            : product
-        );
-        setProducts(updatedProducts);
-        updateLocalStorage(updatedProducts);
-      };
+  const incrementQuantity = (id) => {
+    const updatedProducts = products.map((product) =>
+      product.result.data.product_id === id
+        ? { ...product, quantity: (product.quantity || 0) + 1 }
+        : product
+    );
+    setProducts(updatedProducts);
+    updateLocalStorage(updatedProducts);
+  };
 
-    // Function to decrement quantity
-    const decrementQuantity = (id) => {
-        const updatedProducts = products.map((product) =>
-          product.result.data.product_id === id && product.quantity > 1
-            ? { ...product, quantity: product.quantity - 1 }
-            : product
-        );
-        setProducts(updatedProducts);
-        updateLocalStorage(updatedProducts);
-      };
+  // Function to decrement quantity
+  // const decrementQuantity = (id) => {
+  //   const updatedProducts = products.map((product) =>
+  //     product.result.data.product_id === id && product.quantity > 1
+  //       ? { ...product, quantity: product.quantity - 1 }
+  //       : product
+  //   );
+  //   setProducts(updatedProducts);
+  //   updateLocalStorage(updatedProducts);
+  // };
 
-    // Function to delete a product
-    const deleteProduct = (id) => {
-        const updatedProducts = products.filter((product) => product.result.data.product_id !== id);
-        setProducts(updatedProducts);
-        removeItemFromCart(id);
-        updateLocalStorage(updatedProducts);
-    };
+  const decrementQuantity = (id) => {
+    const updatedProducts = products.map((product) =>
+      product.result.data.product_id === id && product.quantity > 1
+        ? { ...product, quantity: product.quantity - 1 }
+        : product
+    );
+    setProducts(updatedProducts);
+    updateLocalStorage(updatedProducts);
+  };
+
+  // Function to delete a product
+  const deleteProduct = (id) => {
+    const updatedProducts = products.filter(
+      (product) => product.result.data.product_id !== id
+    );
+    setProducts(updatedProducts);
+    removeItemFromCart(id);
+    updateLocalStorage(updatedProducts);
+  };
 
   // Calculate total price
-  const totalPrice = (cart.items || []).reduce(
-    (total, item) => total + (item.price || 0) * item.quantity,
+  // const totalPrice = (cart.items || []).reduce(
+  //   (total, item) => total + (item.price || 0) * item.quantity,
+  //   0
+  // );
+  const totalPrice = products.reduce(
+    (total, product) =>
+      total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
     0
   );
 
@@ -433,7 +471,11 @@ useEffect(() => {
                             </div>
                             <div className="">
                               <button
-                                onClick={() => deleteProduct(product?.result?.data?.product_id)}
+                                onClick={() =>
+                                  deleteProduct(
+                                    product?.result?.data?.product_id
+                                  )
+                                }
                                 className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
                               >
                                 x
@@ -444,7 +486,11 @@ useEffect(() => {
                           <div className="flex justify-between items-center">
                             <div className="flex items-center space-x-2">
                               <button
-                                onClick={() => decrementQuantity(product?.result?.data?.product_id)}
+                                onClick={() =>
+                                  decrementQuantity(
+                                    product?.result?.data?.product_id
+                                  )
+                                }
                                 className={`px-3 py-1 rounded-md font-extrabold ${
                                   product.quantity > 1
                                     ? "bg-Green500 text-Green50"
@@ -457,14 +503,22 @@ useEffect(() => {
                                 {product.quantity}
                               </span>
                               <button
-                                onClick={() => incrementQuantity(product?.result?.data?.product_id)}
+                                onClick={() =>
+                                  incrementQuantity(
+                                    product?.result?.data?.product_id
+                                  )
+                                }
                                 className="bg-Green500 text-Green50 px-3 py-1 rounded-md font-bold"
                               >
                                 +
                               </button>
                             </div>
                             <p className="text-lg font-bold text-Grey500 ml-2">
-                              ₦{(product.price * product.quantity).toFixed(2)}
+                              ₦
+                              {(
+                                (product?.result?.data?.price || 0) *
+                                (product?.quantity || 0)
+                              ).toFixed(2)}
                             </p>
                           </div>
                         </div>
