@@ -4,76 +4,106 @@ import Image from "next/image";
 import Link from "next/link";
 import { MdAddShoppingCart } from "react-icons/md";
 import { useCart } from "@/app/context/CartContext";
+import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
 export default function Cart() {
-  const { cart } = useCart();
+  const [products, setProducts] = useState([]);
+   const { cart, removeItemFromCart } = useCart();
+   const [cartItems, setCartItems] = useState([]);
+   const { data: cartedProducts = [], isLoading, isError, refetch: refetchCartProducts } = useFetchCartProducts(cartItems);
 
-  // Initial product data
-  const initialProducts = [
-    {
-      id: 1,
-      name: "Pepper",
-      quantity: 1,
-      price: 1200.99,
-      image: "/images/elo.svg",
-    },
-    {
-      id: 2,
-      name: "Full Chicken",
-      quantity: 2,
-      price: 1200.99,
-      image: "/images/chicken.svg",
-    },
-    {
-      id: 3,
-      name: "Fresh Fishes",
-      quantity: 1,
-      price: 1200.99,
-      image: "/images/fish.svg",
-    },
-    {
-      id: 4,
-      name: "Cabbage",
-      quantity: 1,
-      price: 1200.99,
-      image: "/images/rice.svg",
-    },
-  ];
+  useEffect(() => {
+    const updateCartItems = () => {
+      const storedCart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
+      setCartItems(storedCart.items);
+      refetchCartProducts();
+    };
 
-  const [products, setProducts] = useState(initialProducts);
+    // Listen for `storage` events to handle updates from other tabs
+    const handleStorageChange = (event) => {
+      if (event.key === "cart") {
+        updateCartItems();
+      }
+    };
 
-  // Function to increment quantity
-  const incrementQuantity = (id) => {
-    setProducts(
-      products.map((product) =>
-        product.id === id
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
-      )
+    updateCartItems();    // Update cart items when the component mounts
+
+    window.addEventListener("storage", handleStorageChange); // Add storage event listener
+
+    // Optional: Listen for manual cart updates in the same tab
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function (key, value) {
+      if (key === "cart") {
+        originalSetItem.apply(this, arguments);
+        updateCartItems(); // Trigger update manually for the same tab
+      } else {
+        originalSetItem.apply(this, arguments);
+      }
+    };
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      localStorage.setItem = originalSetItem; // Restore the original method
+    };
+  }, [refetchCartProducts]);
+
+  useEffect(() => {
+    if (cartedProducts && cartedProducts.length) {
+      setProducts(cartedProducts);
+    }
+  }, [cartedProducts]);
+
+  useEffect(() => {
+    // Refetch whenever cartItems change
+    if (cartItems.length) {
+      refetchCartProducts();
+    }
+  }, [cartItems, refetchCartProducts]);
+
+  const updateLocalStorage = (updatedProducts) => {
+    const cartItems = updatedProducts.map(product => ({
+      id: product.result.data.product_id,
+      quantity: product.quantity
+    }));
+    localStorage.setItem("cart", JSON.stringify({ items: cartItems }));
+  };
+
+   // Function to increment quantity
+   const incrementQuantity = (id) => {
+    const updatedProducts = products.map((product) =>
+      product.result.data.product_id === id
+        ? { ...product, quantity: product.quantity + 1 }
+        : product
     );
+    setProducts(updatedProducts);
+    updateLocalStorage(updatedProducts);
   };
 
-  // Function to decrement quantity
-  const decrementQuantity = (id) => {
-    setProducts(
-      products.map((product) =>
-        product.id === id && product.quantity > 1
-          ? { ...product, quantity: product.quantity - 1 }
-          : product
-      )
+// Function to decrement quantity
+const decrementQuantity = (id) => {
+    const updatedProducts = products.map((product) =>
+      product.result.data.product_id === id && product.quantity > 1
+        ? { ...product, quantity: product.quantity - 1 }
+        : product
     );
+    setProducts(updatedProducts);
+    updateLocalStorage(updatedProducts);
   };
 
-  // Function to delete a product
-  const deleteProduct = (id) => {
-    setProducts(products.filter((product) => product.id !== id));
-  };
+// Function to delete a product
+const deleteProduct = (id) => {
+    const updatedProducts = products.filter((product) => product.result.data.product_id !== id);
+    setProducts(updatedProducts);
+    removeItemFromCart(id);
+    updateLocalStorage(updatedProducts);
+};
 
-  // Calculate total price
-  const totalPrice = (products || []).reduce(
-    (total, product) => total + (product.price || 0) * product.quantity,
-    0
-  );
+// Calculate total price
+const totalPrice = (cart.items || []).reduce(
+(total, item) => total + (item.price || 0) * item.quantity,
+0
+);
+
 
   return (
     <>
@@ -98,32 +128,32 @@ export default function Cart() {
                 {products.length > 0 ? (
                   products.map((product) => (
                     <div
-                      key={product.id}
+                      key={product?.result?.data?.product_id}
                       className="flex items-center justify-between border-b pb-4"
                     >
                       <div className="flex items-center space-x-8">
                         <Image
-                          src={product.image}
-                          alt={product.name}
+                          src={product?.result?.data?.image_url}
+                          alt={product?.result?.data?.product_name}
                           width={124}
                           height={80}
                           className="rounded-md"
                         />
                         <div>
                           <h2 className="text-[20px] text-Grey500 font-bold">
-                            {product.name}
+                            {product?.result?.data?.product_name}
                           </h2>
                           <p className="text-[16px] text-Grey400">
-                            1 kilogram / Bag
+                            {product?.result?.data?.description}
                           </p>
                         </div>
                       </div>
                       <p className="text-[20px] font-bold text-Grey500 ml-2">
-                        ₦{(product.price * product.quantity).toFixed(2)}
+                        ₦{(product?.result?.data?.price * product.quantity).toFixed(2)}
                       </p>
                       <div className="flex items-center space-x-2">
                         <button
-                          onClick={() => decrementQuantity(product.id)}
+                          onClick={() => decrementQuantity(product?.result?.data?.product_id)}
                           className={`px-3 py-1 rounded-md font-extrabold ${
                             product.quantity > 1
                               ? "bg-Green500 text-Green50"
@@ -136,7 +166,7 @@ export default function Cart() {
                           {product.quantity}
                         </span>
                         <button
-                          onClick={() => incrementQuantity(product.id)}
+                          onClick={() => incrementQuantity(product?.result?.data?.product_id)}
                           className="bg-Green500 text-Green50 px-3 py-1 rounded-md font-bold"
                         >
                           +
@@ -144,7 +174,7 @@ export default function Cart() {
                       </div>
                       <div>
                         <button
-                          onClick={() => deleteProduct(product.id)}
+                          onClick={() => deleteProduct(product?.result?.data?.product_id)}
                           className="text-Grey400 text-[16px] hover:text-red-600 ml-2"
                         >
                           x
@@ -227,27 +257,27 @@ export default function Cart() {
           {products.length > 0 ? (
             products.map((product) => (
               <div
-                key={product.id}
+                key={product?.result?.data?.product_id}
                 className=" bg-white rounded-[28px] border p-4 mb-4"
               >
                 <div className="space-y-6">
                   <div className=" relative">
                     <div className="flex flex-row items-center space-x-6">
                       <Image
-                        src={product.image}
-                        alt={product.name}
+                        src={product?.result?.data?.image_url}
+                        alt={product?.result?.data?.product_name}
                         width={124}
                         height={80}
                         className="rounded-md"
                       />
                       <div className="text-Grey500">
-                        <h2 className="text-lg font-bold">{product.name}</h2>
+                        <h2 className="text-lg font-bold">{product?.result?.data?.product_name}</h2>
                         <p className="text-sm">1 kilogram / Bag</p>
                       </div>
                     </div>
                     <div className="">
                       <button
-                        onClick={() => deleteProduct(product.id)}
+                        onClick={() => deleteProduct(product?.result?.data?.product_id)}
                         className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
                       >
                         x
@@ -258,7 +288,7 @@ export default function Cart() {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => decrementQuantity(product.id)}
+                        onClick={() => decrementQuantity(product?.result?.data?.product_id)}
                         className={`px-5 py-1 rounded-md font-extrabold ${
                           product.quantity > 1
                             ? "bg-Green500 text-Green50"
@@ -271,14 +301,14 @@ export default function Cart() {
                         {product.quantity}
                       </span>
                       <button
-                        onClick={() => incrementQuantity(product.id)}
+                        onClick={() => incrementQuantity(product?.result?.data?.product_id)}
                         className="bg-Green500 text-Green50 px-5 py-1 rounded-md font-bold"
                       >
                         +
                       </button>
                     </div>
                     <p className="text-lg font-bold text-Grey500 ml-2">
-                      ₦{(product.price * product.quantity).toFixed(2)}
+                      ₦{(product?.result?.data?.product_id * product.quantity).toFixed(2)}
                     </p>
                   </div>
                 </div>
