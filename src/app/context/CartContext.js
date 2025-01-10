@@ -19,14 +19,26 @@ export const CartProvider = ({ children }) => {
     items: [],
   });
 
+  const isCartExpired = (cart) => {
+    const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+    const now = Date.now();
+    return now - cart.createdAt > oneDay;
+  };
+
   useEffect(() => {
     async function initializeCart() {
       let savedCart = JSON.parse(localStorage.getItem("cart"));
+      if (savedCart && isCartExpired(savedCart)) {
+        localStorage.removeItem("cart");
+        savedCart = null;
+      }
+
       if (!savedCart) {
         const ip = await fetchUserIP();
-        const timestamp = new Date().getTime();
+        const timestamp = Date.now();
         const newCart = {
           cart_group_id: `${ip}_${timestamp}`,
+          createdAt: timestamp,
           items: [],
         };
         setCart(newCart);
