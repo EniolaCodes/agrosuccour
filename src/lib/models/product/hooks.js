@@ -78,7 +78,7 @@ export const useFetchCartProducts = (cartItems) => {
     return useQuery({
       queryKey: ["cartProducts", cartItems],
       queryFn: fetchProducts,
-      enabled: cartItems.length > 0, // Only fetch when cartItems is populated
+      enabled: cartItems.length > 0,
       staleTime: Infinity,
     });
   };

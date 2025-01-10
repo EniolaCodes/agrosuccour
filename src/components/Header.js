@@ -9,106 +9,176 @@ import { FiSearch, FiPhone } from "react-icons/fi";
 import { ImEnlarge2 } from "react-icons/im";
 import CartComponent from "@/components/CartComponent";
 import { useCart } from "@/app/context/CartContext";
-import { useFetchCartProducts, useGetSingleProducts } from "@/lib/models/product/hooks";
+import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);;
+  const [cartItems, setCartItems] = useState([]);
+  const { removeItemFromCart } = useCart();
+  const { data: cartedProducts = [], isLoading, isError, refetch: refetchCartProducts } = useFetchCartProducts(cartItems);
 
-  // Fetch the cart from local storage
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const storedCartItems = storedCart.items
-    setCartItems(storedCart.items);
-  }, []);
- const { data: cartedProducts = [], isLoading, isError } = useFetchCartProducts(cartItems);
+// ---------------------------------------------------------------
+// useEffect(() => {
+//     const updateCartItems = () => {
+//       const storedCart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
+//       setCartItems(storedCart.items);
+//       refetchCartProducts();
+//     };
 
-  const menuRef = useRef(null);
-  const productsRef = useRef(null);
-  const cartRef = useRef(null);
+//     // Listen for storage changes
+//     window.addEventListener("storage", updateCartItems);
 
-  const handleClickOutside = (event) => {
-    //check if click is outside of the desktop menu
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setMenuOpen(false);
-    }
-    if (productsRef.current && !productsRef.current.contains(event.target)) {
-      console.log("product closed");
-      setProductsOpen(false);
-    }
-    if (cartRef.current && !cartRef.current.contains(event.target)) {
-      console.log("cart closed");
-      setCartOpen(false);
-    }
-  };
+//     // Initial fetch
+//     updateCartItems();
+//     // Set up an interval to check for updates
+//     const intervalId = setInterval(updateCartItems, 1000);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+//     return () => {
+//       window.removeEventListener("storage", updateCartItems);
+//       clearInterval(intervalId);
+//     };
+//   }, [refetchCartProducts]);
+
+useEffect(() => {
+    const updateCartItems = () => {
+      const storedCart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
+      setCartItems(storedCart.items);
+      refetchCartProducts();
     };
-  }, []);
 
-  const toggleMenu = () => setMenuOpen((prev) => !prev);
-  const toggleProducts = () => setProductsOpen((prev) => !prev);
-  const toggleCart = () => setCartOpen((prev) => !prev);
+    // Listen for `storage` events to handle updates from other tabs
+    const handleStorageChange = (event) => {
+      if (event.key === "cart") {
+        updateCartItems();
+      }
+    };
 
-  const router = useRouter();
+    updateCartItems();    // Update cart items when the component mounts
 
-  const handleHomeClick = () => {
-    toggleMenu(); // Close the menu
-    router.push("/"); // Redirect to the home page
+    window.addEventListener("storage", handleStorageChange); // Add storage event listener
+
+    // Optional: Listen for manual cart updates in the same tab
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function (key, value) {
+      if (key === "cart") {
+        originalSetItem.apply(this, arguments);
+        updateCartItems(); // Trigger update manually for the same tab
+      } else {
+        originalSetItem.apply(this, arguments);
+      }
+    };
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      localStorage.setItem = originalSetItem; // Restore the original method
+    };
+  }, [refetchCartProducts]);
+
+  useEffect(() => {
+    if (cartedProducts && cartedProducts.length) {
+      setProducts(cartedProducts);
+    }
+  }, [cartedProducts]);
+
+  useEffect(() => {
+    // Refetch whenever cartItems change
+    if (cartItems.length) {
+      refetchCartProducts();
+    }
+  }, [cartItems, refetchCartProducts]);
+
+  const updateLocalStorage = (updatedProducts) => {
+    const cartItems = updatedProducts.map(product => ({
+      id: product.result.data.product_id,
+      quantity: product.quantity
+    }));
+    localStorage.setItem("cart", JSON.stringify({ items: cartItems }));
   };
 
-  const handleAboutClick = () => {
-    toggleMenu(); // Close the menu
-    router.push("/about"); // Redirect to the home page
-  };
-  const handleCartClick = () => {
-    toggleMenu(); // Close the menu
-    router.push("/cart"); // Redirect to the cart page
-  };
-  const { cart } = useCart();
+    const menuRef = useRef(null);
+    const productsRef = useRef(null);
+    const cartRef = useRef(null);
 
-  const isCartEmpty = !cart.items || cart.items.length === 0;
+    const handleClickOutside = (event) => {
+        //check if click is outside of the desktop menu
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+        }
+        if (productsRef.current && !productsRef.current.contains(event.target)) {
+        console.log("product closed");
+        setProductsOpen(false);
+        }
+        if (cartRef.current && !cartRef.current.contains(event.target)) {
+        console.log("cart closed");
+        setCartOpen(false);
+        }
+    };
 
-  // Function to increment quantity
-  const incrementQuantity = (id) => {
-    setProducts(
-      products.map((product) =>
-        product.id === id
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
-      )
-    );
-  };
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
-  // Function to decrement quantity
-  const decrementQuantity = (id) => {
-    setProducts(
-      products.map((product) =>
-        product.id === id && product.quantity > 1
-          ? { ...product, quantity: product.quantity - 1 }
-          : product
-      )
-    );
-  };
+    const toggleMenu = () => setMenuOpen((prev) => !prev);
+    const toggleProducts = () => setProductsOpen((prev) => !prev);
+    const toggleCart = () => setCartOpen((prev) => !prev);
+    const router = useRouter();
 
-  // Function to delete a product
-  const deleteProduct = (id) => {
-    setProducts(products.filter((product) => product.id !== id));
-  };
+    const handleHomeClick = () => {
+        toggleMenu(); // Close the menu
+        router.push("/"); // Redirect to the home page
+    };
+
+    const handleAboutClick = () => {
+        toggleMenu(); // Close the menu
+        router.push("/about"); // Redirect to the home page
+    };
+    const handleCartClick = () => {
+        toggleMenu(); // Close the menu
+        router.push("/cart"); // Redirect to the cart page
+    };
+    const { cart } = useCart();
+
+    const isCartEmpty = !cart.items || cart.items.length === 0;
+
+    // Function to increment quantity
+    const incrementQuantity = (id) => {
+        const updatedProducts = products.map((product) =>
+          product.result.data.product_id === id
+            ? { ...product, quantity: product.quantity + 1 }
+            : product
+        );
+        setProducts(updatedProducts);
+        updateLocalStorage(updatedProducts);
+      };
+
+    // Function to decrement quantity
+    const decrementQuantity = (id) => {
+        const updatedProducts = products.map((product) =>
+          product.result.data.product_id === id && product.quantity > 1
+            ? { ...product, quantity: product.quantity - 1 }
+            : product
+        );
+        setProducts(updatedProducts);
+        updateLocalStorage(updatedProducts);
+      };
+
+    // Function to delete a product
+    const deleteProduct = (id) => {
+        const updatedProducts = products.filter((product) => product.result.data.product_id !== id);
+        setProducts(updatedProducts);
+        removeItemFromCart(id);
+        updateLocalStorage(updatedProducts);
+    };
 
   // Calculate total price
-  // const totalPrice = (cart.items || []).reduce(
-  //   (total, item) => total + (item.price || 0) * item.quantity,
-  //   0
-  // );
-  const totalPrice = (products || []).reduce(
-    (total, product) => total + (product.price || 0) * product.quantity,
+  const totalPrice = (cart.items || []).reduce(
+    (total, item) => total + (item.price || 0) * item.quantity,
     0
   );
 
@@ -330,40 +400,40 @@ const Header = () => {
                 <>
                   <div className="mb-4 font-nunitoSans flex justify-between items-center">
                     <h1 className="text-Grey400 text-sm font-bold">
-                      {cartedProducts.length} items
+                      {products.length} items
                     </h1>
                     <p className="text-[16px] font-bold bg-Green100 rounded-[6px] p-1 text-Green900">
                       ₦{(totalPrice || 0).toFixed(2)}
                     </p>
                   </div>
                   <div className="flex flex-col space-y-4">
-                    {cartedProducts.map((product) => (
+                    {products.map((product) => (
                       <div
-                        key={product.result.data.product_id}
+                        key={product?.result?.data?.product_id}
                         className=" bg-white rounded-[8px] border p-4 mb-4"
                       >
                         <div className="space-y-6">
                           <div className=" relative">
                             <div className="flex flex-row space-x-6">
                               <Image
-                                src={product.result.data.image_url}
-                                alt={product.result.data.product_name}
+                                src={product?.result?.data?.image_url}
+                                alt={product?.result?.data?.product_name}
                                 width={124}
                                 height={80}
                                 className="rounded-md"
                               />
                               <div className="">
                                 <h2 className="text-Grey500 text-[16px] font-bold">
-                                  {product.result.data.product_name}
+                                  {product?.result?.data?.product_name}
                                 </h2>
                                 <p className="text-[16px] text-Grey400">
-                                  {product.quantity} kilogram / Bag
+                                  {product?.quantity} kilogram / Bag
                                 </p>
                               </div>
                             </div>
                             <div className="">
                               <button
-                                onClick={() => deleteProduct(product.id)}
+                                onClick={() => deleteProduct(product?.result?.data?.product_id)}
                                 className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
                               >
                                 x
@@ -374,7 +444,7 @@ const Header = () => {
                           <div className="flex justify-between items-center">
                             <div className="flex items-center space-x-2">
                               <button
-                                onClick={() => decrementQuantity(product.id)}
+                                onClick={() => decrementQuantity(product?.result?.data?.product_id)}
                                 className={`px-3 py-1 rounded-md font-extrabold ${
                                   product.quantity > 1
                                     ? "bg-Green500 text-Green50"
@@ -387,7 +457,7 @@ const Header = () => {
                                 {product.quantity}
                               </span>
                               <button
-                                onClick={() => incrementQuantity(product.id)}
+                                onClick={() => incrementQuantity(product?.result?.data?.product_id)}
                                 className="bg-Green500 text-Green50 px-3 py-1 rounded-md font-bold"
                               >
                                 +
