@@ -157,17 +157,6 @@ const Header = () => {
 
   const isCartEmpty = !cart.items || cart.items.length === 0;
 
-  // Function to increment quantity
-  // const incrementQuantity = (id) => {
-  //   const updatedProducts = products.map((product) =>
-  //     product.result.data.product_id === id
-  //       ? { ...product, quantity: product.quantity + 1 }
-  //       : product
-  //   );
-  //   setProducts(updatedProducts);
-  //   updateLocalStorage(updatedProducts);
-  // };
-
   const incrementQuantity = (id) => {
     const updatedProducts = products.map((product) =>
       product.result.data.product_id === id
@@ -177,17 +166,6 @@ const Header = () => {
     setProducts(updatedProducts);
     updateLocalStorage(updatedProducts);
   };
-
-  // Function to decrement quantity
-  // const decrementQuantity = (id) => {
-  //   const updatedProducts = products.map((product) =>
-  //     product.result.data.product_id === id && product.quantity > 1
-  //       ? { ...product, quantity: product.quantity - 1 }
-  //       : product
-  //   );
-  //   setProducts(updatedProducts);
-  //   updateLocalStorage(updatedProducts);
-  // };
 
   const decrementQuantity = (id) => {
     const updatedProducts = products.map((product) =>
