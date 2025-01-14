@@ -25,28 +25,6 @@ const Header = () => {
     refetch: refetchCartProducts,
   } = useFetchCartProducts(cartItems);
 
-  // ---------------------------------------------------------------
-  // useEffect(() => {
-  //     const updateCartItems = () => {
-  //       const storedCart = JSON.parse(localStorage.getItem("cart")) || { items: [] };
-  //       setCartItems(storedCart.items);
-  //       refetchCartProducts();
-  //     };
-
-  //     // Listen for storage changes
-  //     window.addEventListener("storage", updateCartItems);
-
-  //     // Initial fetch
-  //     updateCartItems();
-  //     // Set up an interval to check for updates
-  //     const intervalId = setInterval(updateCartItems, 1000);
-
-  //     return () => {
-  //       window.removeEventListener("storage", updateCartItems);
-  //       clearInterval(intervalId);
-  //     };
-  //   }, [refetchCartProducts]);
-
   useEffect(() => {
     const updateCartItems = () => {
       const storedCart = JSON.parse(localStorage.getItem("cart")) || {
@@ -96,14 +74,6 @@ const Header = () => {
       refetchCartProducts();
     }
   }, [cartItems, refetchCartProducts]);
-
-  // const updateLocalStorage = (updatedProducts) => {
-  //   const cartItems = updatedProducts.map((product) => ({
-  //     id: product.result.data.product_id,
-  //     quantity: product.quantity,
-  //   }));
-  //   localStorage.setItem("cart", JSON.stringify({ items: cartItems }));
-  // };
 
   const updateLocalStorage = (updatedProducts) => {
     localStorage.setItem("cartProducts", JSON.stringify(updatedProducts));
@@ -187,11 +157,6 @@ const Header = () => {
     updateLocalStorage(updatedProducts);
   };
 
-  // Calculate total price
-  // const totalPrice = (cart.items || []).reduce(
-  //   (total, item) => total + (item.price || 0) * item.quantity,
-  //   0
-  // );
   const totalPrice = products.reduce(
     (total, product) =>
       total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
