@@ -9,44 +9,75 @@ import { FiSearch, FiPhone } from "react-icons/fi";
 import { ImEnlarge2 } from "react-icons/im";
 import CartComponent from "@/components/CartComponent";
 import { useCart } from "@/app/context/CartContext";
+import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
 const Header = () => {
-  // Initial product data
-  const initialProducts = [
-    {
-      id: 1,
-      name: "Pepper",
-      quantity: 1,
-      price: 1200.99,
-      image: "/images/elo.svg",
-    },
-    {
-      id: 2,
-      name: "Full Chicken",
-      quantity: 2,
-      price: 1200.99,
-      image: "/images/chicken.svg",
-    },
-    {
-      id: 3,
-      name: "Fresh Fishes",
-      quantity: 1,
-      price: 1200.99,
-      image: "/images/fish.svg",
-    },
-    {
-      id: 4,
-      name: "Cabbage",
-      quantity: 1,
-      price: 1200.99,
-      image: "/images/rice.svg",
-    },
-  ];
-
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const { removeItemFromCart } = useCart();
+  const {
+    data: cartedProducts = [],
+    isLoading,
+    isError,
+    refetch: refetchCartProducts,
+  } = useFetchCartProducts(cartItems);
+
+  useEffect(() => {
+    const updateCartItems = () => {
+      const storedCart = JSON.parse(localStorage.getItem("cart")) || {
+        items: [],
+      };
+      setCartItems(storedCart.items);
+      refetchCartProducts();
+    };
+
+    // Listen for `storage` events to handle updates from other tabs
+    const handleStorageChange = (event) => {
+      if (event.key === "cart") {
+        updateCartItems();
+      }
+    };
+
+    updateCartItems(); // Update cart items when the component mounts
+
+    window.addEventListener("storage", handleStorageChange); // Add storage event listener
+
+    // Optional: Listen for manual cart updates in the same tab
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function (key, value) {
+      if (key === "cart") {
+        originalSetItem.apply(this, arguments);
+        updateCartItems(); // Trigger update manually for the same tab
+      } else {
+        originalSetItem.apply(this, arguments);
+      }
+    };
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      localStorage.setItem = originalSetItem; // Restore the original method
+    };
+  }, [refetchCartProducts]);
+
+  useEffect(() => {
+    if (cartedProducts && cartedProducts.length) {
+      setProducts(cartedProducts);
+    }
+  }, [cartedProducts]);
+
+  useEffect(() => {
+    // Refetch whenever cartItems change
+    if (cartItems.length) {
+      refetchCartProducts();
+    }
+  }, [cartItems, refetchCartProducts]);
+
+  const updateLocalStorage = (updatedProducts) => {
+    localStorage.setItem("cartProducts", JSON.stringify(updatedProducts));
+  };
 
   const menuRef = useRef(null);
   const productsRef = useRef(null);
@@ -77,7 +108,6 @@ const Header = () => {
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const toggleProducts = () => setProductsOpen((prev) => !prev);
   const toggleCart = () => setCartOpen((prev) => !prev);
-
   const router = useRouter();
 
   const handleHomeClick = () => {
@@ -97,40 +127,39 @@ const Header = () => {
 
   const isCartEmpty = !cart.items || cart.items.length === 0;
 
-  // Function to increment quantity
   const incrementQuantity = (id) => {
-    setProducts(
-      products.map((product) =>
-        product.id === id
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
-      )
+    const updatedProducts = products.map((product) =>
+      product.result.data.product_id === id
+        ? { ...product, quantity: (product.quantity || 0) + 1 }
+        : product
     );
+    setProducts(updatedProducts);
+    updateLocalStorage(updatedProducts);
   };
 
-  // Function to decrement quantity
   const decrementQuantity = (id) => {
-    setProducts(
-      products.map((product) =>
-        product.id === id && product.quantity > 1
-          ? { ...product, quantity: product.quantity - 1 }
-          : product
-      )
+    const updatedProducts = products.map((product) =>
+      product.result.data.product_id === id && product.quantity > 1
+        ? { ...product, quantity: product.quantity - 1 }
+        : product
     );
+    setProducts(updatedProducts);
+    updateLocalStorage(updatedProducts);
   };
 
   // Function to delete a product
   const deleteProduct = (id) => {
-    setProducts(products.filter((product) => product.id !== id));
+    const updatedProducts = products.filter(
+      (product) => product.result.data.product_id !== id
+    );
+    setProducts(updatedProducts);
+    removeItemFromCart(id);
+    updateLocalStorage(updatedProducts);
   };
 
-  // Calculate total price
-  // const totalPrice = (cart.items || []).reduce(
-  //   (total, item) => total + (item.price || 0) * item.quantity,
-  //   0
-  // );
-  const totalPrice = (products || []).reduce(
-    (total, product) => total + (product.price || 0) * product.quantity,
+  const totalPrice = products.reduce(
+    (total, product) =>
+      total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
     0
   );
 
@@ -361,31 +390,35 @@ const Header = () => {
                   <div className="flex flex-col space-y-4">
                     {products.map((product) => (
                       <div
-                        key={product.id}
+                        key={product?.result?.data?.product_id}
                         className=" bg-white rounded-[8px] border p-4 mb-4"
                       >
                         <div className="space-y-6">
                           <div className=" relative">
                             <div className="flex flex-row space-x-6">
                               <Image
-                                src={product.image}
-                                alt={product.name}
+                                src={product?.result?.data?.image_url}
+                                alt={product?.result?.data?.product_name}
                                 width={124}
                                 height={80}
                                 className="rounded-md"
                               />
                               <div className="">
                                 <h2 className="text-Grey500 text-[16px] font-bold">
-                                  {product.name}
+                                  {product?.result?.data?.product_name}
                                 </h2>
                                 <p className="text-[16px] text-Grey400">
-                                  {product.quantity} kilogram / Bag
+                                  {product?.quantity} kilogram / Bag
                                 </p>
                               </div>
                             </div>
                             <div className="">
                               <button
-                                onClick={() => deleteProduct(product.id)}
+                                onClick={() =>
+                                  deleteProduct(
+                                    product?.result?.data?.product_id
+                                  )
+                                }
                                 className="text-Grey400 hover:text-red-600 absolute top-0 right-2"
                               >
                                 x
@@ -396,7 +429,11 @@ const Header = () => {
                           <div className="flex justify-between items-center">
                             <div className="flex items-center space-x-2">
                               <button
-                                onClick={() => decrementQuantity(product.id)}
+                                onClick={() =>
+                                  decrementQuantity(
+                                    product?.result?.data?.product_id
+                                  )
+                                }
                                 className={`px-3 py-1 rounded-md font-extrabold ${
                                   product.quantity > 1
                                     ? "bg-Green500 text-Green50"
@@ -409,14 +446,22 @@ const Header = () => {
                                 {product.quantity}
                               </span>
                               <button
-                                onClick={() => incrementQuantity(product.id)}
+                                onClick={() =>
+                                  incrementQuantity(
+                                    product?.result?.data?.product_id
+                                  )
+                                }
                                 className="bg-Green500 text-Green50 px-3 py-1 rounded-md font-bold"
                               >
                                 +
                               </button>
                             </div>
                             <p className="text-lg font-bold text-Grey500 ml-2">
-                              ₦{(product.price * product.quantity).toFixed(2)}
+                              ₦
+                              {(
+                                (product?.result?.data?.price || 0) *
+                                (product?.quantity || 0)
+                              ).toFixed(2)}
                             </p>
                           </div>
                         </div>
