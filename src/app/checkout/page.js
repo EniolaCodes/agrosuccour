@@ -1,11 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import { PiFireTruck } from "react-icons/pi";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiMail, FiUser, FiMapPin, FiGlobe } from "react-icons/fi";
-
+import OrderSummary from "@/components/OrderSummary";
+import { useCart } from "@/app/context/CartContext";
+import { useFetchCartProducts } from "@/lib/models/product/hooks";
 import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -27,6 +29,37 @@ const Checkout = () => {
   const currentStep = 0;
 
   const [deliveryMethod, setDeliveryMethod] = useState("delivery");
+
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const { removeItemFromCart } = useCart();
+  const {
+    data: cartedProducts = [],
+    isLoading,
+    isError,
+    refetch: refetchCartProducts,
+  } = useFetchCartProducts(cartItems);
+
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || {
+      items: [],
+    };
+    setCartItems(storedCart.items);
+    refetchCartProducts();
+  }, [refetchCartProducts]);
+
+  useEffect(() => {
+    if (cartedProducts.length) {
+      setProducts(cartedProducts);
+    }
+  }, [cartedProducts]);
+
+  const totalPrice = products.reduce(
+    (total, product) =>
+      total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
+    0
+  );
+
   return (
     <div className="px-4 md:px-52 py-8 ">
       <div className="flex flex-row space-x-6">
@@ -249,37 +282,7 @@ const Checkout = () => {
         {/* right side */}
         <div className="hidden md:flex flex-col gap-6">
           {/* Order Summary */}
-          <div className="w-[350px] pt-6 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
-            <div className="flex justify-between items-center border-b pb-2 mb-4">
-              <h2 className="text-[20px] text-Grey500 font-bold">
-                Order summary
-              </h2>
-              <p className="text-Grey400 text-[13px]">8 items</p>
-            </div>
-
-            <div className="mb-4 border-b pb-2 font-nunitoSans">
-              <p className="text-Grey500 text-[16px]">Delivery fees:</p>
-              <p className="text-[11px] text-Grey300 w-[260px]">
-                Your trusted source for fresh produce, essentials, bulk
-                purchasing, and farming
-              </p>
-            </div>
-
-            <div className="flex justify-between items-center text-[16px]  text-Grey400 border-b pb-2">
-              <p>Subtotal:</p>
-              <p>₦6000</p>
-            </div>
-
-            <div className="flex justify-between items-center text-Grey400 text-[16px] border-b pb-2">
-              <p>Other fees:</p>
-              <p>₦0.00</p>
-            </div>
-
-            <div className="flex justify-between items-center text-Grey400 font-bold text-[16px] font-nunitoSans border-b pb-2">
-              <p className="">Total:</p>
-              <p>₦7000</p>
-            </div>
-          </div>
+          <OrderSummary products={products} totalPrice={totalPrice} />
           <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
             <div className="">
               <div className="flex space-x-8">

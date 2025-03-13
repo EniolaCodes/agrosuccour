@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import OrderSummary from "@/components/OrderSummary";
 import { MdAddShoppingCart } from "react-icons/md";
 import { useCart } from "@/app/context/CartContext";
 import { useFetchCartProducts } from "@/lib/models/product/hooks";
@@ -210,42 +211,13 @@ export default function Cart() {
             </div>
           </div>
           {/* Order Summary */}
-          <div className="w-[350px] pt-6 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
-            <div>
-              <div className="flex justify-between">
-                <h2 className="text-[20px] text-Grey500 font-bold">
-                  Order Summary
-                </h2>
-                <p>{products.length} items</p>
-              </div>
-              <hr className="mt-4" />
-            </div>
-            <div className="mb-2 border-b  font-nunitoSans">
-              <p className="text-Grey500 text-[16px]">Delivery fees:</p>
-              <p className="text-[11px] text-Grey300 w-[260px]">
-                Your trusted source for fresh produce, essentials, bulk
-                purchasing, and farming
-              </p>
-            </div>
-            <div className="flex justify-between items-center text-[16px]  text-Grey400 border-b pb-2">
-              <p>Subtotal:</p>
-              <p>₦{totalPrice.toFixed(2)}</p>
-            </div>
-            <div className="flex justify-between items-center text-Grey400 text-[16px] border-b pb-2">
-              <p>Other fees:</p>
-              <p>₦0.00</p>
-            </div>
-
-            <div className="flex justify-between items-center text-Grey400 font-bold text-[16px] font-nunitoSans border-b pb-2">
-              <p className="">Total:</p>
-              <p>₦{totalPrice.toFixed(2)}</p>
-            </div>
-            <Link href="/checkout">
-              <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                Checkout
-              </button>
-            </Link>
-          </div>
+          <OrderSummary
+            products={products}
+            totalPrice={totalPrice}
+            incrementQuantity={incrementQuantity}
+            decrementQuantity={decrementQuantity}
+            deleteProduct={deleteProduct}
+          />
         </div>
       </div>
 
@@ -362,36 +334,13 @@ export default function Cart() {
         </div>
 
         {/* Order Summary */}
-        <div className="pt-6 mt-6 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
-          <div className="flex justify-between items-center border-b pb-2 mb-4">
-            <h2 className="text-lg text-Grey500 font-semibold">
-              Order summary
-            </h2>
-            <p className="text-Grey400 text-sm">{products.length} items</p>
-          </div>
-
-          <div className="mb-4 border-b pb-2">
-            <p className="text-Grey500 font-semibold text-lg">Delivery fees:</p>
-            <p className="text-sm text-Grey400">
-              Your trusted source for fresh produce, essentials, bulk
-              purchasing, and farming
-            </p>
-          </div>
-
-          <div className="flex justify-between items-center text-Grey400 text-sm border-b pb-2">
-            <p>Subtotal:</p>
-            <p> ₦{(totalPrice || 0).toFixed(2)}</p>
-          </div>
-
-          <div className="flex justify-between items-center text-Grey400 text-sm border-b pb-2">
-            <p>Other fees:</p>
-            <p>₦0.00</p>
-          </div>
-          <div className="flex justify-between items-center text-Grey500 text-[20px] font-bold border-b pb-2">
-            <p className="text-medium">Total:</p>
-            <p> ₦{(totalPrice || 0).toFixed(2)}</p>
-          </div>
-        </div>
+        <OrderSummary
+          products={products}
+          totalPrice={totalPrice}
+          incrementQuantity={incrementQuantity}
+          decrementQuantity={decrementQuantity}
+          deleteProduct={deleteProduct}
+        />
       </div>
     </>
   );
