@@ -14,12 +14,10 @@ const fetchUserIP = async () => {
 };
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart"));
-    if (savedCart && savedCart.createdAt) {
-      return savedCart;
-    }
-    return { cart_group_id: null, items: [], createdAt: null };
+  const [cart, setCart] = useState({
+    cart_group_id: null,
+    items: [],
+    createdAt: null,
   });
 
   const isCartExpired = (cart) => {
@@ -28,6 +26,8 @@ export const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (typeof window === "undefined") return; // Prevents execution on the server
+
     async function initializeCart() {
       let savedCart = JSON.parse(localStorage.getItem("cart"));
 
@@ -55,7 +55,7 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (cart.cart_group_id) {
+    if (typeof window !== "undefined" && cart.cart_group_id) {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart]);
@@ -74,7 +74,11 @@ export const CartProvider = ({ children }) => {
         : [...prevCart.items, { product_id: productId, quantity }];
 
       const updatedCart = { ...prevCart, items: updatedItems };
-      localStorage.setItem("cart", JSON.stringify(updatedCart)); // Sync immediately
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+      }
+
       return updatedCart;
     });
   };
@@ -85,7 +89,11 @@ export const CartProvider = ({ children }) => {
         ...prevCart,
         items: prevCart.items.filter((item) => item.product_id !== productId),
       };
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+      }
+
       return updatedCart;
     });
   };

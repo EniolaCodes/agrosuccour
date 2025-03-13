@@ -56,6 +56,7 @@ const Payment = () => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const { removeItemFromCart } = useCart();
+
   const {
     data: cartedProducts = [],
     isLoading,
@@ -64,12 +65,19 @@ const Payment = () => {
   } = useFetchCartProducts(cartItems);
 
   useEffect(() => {
+    if (typeof window === "undefined") return; // Ensure client-side execution
+
     const storedCart = JSON.parse(localStorage.getItem("cart")) || {
       items: [],
     };
     setCartItems(storedCart.items);
-    refetchCartProducts();
-  }, [refetchCartProducts]);
+  }, []);
+
+  useEffect(() => {
+    if (cartItems.length) {
+      refetchCartProducts();
+    }
+  }, [cartItems, refetchCartProducts]);
 
   useEffect(() => {
     if (cartedProducts.length) {

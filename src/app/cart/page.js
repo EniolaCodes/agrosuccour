@@ -10,7 +10,8 @@ import { useFetchCartProducts } from "@/lib/models/product/hooks";
 export default function Cart() {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const { removeItemFromCart } = useCart();
+  const { removeItemFromCart, cart } = useCart();
+
   const {
     data: cartedProducts = [],
     isLoading,
@@ -19,6 +20,8 @@ export default function Cart() {
   } = useFetchCartProducts(cartItems);
 
   useEffect(() => {
+    if (typeof window === "undefined") return; // Ensure client-side execution
+
     const updateCartItems = () => {
       const storedCart = JSON.parse(localStorage.getItem("cart")) || {
         items: [],
@@ -38,41 +41,28 @@ export default function Cart() {
 
     window.addEventListener("storage", handleStorageChange); // Add storage event listener
 
-    // Optional: Listen for manual cart updates in the same tab
-    const originalSetItem = localStorage.setItem;
-    localStorage.setItem = function (key, value) {
-      if (key === "cart") {
-        originalSetItem.apply(this, arguments);
-        updateCartItems(); // Trigger update manually for the same tab
-      } else {
-        originalSetItem.apply(this, arguments);
-      }
-    };
-
     return () => {
       window.removeEventListener("storage", handleStorageChange);
-      localStorage.setItem = originalSetItem; // Restore the original method
     };
   }, [refetchCartProducts]);
 
   useEffect(() => {
-    if (cartedProducts && cartedProducts.length) {
+    if (cartedProducts.length) {
       setProducts(cartedProducts);
     }
   }, [cartedProducts]);
 
   useEffect(() => {
-    // Refetch whenever cartItems change
     if (cartItems.length) {
       refetchCartProducts();
     }
   }, [cartItems, refetchCartProducts]);
 
   const updateLocalStorage = (updatedProducts) => {
-    localStorage.setItem("cartProducts", JSON.stringify(updatedProducts));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cartProducts", JSON.stringify(updatedProducts));
+    }
   };
-
-  const { cart } = useCart();
 
   const isCartEmpty = !cart.items || cart.items.length === 0;
 
@@ -96,7 +86,6 @@ export default function Cart() {
     updateLocalStorage(updatedProducts);
   };
 
-  // Function to delete a product
   const deleteProduct = (id) => {
     const updatedProducts = products.filter(
       (product) => product.result.data.product_id !== id

@@ -46,3 +46,13 @@ export default function OrderSummary({
     </div>
   );
 }
+
+//  Displays a summary of the user's order, including product details and total price.
+//  Provides controls to adjust product quantities and proceed to checkout.
+
+//  Props:
+// - products (Array): List of products in the cart.
+//  -totalPrice (number): Total price of all products combined.
+//   - incrementQuantity (function): Function to increase the quantity of a product.
+//   - decrementQuantity (function): Function to decrease the quantity of a product.
+//   - deleteProduct (function): Function to remove a product from the cart.
