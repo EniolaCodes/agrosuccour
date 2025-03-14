@@ -84,7 +84,8 @@ export const useFetchCartProducts = (cartItems) => {
 };
 
 //   fetch all distinct logistics locations
-export const useGetLogistics = ({ options } = {}) => {
+export const useFetchLogistics = ({ options } = {}) => {
+  console.log("location options", options);
   const fetchLogistics = () =>
     backendFetch({ endpoint: "/logistic/?distinct=true" });
 
@@ -96,7 +97,7 @@ export const useGetLogistics = ({ options } = {}) => {
   });
 };
 //  fetch logistics based on selected location
-export const useGetLogisticsByLocation = ({ from, options } = {}) => {
+export const useFetchLogisticsByLocation = ({ from, options } = {}) => {
   const fetchLogistics = () =>
     backendFetch({ endpoint: `/logistic/?from=${from}` });
 
@@ -110,7 +111,7 @@ export const useGetLogisticsByLocation = ({ from, options } = {}) => {
 };
 
 // fetch logistics price based on selected locations
-export const useGetLogisticsPrice = ({ from, to, options } = {}) => {
+export const useFetchLogisticsPrice = ({ from, to, options } = {}) => {
   const fetchLogisticsPrice = () =>
     backendFetch({ endpoint: `/logistic/?from=${from}&to=${to}` });
 
