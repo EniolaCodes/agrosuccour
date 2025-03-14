@@ -83,6 +83,46 @@ export const useFetchCartProducts = (cartItems) => {
   });
 };
 
+//   fetch all distinct logistics locations
+export const useGetLogistics = ({ options } = {}) => {
+  const fetchLogistics = () =>
+    backendFetch({ endpoint: "/logistic/?distinct=true" });
+
+  return useQuery({
+    queryKey: ["FETCH_LOGISTICS"],
+    queryFn: fetchLogistics,
+    staleTime: Infinity,
+    ...options,
+  });
+};
+//  fetch logistics based on selected location
+export const useGetLogisticsByLocation = ({ from, options } = {}) => {
+  const fetchLogistics = () =>
+    backendFetch({ endpoint: `/logistic/?from=${from}` });
+
+  return useQuery({
+    queryKey: ["FETCH_LOGISTICS_BY_LOCATION", from],
+    queryFn: fetchLogistics,
+    enabled: !!from,
+    staleTime: Infinity,
+    ...options,
+  });
+};
+
+// fetch logistics price based on selected locations
+export const useGetLogisticsPrice = ({ from, to, options } = {}) => {
+  const fetchLogisticsPrice = () =>
+    backendFetch({ endpoint: `/logistic/?from=${from}&to=${to}` });
+
+  return useQuery({
+    queryKey: ["FETCH_LOGISTICS_PRICE", from, to],
+    queryFn: fetchLogisticsPrice,
+    enabled: !!from && !!to,
+    staleTime: Infinity,
+    ...options,
+  });
+};
+
 // To be used later on
 // export const useGetSingleProducts = ({poductId, options}) => {
 //     // const token = getCookie(USER_TOKEN);
