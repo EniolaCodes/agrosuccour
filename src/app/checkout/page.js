@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import { PiFireTruck } from "react-icons/pi";
+import { FiLock } from "react-icons/fi";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiMail, FiUser, FiMapPin, FiGlobe } from "react-icons/fi";
 import OrderSummary from "@/components/OrderSummary";
@@ -30,7 +31,7 @@ const Checkout = () => {
     console.log("Form Data:", data);
   };
 
-  const steps = ["DELIVERY", "PAYMENT", "REVIEW"];
+  const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
   const currentStep = 0;
 
   const [deliveryMethod, setDeliveryMethod] = useState("delivery");
@@ -210,6 +211,36 @@ const Checkout = () => {
                   </p>
                 )}
               </div>
+              {/* Password */}
+              <div className="mb-4">
+                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
+                  Password
+                </label>
+                <div className="relative">
+                  <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
+                  <input
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters",
+                      },
+                    })}
+                    type="password"
+                    className={`w-full pl-10 p-4 border font-nunitoSans rounded-lg focus:outline-none ${
+                      errors.password
+                        ? "border-red-500"
+                        : "border-Grey200 hover:border-Grey400"
+                    }`}
+                    placeholder="Enter your password"
+                  />
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
               {/* Phone Number */}
               <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
@@ -330,13 +361,13 @@ const Checkout = () => {
                   </h1>
                 </div>
               </div>
-              <Link href="/payment">
+              <Link href="/review">
                 <button className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                  Save and Continue
+                  Submit
                 </button>
                 <div className="flex justify-end">
                   <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                    Save and Continue
+                    Submit
                   </button>
                 </div>
               </Link>
@@ -397,6 +428,36 @@ const Checkout = () => {
                 {errors.email && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.email.message}
+                  </p>
+                )}
+              </div>
+              {/* Password */}
+              <div className="mb-4">
+                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
+                  Password
+                </label>
+                <div className="relative">
+                  <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
+                  <input
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters",
+                      },
+                    })}
+                    type="password"
+                    className={`w-full pl-10 p-4 border font-nunitoSans rounded-lg focus:outline-none ${
+                      errors.password
+                        ? "border-red-500"
+                        : "border-Grey200 hover:border-Grey400"
+                    }`}
+                    placeholder="Enter your password"
+                  />
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.password.message}
                   </p>
                 )}
               </div>
@@ -485,22 +546,20 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <Link href="/payment">
+              <Link href="/review">
                 <button className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                  Save and Continue
+                  Submit
                 </button>
                 <div className="flex justify-end">
                   <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                    Save and Continue
+                    Submit
                   </button>
                 </div>
               </Link>
             </form>
           )}
         </div>
-        {/* right side */}
-        <div className="hidden md:flex flex-col gap-6">
-          {/* Order Summary */}
+        {/* <div className="hidden md:flex flex-col gap-6">
           <OrderSummary products={products} totalPrice={totalPrice} />
           <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
             <div className="">
@@ -534,7 +593,7 @@ const Checkout = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -1,16 +1,19 @@
 "use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useEffect } from "react";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import { PiFireTruck } from "react-icons/pi";
 import { MdOutlinePayment } from "react-icons/md";
 import ProgressIndicator from "@/components/ProgressIndicator";
 import { useSession } from "@/components/providers/SessionProvider";
+import OrderSummary from "@/components/OrderSummary";
+import { useCart } from "@/app/context/CartContext";
+import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
 const Review = () => {
-  const steps = ["DELIVERY", "PAYMENT", "REVIEW"];
-  const currentStep = 2;
+  const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
+  const currentStep = 1;
 
   const sessionId = useSession();
   useEffect(() => {
@@ -18,32 +21,42 @@ const Review = () => {
     // Fetch review data associated with the sessionId
   }, [sessionId]);
 
-  const products = [
-    {
-      id: 1,
-      image: "/images/elo.svg",
-      name: "Pepper mixed for soup - Elo",
-      weight: "1 kilogram / Bag",
-      price: "1,200.99",
-      quantity: 1,
-    },
-    {
-      id: 2,
-      image: "/images/chicken.svg",
-      name: "Full Chicken",
-      weight: "2 kilogram",
-      price: "1,200.99",
-      quantity: 2,
-    },
-    {
-      id: 3,
-      image: "/images/fish.svg",
-      name: "Pepper mixed for soup - Elo",
-      weight: "1 kilogram / Bag",
-      price: "1,200.99",
-      quantity: 1,
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+
+  const {
+    data: cartedProducts = [],
+    isLoading,
+    isError,
+    refetch: refetchCartProducts,
+  } = useFetchCartProducts(cartItems);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return; // Ensure client-side execution
+
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || {
+      items: [],
+    };
+    setCartItems(storedCart.items);
+  }, []);
+
+  useEffect(() => {
+    if (cartItems.length) {
+      refetchCartProducts();
+    }
+  }, [cartItems, refetchCartProducts]);
+
+  useEffect(() => {
+    if (cartedProducts.length) {
+      setProducts(cartedProducts);
+    }
+  }, [cartedProducts]);
+
+  const totalPrice = products.reduce(
+    (total, product) =>
+      total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
+    0
+  );
 
   return (
     <div className="px-4 md:px-52 py-8 ">
@@ -58,36 +71,44 @@ const Review = () => {
               <h1 className="text-Grey500 font-semibold font-nunito text-[25px]">
                 Review your order
               </h1>
-              <p className="text-Grey400 text-[13px]">8 items</p>
+              <p className="text-Grey400 text-[13px]">
+                {products.length} items
+              </p>
             </div>
           </div>
           <div className="bg-white  p-6 shadow-md rounded-[28px]">
             {products.map((product) => (
               <div
-                key={product.id}
+                key={product?.result?.data?.product_id}
                 className="flex items-center relative border-b border-gray-300 py-4"
               >
                 <div className="">
                   <Image
-                    src={product.image}
-                    alt={product.name}
+                    src={product?.result?.data?.image_url}
+                    alt={product?.result?.data?.product_name}
                     width={124}
                     height={80}
-                    className=" object-cover rounded-md"
+                    className="rounded-md"
                   />
                 </div>
                 <div className="ml-4 flex-grow">
                   <h3 className="text-[20px] text-Grey500 font-bold">
-                    {product.name}
+                    {product?.result?.data?.product_name}
                   </h3>
-                  <p className="text-[16px] text-Grey400">{product.weight}</p>
+                  <p className="text-[16px] text-Grey400">
+                    {product?.quantity} kilogram / Bag
+                  </p>
                 </div>
-                <span className="bg-[#F26262] text-white text-xs font-bold absolute px-2 py-1 top-2 right-0 rounded-full mb-4">
+                {/* <span className="bg-[#F26262] text-white text-xs font-bold absolute px-2 py-1 top-2 right-0 rounded-full mb-4">
                   {product.quantity}
-                </span>
+                </span> */}
                 <div className="flex items-center">
                   <p className="text-[20px] font-bold text-Grey500">
-                    ₦{product.price}
+                    ₦
+                    {(
+                      (product?.result?.data?.price || 0) *
+                      (product?.quantity || 0)
+                    ).toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -96,42 +117,7 @@ const Review = () => {
         </div>
         {/* order summary */}
         <div className="hidden md:flex flex-col gap-6">
-          <div className="w-[350px] pt-6 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
-            <div className="flex justify-between items-center border-b pb-2 mb-4">
-              <h2 className="text-[20px] text-Grey500 font-bold">
-                Order summary
-              </h2>
-              <p className="text-Grey400 text-[13px]">8 items</p>
-            </div>
-
-            <div className="mb-4 border-b pb-2 font-nunitoSans">
-              <p className="text-Grey500 text-[16px]">Delivery fees:</p>
-              <p className="text-[11px] text-Grey300 w-[260px]">
-                Your trusted source for fresh produce, essentials, bulk
-                purchasing, and farming
-              </p>
-            </div>
-
-            <div className="flex justify-between items-center text-[16px]  text-Grey400 border-b pb-2">
-              <p>Subtotal:</p>
-              <p>₦6000</p>
-            </div>
-
-            <div className="flex justify-between items-center text-Grey400 text-[16px] border-b pb-2">
-              <p>Other fees:</p>
-              <p>₦0.00</p>
-            </div>
-
-            <div className="flex justify-between items-center text-Grey400 font-bold text-[16px] font-nunitoSans border-b pb-2">
-              <p className="">Total:</p>
-              <p>₦7000</p>
-            </div>
-            <Link href="/ordercompleted">
-              <button className="hidden md:block mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                Place your order
-              </button>
-            </Link>
-          </div>
+          <OrderSummary products={products} totalPrice={totalPrice} />
           <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
             <div className="">
               <div className="flex space-x-8">

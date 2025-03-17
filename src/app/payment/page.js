@@ -50,8 +50,8 @@ const Payment = () => {
     setAddresses([]); // Clear all addresses
   };
 
-  const steps = ["DELIVERY", "PAYMENT", "REVIEW"];
-  const currentStep = 1;
+  const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
+  const currentStep = 2;
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
