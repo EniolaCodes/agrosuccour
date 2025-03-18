@@ -170,12 +170,12 @@ const Review = () => {
         </div>
       </div>
       <Link
-        href="/ordercompleted"
+        href="/payment"
         className="block md:hidden mt-8 bg-Green50 fixed bottom-0 w-full"
       >
         <div className="p-8">
           <button className=" mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-            Place your order
+            Proceed to Payment
           </button>
         </div>
       </Link>

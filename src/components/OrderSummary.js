@@ -1,15 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function OrderSummary({
-  //prevents error when value of producys and totalPrice are missing
+  //prevents error when value of products and totalPrice are missing
   products = [],
   totalPrice = 0,
   incrementQuantity,
   decrementQuantity,
   deleteProduct,
 }) {
+  const pathname = usePathname();
+
+  let buttonLink = "/checkout";
+  let buttonText = "Checkout";
+
+  if (pathname === "/review") {
+    buttonLink = "/payment";
+    buttonText = "Proceed to Payment";
+  } else if (pathname === "/payment") {
+    buttonLink = "/ordercompleted";
+    buttonText = "Complete Order";
+  }
   return (
     <div className="md:w-[350px] pt-6 mt-6 md:mt-0 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
       <div>
@@ -38,9 +51,9 @@ export default function OrderSummary({
         <p>Total:</p>
         <p>₦{totalPrice.toFixed(2)}</p>
       </div>
-      <Link href="/checkout">
+      <Link href={buttonLink}>
         <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-          Checkout
+          {buttonText}
         </button>
       </Link>
     </div>
