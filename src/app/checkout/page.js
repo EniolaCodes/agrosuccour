@@ -48,16 +48,33 @@ const Checkout = () => {
     isError,
     refetch: refetchCartProducts,
   } = useFetchCartProducts(cartItems);
+  const { data } = useFetchLogistics();
+  const locations =
+    data?.result?.data?.map((item, index) => ({
+      id: index,
+      name: item.from_location,
+    })) || [];
 
-  const { data: locations = [] } = useFetchLogistics();
-  const { data: logisticsOptions = [] } = useFetchLogisticsByLocation({
+  const { data: logisticsOptionsData } = useFetchLogisticsByLocation({
     from: fromLocation,
   });
-  const { data: logisticsPrice = 0 } = useFetchLogisticsPrice({
+  const logisticsOptions =
+    logisticsOptionsData?.result?.data?.map((item, index) => ({
+      id: index,
+      name: item.to_location,
+    })) || [];
+
+  const { data: priceData } = useFetchLogisticsPrice({
     from: fromLocation,
     to: toLocation,
   });
-  console.log(locations);
+  console.log("Price Data is here:", priceData);
+
+  const logisticsPrice = priceData?.result?.data?.logistic_price ?? 0;
+
+  console.log(locations, "Locations after mapping");
+  console.log(logisticsOptions, "Logistics Options after mapping");
+  console.log(logisticsPrice, "Logistics Price");
 
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure client-side execution
@@ -326,13 +343,14 @@ const Checkout = () => {
                 </div>
                 {/* location */}
                 <div className="mt-6">
+                  {/* From Location */}
                   <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                     From
                   </label>
                   <select
                     value={fromLocation}
                     onChange={(e) => setFromLocation(e.target.value)}
-                    className="w-full p-4 border border-Grey200 hover:border-Grey400  font-nunitoSans rounded-lg focus:outline-none "
+                    className="w-full p-4 border border-Grey200 hover:border-Grey400 font-nunitoSans rounded-lg focus:outline-none"
                   >
                     <option value="">Select Location</option>
                     {locations.map((location) => (
@@ -341,6 +359,8 @@ const Checkout = () => {
                       </option>
                     ))}
                   </select>
+
+                  {/* To Location */}
                   <label className="block mt-4 mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                     To
                   </label>
@@ -356,6 +376,8 @@ const Checkout = () => {
                       </option>
                     ))}
                   </select>
+
+                  {/* Logistics Price */}
                   <h1 className="mt-4 text-xl font-bold text-Grey500">
                     Logistics Price: ₦{logisticsPrice}
                   </h1>
