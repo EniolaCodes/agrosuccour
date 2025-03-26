@@ -6,10 +6,10 @@ const fetchUserIP = async () => {
   try {
     const response = await fetch("https://api.ipify.org?format=json");
     const data = await response.json();
-    return data.ip; // User's public IP
+    return data.ip;
   } catch (error) {
     console.error("Failed to fetch IP:", error);
-    return "unknown_ip"; // Fallback in case of failure
+    return "unknown_ip";
   }
 };
 
@@ -17,17 +17,20 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({
     cart_group_id: null,
     items: [],
+    createdAt: null,
   });
 
   const isCartExpired = (cart) => {
-    const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
-    const now = Date.now();
-    return now - cart.createdAt > oneDay;
+    const oneDay = 24 * 60 * 60 * 1000;
+    return Date.now() - cart.createdAt > oneDay;
   };
 
   useEffect(() => {
+    if (typeof window === "undefined") return; // Prevents execution on the server
+
     async function initializeCart() {
       let savedCart = JSON.parse(localStorage.getItem("cart"));
+
       if (savedCart && isCartExpired(savedCart)) {
         localStorage.removeItem("cart");
         savedCart = null;
@@ -47,11 +50,12 @@ export const CartProvider = ({ children }) => {
         setCart(savedCart);
       }
     }
+
     initializeCart();
   }, []);
 
   useEffect(() => {
-    if (cart.cart_group_id) {
+    if (typeof window !== "undefined" && cart.cart_group_id) {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart]);
@@ -61,28 +65,37 @@ export const CartProvider = ({ children }) => {
       const existingItem = prevCart.items.find(
         (item) => item.product_id === productId
       );
-      if (existingItem) {
-        return {
-          ...prevCart,
-          items: prevCart.items.map((item) =>
+      const updatedItems = existingItem
+        ? prevCart.items.map((item) =>
             item.product_id === productId
               ? { ...item, quantity: item.quantity + quantity }
               : item
-          ),
-        };
+          )
+        : [...prevCart.items, { product_id: productId, quantity }];
+
+      const updatedCart = { ...prevCart, items: updatedItems };
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
       }
-      return {
-        ...prevCart,
-        items: [...prevCart.items, { product_id: productId, quantity }],
-      };
+
+      return updatedCart;
     });
   };
 
   const removeItemFromCart = (productId) => {
-    setCart((prevCart) => ({
-      ...prevCart,
-      items: prevCart.items.filter((item) => item.product_id !== productId),
-    }));
+    setCart((prevCart) => {
+      const updatedCart = {
+        ...prevCart,
+        items: prevCart.items.filter((item) => item.product_id !== productId),
+      };
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+      }
+
+      return updatedCart;
+    });
   };
 
   return (
@@ -94,7 +107,7 @@ export const CartProvider = ({ children }) => {
 
 export const useCart = () => {
   const context = useContext(CartContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useCart must be used within a CartProvider");
   }
   return context;
