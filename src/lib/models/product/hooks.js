@@ -60,8 +60,41 @@ export const useGetSingleProducts = ({ productId }) => {
   });
 };
 
+// export const useFetchCartProducts = (cartItems) => {
+//   const fetchProducts = async () => {
+//     const fetchedProducts = await Promise.all(
+//       cartItems.map((item) =>
+//         backendFetch({ endpoint: `/product/${item.product_id}` }).then(
+//           (product) => ({
+//             ...product,
+//             quantity: item.quantity,
+//           })
+//         )
+//       )
+//     );
+//     return fetchedProducts;
+//   };
+
+//   return useQuery({
+//     queryKey: ["cartProducts", cartItems],
+//     queryFn: fetchProducts,
+//     enabled: cartItems.length > 0,
+//     staleTime: Infinity,
+//   });
+// };
+
 export const useFetchCartProducts = (cartItems) => {
+  const [enabled, setEnabled] = useState(false); // Add an enabled state
+
+  useEffect(() => {
+    setEnabled(true); // Enable the query on the client-side
+  }, []);
+
   const fetchProducts = async () => {
+    if (!cartItems || cartItems.length === 0) {
+      return []; // Return an empty array if cartItems is empty
+    }
+
     const fetchedProducts = await Promise.all(
       cartItems.map((item) =>
         backendFetch({ endpoint: `/product/${item.product_id}` }).then(
@@ -78,7 +111,7 @@ export const useFetchCartProducts = (cartItems) => {
   return useQuery({
     queryKey: ["cartProducts", cartItems],
     queryFn: fetchProducts,
-    enabled: cartItems.length > 0,
+    enabled: enabled,
     staleTime: Infinity,
   });
 };
