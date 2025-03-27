@@ -20,9 +20,9 @@ const TopSellingProducts = () => {
   } = useGetTopSellingProducts({
     params: "?limit=6",
   });
-
+  console.log(fetchProducts, "i am fetched");
   const topsellingProducts = fetchProducts?.result?.data;
-  console.log("topsellingProducts : ", topsellingProducts);
+  console.log(topsellingProducts, "top selling");
 
   const { cart, addItemToCart, removeItemFromCart } = useCart();
 
