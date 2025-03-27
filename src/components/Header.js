@@ -27,7 +27,7 @@ const Header = () => {
     isLoading,
     isError,
     refetch: refetchCartProducts,
-  } = useFetchCartProducts(cartItems);
+  } = useFetchCartProducts(cart.items);
 
   useEffect(() => {
     if (cartedProducts && cartedProducts.length) {
