@@ -8,99 +8,16 @@ import { useCart } from "@/app/context/CartContext";
 import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
 export default function Cart() {
-  const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
-  const { removeItemFromCart, cart } = useCart();
-
+  const { cart, removeItemFromCart, incrementQuantity, decrementQuantity } =
+    useCart();
   const {
     data: cartedProducts = [],
     isLoading,
     isError,
     refetch: refetchCartProducts,
-  } = useFetchCartProducts(cartItems);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return; // Ensure client-side execution
-
-    const updateCartItems = () => {
-      const storedCart = JSON.parse(localStorage.getItem("cart")) || {
-        items: [],
-      };
-      setCartItems(storedCart.items);
-      refetchCartProducts();
-    };
-
-    // Listen for `storage` events to handle updates from other tabs
-    const handleStorageChange = (event) => {
-      if (event.key === "cart") {
-        updateCartItems();
-      }
-    };
-
-    updateCartItems(); // Update cart items when the component mounts
-
-    window.addEventListener("storage", handleStorageChange); // Add storage event listener
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, [refetchCartProducts]);
-
-  useEffect(() => {
-    if (cartedProducts.length) {
-      setProducts(cartedProducts);
-    }
-  }, [cartedProducts]);
-
-  useEffect(() => {
-    if (cartItems.length) {
-      refetchCartProducts();
-    }
-  }, [cartItems, refetchCartProducts]);
-
-  const updateLocalStorage = (updatedProducts) => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cartProducts", JSON.stringify(updatedProducts));
-    }
-  };
-
+  } = useFetchCartProducts(cart.items);
   const isCartEmpty = !cart.items || cart.items.length === 0;
-
-  const incrementQuantity = (id) => {
-    const updatedProducts = products.map((product) =>
-      product.result.data.product_id === id
-        ? { ...product, quantity: (product.quantity || 0) + 1 }
-        : product
-    );
-    setProducts(updatedProducts);
-    updateLocalStorage(updatedProducts);
-  };
-
-  const decrementQuantity = (id) => {
-    const updatedProducts = products.map((product) =>
-      product.result.data.product_id === id && product.quantity > 1
-        ? { ...product, quantity: product.quantity - 1 }
-        : product
-    );
-    setProducts(updatedProducts);
-    updateLocalStorage(updatedProducts);
-  };
-
-  const deleteProduct = (id) => {
-    const updatedProducts = products.filter(
-      (product) => product.result.data.product_id !== id
-    );
-    setProducts(updatedProducts);
-    removeItemFromCart(id);
-    updateLocalStorage(updatedProducts);
-  };
-
-  const totalPrice = products.reduce(
-    (total, product) =>
-      total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
-    0
-  );
-
+  const totalPrice = cart?.total_amount;
   return (
     <>
       {/* desktop */}
@@ -176,7 +93,7 @@ export default function Cart() {
                     </div>
                     <button
                       onClick={() =>
-                        deleteProduct(product?.result?.data?.product_id)
+                        removeItemFromCart(product?.result?.data?.product_id)
                       }
                       className="text-Grey400 text-[16px] hover:text-red-600 ml-2"
                     >
