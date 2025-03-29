@@ -26,6 +26,16 @@ export const CartProvider = ({ children }) => {
     return Date.now() - cart.createdAt > oneDay;
   };
 
+  const calculateTotalAmount = (items = []) => {
+    return items.reduce((total, item) => {
+      if (!item?.price || !item?.quantity) return total; // Skip invalid items
+
+      return (
+        total + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0)
+      );
+    }, 0);
+  };
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -49,10 +59,11 @@ export const CartProvider = ({ children }) => {
         setCart(newCart);
         localStorage.setItem("cart", JSON.stringify(newCart));
       } else {
-        const recalculatedTotal = calculateTotalAmount(savedCart.items);
         setCart({
           ...savedCart,
-          total_amount: parseFloat(recalculatedTotal.toFixed(2)),
+          total_amount: parseFloat(
+            calculateTotalAmount(savedCart.items).toFixed(2)
+          ),
         });
       }
     }
@@ -60,50 +71,18 @@ export const CartProvider = ({ children }) => {
     initializeCart();
   }, []);
 
-  const calculateTotalAmount = (items) => {
-    console.log("Items in calculateTotalAmount:", items);
-    return items.reduce((total, item) => {
-      // Initialize price and quantity for safety
-      let price = 0;
-      let quantity = 0;
-
-      // Validate price
-      if (item && item.price !== undefined && item.price !== null) {
-        price =
-          typeof item.price === "number" ? item.price : parseFloat(item.price);
-        if (isNaN(price)) {
-          console.warn(`Item ${item.product_id} has an invalid price`);
-          return total; // Skip this item
-        }
-      } else {
-        console.warn(`Item ${item.product_id} is missing price`);
-        return total; // Skip this item
-      }
-
-      // Validate quantity
-      if (item && item.quantity !== undefined && item.quantity !== null) {
-        quantity =
-          typeof item.quantity === "number"
-            ? item.quantity
-            : parseInt(item.quantity, 10);
-        if (isNaN(quantity) || quantity < 0) {
-          console.warn(`Item ${item.product_id} has an invalid quantity`);
-          return total;
-        }
-      } else {
-        console.warn(`Item ${item.product_id} is missing quantity`);
-        return total;
-      }
-
-      const itemTotal = parseFloat((price * quantity).toFixed(2));
-      return total + itemTotal;
-    }, 0);
-  };
   useEffect(() => {
     if (typeof window !== "undefined" && cart.cart_group_id) {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart]);
+
+  useEffect(() => {
+    setCart((prevCart) => ({
+      ...prevCart,
+      total_amount: parseFloat(calculateTotalAmount(prevCart.items).toFixed(2)),
+    }));
+  }, [cart.items]); // Update total_amount when cart items change
 
   const addItemToCart = (productId, quantity, price) => {
     setCart((prevCart) => {
@@ -119,17 +98,7 @@ export const CartProvider = ({ children }) => {
           )
         : [...prevCart.items, { product_id: productId, quantity, price }];
 
-      const updatedTotal = calculateTotalAmount(updatedItems);
-
-      const updatedCart = {
-        ...prevCart,
-        items: updatedItems,
-        total_amount: parseFloat(updatedTotal.toFixed(2)),
-      };
-
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-
-      return updatedCart;
+      return { ...prevCart, items: updatedItems };
     });
   };
 
@@ -138,15 +107,7 @@ export const CartProvider = ({ children }) => {
       const updatedItems = prevCart.items.filter(
         (item) => item.product_id !== productId
       );
-      const updatedCart = {
-        ...prevCart,
-        items: updatedItems,
-        total_amount: parseFloat(calculateTotalAmount(updatedItems).toFixed(2)),
-      };
-
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-
-      return updatedCart;
+      return { ...prevCart, items: updatedItems };
     });
   };
 
@@ -157,30 +118,21 @@ export const CartProvider = ({ children }) => {
           ? { ...item, quantity: item.quantity + 1 }
           : item
       );
-      const updatedCart = {
-        ...prevCart,
-        items: updatedItems,
-        total_amount: parseFloat(calculateTotalAmount(updatedItems).toFixed(2)),
-      };
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      return updatedCart;
+      return { ...prevCart, items: updatedItems };
     });
   };
 
   const decrementQuantity = (productId) => {
     setCart((prevCart) => {
-      const updatedItems = prevCart.items.map((item) =>
-        item.product_id === productId && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      );
-      const updatedCart = {
-        ...prevCart,
-        items: updatedItems,
-        total_amount: parseFloat(calculateTotalAmount(updatedItems).toFixed(2)),
-      };
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      return updatedCart;
+      const updatedItems = prevCart.items
+        .map((item) =>
+          item.product_id === productId && item.quantity > 1
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0); // Remove items with quantity 0
+
+      return { ...prevCart, items: updatedItems };
     });
   };
 
