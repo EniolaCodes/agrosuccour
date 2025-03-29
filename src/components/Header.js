@@ -27,7 +27,14 @@ const Header = () => {
     isLoading,
     isError,
     refetch: refetchCartProducts,
-  } = useFetchCartProducts(cart.items);
+  } = useFetchCartProducts(items);
+
+  // const totalPrice = cart?.total_amount;
+  const totalPrice = cartedProducts.reduce((acc, product) => {
+    const price = parseFloat(product?.result?.data?.price) || 0;
+    const quantity = parseInt(product?.quantity, 10) || 0;
+    return acc + price * quantity;
+  }, 0);
 
   useEffect(() => {
     if (cartedProducts && cartedProducts.length) {
@@ -332,7 +339,7 @@ const Header = () => {
                             <div className="">
                               <button
                                 onClick={() =>
-                                  deleteProduct(
+                                  removeItemFromCart(
                                     product?.result?.data?.product_id
                                   )
                                 }
