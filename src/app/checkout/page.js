@@ -18,19 +18,20 @@ import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import ProgressIndicator from "@/components/ProgressIndicator";
+import { useMutateSubmitUserDetails } from "@/lib/models/auth/hooks";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const Checkout = () => {
+    const router = useRouter();
   const {
     register,
-    handleSubmit,
     control,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-  };
-
+  const [isLoadingSubmitDetails, setIsLoadingSubmitDetails] = useState(false);
+  const {isPending: isPendingSubmitDetails, mutate: onMutateSubmitDetails } = useMutateSubmitUserDetails({});
   const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
   const currentStep = 0;
 
@@ -68,13 +69,15 @@ const Checkout = () => {
     from: fromLocation,
     to: toLocation,
   });
-  console.log("Price Data is here:", priceData);
+//   console.log("Price Data is here:", priceData);
 
   const logisticsPrice = priceData?.result?.data?.logistic_price ?? 0;
 
-  console.log(locations, "Locations after mapping");
-  console.log(logisticsOptions, "Logistics Options after mapping");
-  console.log(logisticsPrice, "Logistics Price");
+//   console.log(locations, "Locations after mapping");
+//   console.log(logisticsOptions, "Logistics Options after mapping");
+//   console.log(logisticsPrice, "Logistics Price");
+
+
 
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure client-side execution
@@ -102,6 +105,75 @@ const Checkout = () => {
       total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
     0
   );
+
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const values = Object.fromEntries(formData);
+    console.log("OUR great values: ", values)
+
+    if (!values.email || !values.password ) {
+        toast.error("All fields are required");
+        return;
+    }
+
+    setIsLoadingSubmitDetails(true);
+    const storedCart = JSON.parse(localStorage.getItem("cart"))
+    const payload = {
+        "email": values.email,
+        "username": values.fullName,
+        "password": values.email,
+        // "email": "fawaz77@agrosuccour.com",
+        // "username": "fawaz77@agrosuccour.com",
+        // "password": "fawaz77@agrosuccour.com",
+        // cart can also be send as payload but not necccessary field
+        "address": values.address,
+        "state": values.state,
+        cart: storedCart,
+    //     "cart": {
+    //     "cart_group_id": "session_abc12366666",
+    //     "total_amount": "54549.97",
+    //     // "logistic_id" : 1,
+    //     "items": [
+    //       {
+    //         "product_id": 2,
+    //         "quantity": 4
+    //       },
+    //       {
+    //         "product_id": 3,
+    //         "quantity": 10
+    //       }
+    //     ]
+    //   }
+
+    }
+    onMutateSubmitDetails(payload, {
+        onSuccess: (response) => {
+            console.log("OUr backend response: ", response)
+            // console.log("OUr backend response: ", response.result.success)
+            if(response.result.success){
+                localStorage.setItem("token", response.result.token);
+                setIsLoadingSubmitDetails(false);
+                alert("Registration successfully")
+            }
+            else{
+                setIsLoadingSubmitDetails(false);
+                alert("Unsuccessful Registration")
+            }
+            // toast.success("Registration successfully");
+            // router.push('/review');
+
+        },
+        onError: (error) => {
+            console.log("Error: ", error)
+            setIsLoadingSubmitDetails(false);
+            toast.error(error.response.data.message.toString());
+        },
+    });
+
+ }
 
   return (
     <div className="px-4 md:px-52 py-8 ">
@@ -170,7 +242,7 @@ const Checkout = () => {
             </button>
           </div>
           {deliveryMethod === "delivery" ? (
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
+            <form onSubmit={handleSubmit} className="mt-8" method="POST">
               {/* Full Name */}
               <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
@@ -383,19 +455,19 @@ const Checkout = () => {
                   </h1>
                 </div>
               </div>
-              <Link href="/review">
-                <button className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                  Submit
+
+                <button type="submit" className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+                  {isLoadingSubmitDetails ? "Loading..." : "Submit "}
                 </button>
                 <div className="flex justify-end">
-                  <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                    Submit
+                  <button type="submit" className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+                  {isLoadingSubmitDetails ? "Loading..." : "Submit "}
                   </button>
                 </div>
-              </Link>
+
             </form>
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
+            <form onSubmit={handleSubmit} className="mt-8" method="POST">
               {/* Full Name */}
               <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
@@ -568,16 +640,16 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <Link href="/review">
-                <button className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                  Submit
+
+                <button type="submit" className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+                {isLoadingSubmitDetails ? "Loading..." : "Submit"}
                 </button>
-                <div className="flex justify-end">
+                <div type="submit" className="flex justify-end">
                   <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                    Submit
+                  {isLoadingSubmitDetails ? "Loading..." : "Submit"}
                   </button>
                 </div>
-              </Link>
+
             </form>
           )}
         </div>

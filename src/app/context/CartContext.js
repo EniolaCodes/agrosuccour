@@ -16,6 +16,7 @@ const fetchUserIP = async () => {
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({
     cart_group_id: null,
+    total_amount: 0,
     items: [],
     createdAt: null,
   });
@@ -41,6 +42,7 @@ export const CartProvider = ({ children }) => {
         const timestamp = Date.now();
         const newCart = {
           cart_group_id: `${ip}_${timestamp}`,
+          total_amount: 0,
           createdAt: timestamp,
           items: [],
         };
