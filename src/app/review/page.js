@@ -134,6 +134,7 @@ const Review = () => {
         {/* order summary */}
         <div className="hidden md:flex flex-col gap-6">
           <OrderSummary products={products} totalPrice={totalPrice} />
+
           <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
             <div className="">
               <div className="flex space-x-8">

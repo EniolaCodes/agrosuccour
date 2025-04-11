@@ -19,6 +19,7 @@ export const CartProvider = ({ children }) => {
     total_amount: 0,
     items: [],
     createdAt: null,
+    total_amount: 0,
   });
 
   const isCartExpired = (cart) => {
@@ -26,8 +27,18 @@ export const CartProvider = ({ children }) => {
     return Date.now() - cart.createdAt > oneDay;
   };
 
+  const calculateTotalAmount = (items = []) => {
+    return items.reduce((total, item) => {
+      if (!item?.price || !item?.quantity) return total; 
+
+      return (
+        total + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0)
+      );
+    }, 0);
+  };
+
   useEffect(() => {
-    if (typeof window === "undefined") return; // Prevents execution on the server
+    if (typeof window === "undefined") return;
 
     async function initializeCart() {
       let savedCart = JSON.parse(localStorage.getItem("cart"));
@@ -45,11 +56,17 @@ export const CartProvider = ({ children }) => {
           total_amount: 0,
           createdAt: timestamp,
           items: [],
+          total_amount: 0,
         };
         setCart(newCart);
         localStorage.setItem("cart", JSON.stringify(newCart));
       } else {
-        setCart(savedCart);
+        setCart({
+          ...savedCart,
+          total_amount: parseFloat(
+            calculateTotalAmount(savedCart.items).toFixed(2)
+          ),
+        });
       }
     }
 
@@ -62,46 +79,75 @@ export const CartProvider = ({ children }) => {
     }
   }, [cart]);
 
-  const addItemToCart = (productId, quantity) => {
+  useEffect(() => {
+    setCart((prevCart) => ({
+      ...prevCart,
+      total_amount: parseFloat(calculateTotalAmount(prevCart.items).toFixed(2)),
+    }));
+  }, [cart.items]); // Update total_amount when cart items change
+
+  const addItemToCart = (productId, quantity, price) => {
     setCart((prevCart) => {
       const existingItem = prevCart.items.find(
         (item) => item.product_id === productId
       );
+
       const updatedItems = existingItem
         ? prevCart.items.map((item) =>
             item.product_id === productId
-              ? { ...item, quantity: item.quantity + quantity }
+              ? { ...item, quantity: item.quantity + quantity, price }
               : item
           )
-        : [...prevCart.items, { product_id: productId, quantity }];
+        : [...prevCart.items, { product_id: productId, quantity, price }];
 
-      const updatedCart = { ...prevCart, items: updatedItems };
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-      }
-
-      return updatedCart;
+      return { ...prevCart, items: updatedItems };
     });
   };
 
   const removeItemFromCart = (productId) => {
     setCart((prevCart) => {
-      const updatedCart = {
-        ...prevCart,
-        items: prevCart.items.filter((item) => item.product_id !== productId),
-      };
+      const updatedItems = prevCart.items.filter(
+        (item) => item.product_id !== productId
+      );
+      return { ...prevCart, items: updatedItems };
+    });
+  };
 
-      if (typeof window !== "undefined") {
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-      }
+  const incrementQuantity = (productId) => {
+    setCart((prevCart) => {
+      const updatedItems = prevCart.items.map((item) =>
+        item.product_id === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+      return { ...prevCart, items: updatedItems };
+    });
+  };
 
-      return updatedCart;
+  const decrementQuantity = (productId) => {
+    setCart((prevCart) => {
+      const updatedItems = prevCart.items
+        .map((item) =>
+          item.product_id === productId && item.quantity > 1
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0); // Remove items with quantity 0
+
+      return { ...prevCart, items: updatedItems };
     });
   };
 
   return (
-    <CartContext.Provider value={{ cart, addItemToCart, removeItemFromCart }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addItemToCart,
+        removeItemFromCart,
+        incrementQuantity,
+        decrementQuantity,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

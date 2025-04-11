@@ -16,68 +16,31 @@ const Header = () => {
   const [productsOpen, setProductsOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
-  const { removeItemFromCart } = useCart();
+
+  const { cart, removeItemFromCart, incrementQuantity, decrementQuantity } =
+    useCart();
+  const items = cart ? cart.items : [];
+  const isCartEmpty = !items || items.length === 0;
+
   const {
     data: cartedProducts = [],
     isLoading,
     isError,
     refetch: refetchCartProducts,
-  } = useFetchCartProducts(cartItems);
+  } = useFetchCartProducts(items);
 
-  useEffect(() => {
-    const updateCartItems = () => {
-      const storedCart = JSON.parse(localStorage.getItem("cart")) || {
-        items: [],
-      };
-      setCartItems(storedCart.items);
-      refetchCartProducts();
-    };
-
-    // Listen for `storage` events to handle updates from other tabs
-    const handleStorageChange = (event) => {
-      if (event.key === "cart") {
-        updateCartItems();
-      }
-    };
-
-    updateCartItems(); // Update cart items when the component mounts
-
-    window.addEventListener("storage", handleStorageChange); // Add storage event listener
-
-    // Optional: Listen for manual cart updates in the same tab
-    const originalSetItem = localStorage.setItem;
-    localStorage.setItem = function (key, value) {
-      if (key === "cart") {
-        originalSetItem.apply(this, arguments);
-        updateCartItems(); // Trigger update manually for the same tab
-      } else {
-        originalSetItem.apply(this, arguments);
-      }
-    };
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      localStorage.setItem = originalSetItem; // Restore the original method
-    };
-  }, [refetchCartProducts]);
+  // const totalPrice = cart?.total_amount;
+  const totalPrice = cartedProducts.reduce((acc, product) => {
+    const price = parseFloat(product?.result?.data?.price) || 0;
+    const quantity = parseInt(product?.quantity, 10) || 0;
+    return acc + price * quantity;
+  }, 0);
 
   useEffect(() => {
     if (cartedProducts && cartedProducts.length) {
       setProducts(cartedProducts);
     }
   }, [cartedProducts]);
-
-  useEffect(() => {
-    // Refetch whenever cartItems change
-    if (cartItems.length) {
-      refetchCartProducts();
-    }
-  }, [cartItems, refetchCartProducts]);
-
-  const updateLocalStorage = (updatedProducts) => {
-    localStorage.setItem("cartProducts", JSON.stringify(updatedProducts));
-  };
 
   const menuRef = useRef(null);
   const productsRef = useRef(null);
@@ -123,45 +86,6 @@ const Header = () => {
     toggleMenu(); // Close the menu
     router.push("/cart"); // Redirect to the cart page
   };
-  const { cart } = useCart();
-
-  const isCartEmpty = !cart.items || cart.items.length === 0;
-
-  const incrementQuantity = (id) => {
-    const updatedProducts = products.map((product) =>
-      product.result.data.product_id === id
-        ? { ...product, quantity: (product.quantity || 0) + 1 }
-        : product
-    );
-    setProducts(updatedProducts);
-    updateLocalStorage(updatedProducts);
-  };
-
-  const decrementQuantity = (id) => {
-    const updatedProducts = products.map((product) =>
-      product.result.data.product_id === id && product.quantity > 1
-        ? { ...product, quantity: product.quantity - 1 }
-        : product
-    );
-    setProducts(updatedProducts);
-    updateLocalStorage(updatedProducts);
-  };
-
-  // Function to delete a product
-  const deleteProduct = (id) => {
-    const updatedProducts = products.filter(
-      (product) => product.result.data.product_id !== id
-    );
-    setProducts(updatedProducts);
-    removeItemFromCart(id);
-    updateLocalStorage(updatedProducts);
-  };
-
-  const totalPrice = products.reduce(
-    (total, product) =>
-      total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
-    0
-  );
 
   return (
     <div>
@@ -415,7 +339,7 @@ const Header = () => {
                             <div className="">
                               <button
                                 onClick={() =>
-                                  deleteProduct(
+                                  removeItemFromCart(
                                     product?.result?.data?.product_id
                                   )
                                 }
