@@ -17,12 +17,12 @@ const Footer = () => {
             <Image
               src="/images/logo.svg"
               alt="Agrosuccour Logo"
-              width={50}
-              height={50}
+              width={30}
+              height={30}
               className=""
             />
             <h2
-              className="text-[33px] mt-6
+              className="text-[26px] mt-6
             font-urbanist font-semibold text-Green100"
             >
               Agrosuccour
@@ -42,9 +42,6 @@ const Footer = () => {
             <ul className="space-y-2 text-agroHeading opacity-80">
               <li className="text-inherit hover:text-Green500 ">
                 <Link href="/">Home</Link>
-              </li>
-              <li className="text-inherit hover:text-Green500 ">
-                <Link href="/about">About</Link>
               </li>
               <li className="text-inherit hover:text-Green500 ">
                 <Link href="/products">Products</Link>

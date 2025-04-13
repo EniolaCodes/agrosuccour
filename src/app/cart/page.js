@@ -205,7 +205,7 @@ export default function Cart() {
                         className={`px-5 py-1 rounded-md font-extrabold ${
                           product.quantity > 1
                             ? "bg-Green500 text-Green50"
-                            : "bg-Green200 text-Green50"
+                            : "bg-Grey100 text-Green50"
                         }`}
                       >
                         -
