@@ -6,8 +6,13 @@ import { useCart } from "@/app/context/CartContext";
 const CartComponent = () => {
   const pathname = usePathname();
   const { cart } = useCart(); // Get cart count from context
-  const cartCount = cart.items.reduce(
-    (count, item) => count + item.quantity,
+  // const cartCount = cart.items.reduce(
+  //   (count, item) => count + item.quantity,
+  //   0
+  // );
+  console.log("Cart items:", cart.items);
+  const cartCount = (cart.items || []).reduce(
+    (count, item) => count + (parseInt(item.quantity) || 0),
     0
   );
 
