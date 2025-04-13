@@ -72,6 +72,7 @@ const Checkout = () => {
 //   console.log("Price Data is here:", priceData);
 
   const logisticsPrice = priceData?.result?.data?.logistic_price ?? 0;
+  const logistic_id = priceData?.result?.data?.logistic_id ?? 0;
 
 //   console.log(locations, "Locations after mapping");
 //   console.log(logisticsOptions, "Logistics Options after mapping");
@@ -451,7 +452,7 @@ const handleSubmit = async (e) => {
 
                   {/* Logistics Price */}
                   <h1 className="mt-4 text-xl font-bold text-Grey500">
-                    Logistics Price: ₦{logisticsPrice}
+                    Logistics Price: ₦{logistic_id}
                   </h1>
                 </div>
               </div>
