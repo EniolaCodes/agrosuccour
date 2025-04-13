@@ -54,16 +54,16 @@ const ProductDetails = () => {
 
   const { cart, addItemToCart, removeItemFromCart } = useCart();
 
-  const toggleCart = (productId) => {
+  const toggleCart = (product) => {
     const isAlreadyInCart = cart.items.some(
-      (item) => item.product_id === productId
+      (item) => item.product_id === product.product_id
     );
 
     if (!isAlreadyInCart) {
-      addItemToCart(productId, 1);
+      addItemToCart(product.product_id, product.quantity, product.price);
       toast.success("Cart successfully updated");
     } else {
-      removeItemFromCart(productId);
+      removeItemFromCart(product.product_id);
       toast.error("One item has been removed from cart");
     }
   };
@@ -234,7 +234,7 @@ const ProductDetails = () => {
                 <div
                   onClick={(e) => {
                     e.preventDefault();
-                    toggleCart(product.product_id);
+                    toggleCart(product);
                   }}
                   className={`rounded-full border p-2 cursor-pointer transition-colors ${
                     (cart.items || []).some(
