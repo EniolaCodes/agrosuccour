@@ -28,7 +28,7 @@ export const CartProvider = ({ children }) => {
 
   const calculateTotalAmount = (items = []) => {
     return items.reduce((total, item) => {
-      if (!item?.price || !item?.quantity) return total; 
+      if (!item?.price || !item?.quantity) return total;
 
       return (
         total + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0)

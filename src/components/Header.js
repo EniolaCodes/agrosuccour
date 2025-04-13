@@ -105,10 +105,10 @@ const Header = () => {
             <Image
               src="/images/logo.svg"
               alt="Agrosuccour Logo"
-              width={40}
-              height={40}
+              width={30}
+              height={30}
             />
-            <h1 className="text-[33px] mt-4 font-urbanist font-semibold text-Green100">
+            <h1 className="text-[26px] mt-4 font-urbanist font-semibold text-Green100">
               Agrosuccour
             </h1>
           </Link>
@@ -236,9 +236,6 @@ const Header = () => {
             </li>
 
             <li className="hover:text-Green500 ">
-              <Link href="/about">About</Link>
-            </li>
-            <li className="hover:text-Green500 ">
               <Link href="/products">Products</Link>
             </li>
           </ul>
@@ -361,7 +358,7 @@ const Header = () => {
                                 className={`px-3 py-1 rounded-md font-extrabold ${
                                   product.quantity > 1
                                     ? "bg-Green500 text-Green50"
-                                    : "bg-Green200 text-Green50"
+                                    : "bg-Grey100 text-Green50"
                                 }`}
                               >
                                 -
