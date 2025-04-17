@@ -45,7 +45,7 @@ const Products = () => {
     );
 
     if (!isAlreadyInCart) {
-      addItemToCart(product.product_id, product.quantity, product.price);
+      addItemToCart(product.product_id, 1, product.price); // <--- PASS A DEFAULT QUANTITY OF 1
       toast.success("Cart successfully updated");
     } else {
       removeItemFromCart(product.product_id);
