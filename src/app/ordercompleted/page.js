@@ -1,34 +1,53 @@
 "use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "@/components/providers/SessionProvider";
+import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
 const OrderCompleted = () => {
-  const products = [
-    {
-      id: 1,
-      image: "/images/elo.svg",
-      name: "Pepper mixed for soup - Elo",
-      weight: "1 kilogram / Bag",
-      price: "1,200.99",
-      quantity: 1,
-    },
-    {
-      id: 2,
-      image: "/images/chicken.svg",
-      name: "Full Chicken",
-      weight: "2 kilogram",
-      price: "1,200.99",
-      quantity: 2,
-    },
-    {
-      id: 3,
-      image: "/images/fish.svg",
-      name: "Pepper mixed for soup - Elo",
-      weight: "1 kilogram / Bag",
-      price: "1,200.99",
-      quantity: 1,
-    },
-  ];
+  const sessionId = useSession();
+  useEffect(() => {
+    console.log("Session ID in Order Completed  Page:", sessionId);
+    // Fetch review data associated with the sessionId
+  }, [sessionId]);
+
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+
+  const {
+    data: cartedProducts = [],
+    isLoading,
+    isError,
+    refetch: refetchCartProducts,
+  } = useFetchCartProducts(cartItems);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return; // Ensure client-side execution
+
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || {
+      items: [],
+    };
+    setCartItems(storedCart.items);
+  }, []);
+
+  useEffect(() => {
+    if (cartItems.length) {
+      refetchCartProducts();
+    }
+  }, [cartItems, refetchCartProducts]);
+
+  useEffect(() => {
+    if (cartedProducts.length) {
+      setProducts(cartedProducts);
+    }
+  }, [cartedProducts]);
+
+  const totalPrice = products.reduce(
+    (total, product) =>
+      total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
+    0
+  );
 
   return (
     <div className="px-4 md:px-52 py-8 ">
@@ -38,35 +57,39 @@ const OrderCompleted = () => {
             <h1 className="text-Grey500 font-semibold font-nunito text-[25px]">
               Order Completed
             </h1>
-            <p className="text-Grey400 text-[13px]">8 items</p>
+            <p className="text-Grey400 text-[13px]">{products.length} items</p>
           </div>
           <div className="bg-white  p-6 shadow-md rounded-[28px]">
+            {" "}
             {products.map((product) => (
               <div
-                key={product.id}
+                key={product?.result?.data?.product_id}
                 className="flex items-center relative border-b border-gray-300 py-4"
               >
                 <div className="">
                   <Image
-                    src={product.image}
-                    alt={product.name}
+                    src={product?.result?.data?.image_url}
+                    alt={product?.result?.data?.product_name}
                     width={124}
                     height={80}
-                    className=" object-cover rounded-md"
+                    className="rounded-md"
                   />
                 </div>
                 <div className="ml-4 flex-grow">
                   <h3 className="text-[20px] text-Grey500 font-bold">
-                    {product.name}
+                    {product?.result?.data?.product_name}
                   </h3>
-                  <p className="text-[16px] text-Grey400">{product.weight}</p>
+                  <p className="text-[16px] text-Grey400">
+                    {product?.quantity} kilogram / Bag
+                  </p>
                 </div>
-                <span className="bg-Grey400 text-white text-xs font-bold px-2 py-1 absolute top-2 right-0 rounded-full mb-4">
-                  {product.quantity}
-                </span>
-                <div className="flex  items-center">
+                <div className="flex items-center">
                   <p className="text-[20px] font-bold text-Grey500">
-                    ₦{product.price}
+                    ₦
+                    {(
+                      (product?.result?.data?.price || 0) *
+                      (product?.quantity || 0)
+                    ).toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -90,11 +113,18 @@ const OrderCompleted = () => {
               </div>
               <div className="flex justify-between items-center text-[13px] font-nunitoSans mb-4">
                 <span className="text-Grey400 ">Date:</span>
-                <span className="text-Grey500 font-bold">15th Nov, 2024</span>
+                <span className="text-Grey500 font-bold">
+                  {new Date().toLocaleDateString()}
+                </span>
               </div>
               <div className="flex justify-between items-center text-[13px] font-nunitoSans mb-4">
                 <span className="text-Grey400">Time:</span>
-                <span className="text-Grey500 font-bold">01:08 PM</span>
+                <span className="text-Grey500 font-bold">
+                  {new Date().toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
               </div>
               <div className="flex justify-between items-center text-[13px] font-nunitoSans mb-4">
                 <span className="text-Grey400 ">Order ID:</span>
@@ -103,7 +133,7 @@ const OrderCompleted = () => {
             </div>
             <hr className="my-4 border-Grey-50" />
             <p className="text-[31px] font-nunitoSans text-center font-bold text-Green900">
-              ₦102,000
+              ₦{totalPrice.toFixed(2)}
             </p>
             <hr className="my-4 border-Grey-50" />
             <div className="mt-4">
