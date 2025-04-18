@@ -8,6 +8,7 @@ import { IoChevronForwardOutline, IoChevronBackOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCart } from "@/app/context/CartContext";
+import ErrorPage from "../error/page";
 
 const Products = () => {
   const totalPages = 10; // Total number of pages
@@ -54,7 +55,7 @@ const Products = () => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  if (isError) return <ErrorPage message={error.message} />; // Render the ErrorPage
   return (
     <div className="px-4 md:px-20 py-8">
       <div className="flex">

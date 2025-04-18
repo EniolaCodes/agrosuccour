@@ -7,6 +7,7 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCart } from "@/app/context/CartContext";
+import ErrorPage from "@/app/error/page";
 
 const FeaturedProducts = () => {
   const {
@@ -38,7 +39,7 @@ const FeaturedProducts = () => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  if (isError) return <ErrorPage message={error.message} />; // Render the ErrorPage
 
   return (
     <div className="px-4 md:px-20 py-8">

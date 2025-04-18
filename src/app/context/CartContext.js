@@ -1,3 +1,4 @@
+// app/context/CartContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
@@ -19,6 +20,7 @@ export const CartProvider = ({ children }) => {
     items: [],
     createdAt: null,
     total_amount: 0,
+    logistic_price: 0, // Add logistic_price to the cart state
   });
 
   const isCartExpired = (cart) => {
@@ -26,14 +28,35 @@ export const CartProvider = ({ children }) => {
     return Date.now() - cart.createdAt > oneDay;
   };
 
-  const calculateTotalAmount = (items = []) => {
-    return items.reduce((total, item) => {
-      if (!item?.price || !item?.quantity) return total;
+  // const calculateTotalAmount = (items = [], logisticPrice = 0) => {
+  //   const itemsTotal = items.reduce((total, item) => {
+  //     if (!item?.price || !item?.quantity) return total;
+  //     return (
+  //       total + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0)
+  //     );
+  //   }, 0);
+  //   return parseFloat((itemsTotal + parseFloat(logisticPrice)).toFixed(2)); // Add logistic price
+  // };
 
+  const calculateTotalAmount = (items = [], logisticPrice = 0) => {
+    console.log(
+      "Calculating total. Items:",
+      items,
+      "Logistic Price:",
+      logisticPrice
+    );
+    const itemsTotal = items.reduce((total, item) => {
+      console.log("Processing item:", item, "Current total:", total);
+      if (!item?.price || !item?.quantity) return total;
       return (
         total + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0)
       );
     }, 0);
+    const finalTotal = parseFloat(
+      (itemsTotal + parseFloat(logisticPrice)).toFixed(2)
+    );
+    console.log("Calculated final total:", finalTotal);
+    return finalTotal;
   };
 
   useEffect(() => {
@@ -55,6 +78,7 @@ export const CartProvider = ({ children }) => {
           createdAt: timestamp,
           items: [],
           total_amount: 0,
+          logistic_price: 0, // Initialize logistic_price in new cart
         };
         setCart(newCart);
         localStorage.setItem("cart", JSON.stringify(newCart));
@@ -80,9 +104,21 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     setCart((prevCart) => ({
       ...prevCart,
-      total_amount: parseFloat(calculateTotalAmount(prevCart.items).toFixed(2)),
+      total_amount: calculateTotalAmount(
+        prevCart.items,
+        prevCart.logistic_price
+      ),
     }));
-  }, [cart.items]); // Update total_amount when cart items change
+  }, [cart.items, cart.logistic_price]); // Recalculate when items or logistic price change
+
+  // New function to update the logistic price
+  const setLogisticPrice = (price) => {
+    console.log("CartContext: setLogisticPrice called with:", price);
+    setCart((prevCart) => ({
+      ...prevCart,
+      logistic_price: parseFloat(price),
+    }));
+  };
 
   const addItemToCart = (productId, quantity, price) => {
     setCart((prevCart) => {
@@ -144,6 +180,7 @@ export const CartProvider = ({ children }) => {
         removeItemFromCart,
         incrementQuantity,
         decrementQuantity,
+        setLogisticPrice, // Expose the new function
       }}
     >
       {children}

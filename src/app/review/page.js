@@ -15,6 +15,8 @@ const Review = () => {
   const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
   const currentStep = 1;
 
+  const { cart } = useCart();
+  console.log("Cart object in ReviewPage:", cart);
   const sessionId = useSession();
   useEffect(() => {
     console.log("Session ID in Review Page:", sessionId);
@@ -117,7 +119,11 @@ const Review = () => {
         </div>
         {/* order summary */}
         <div className="hidden md:flex flex-col gap-6">
-          <OrderSummary products={products} totalPrice={totalPrice} />
+          <OrderSummary
+            products={products}
+            totalPrice={cart.total_amount - cart.logistic_price}
+            logisticPrice={cart.logistic_price}
+          />
 
           <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
             <div className="">
