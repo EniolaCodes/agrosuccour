@@ -56,7 +56,7 @@ const TopSellingProducts = () => {
         </Link>
       </div>
       <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
-        {topsellingProducts.map((product, index) => (
+        {topsellingProducts?.map((product, index) => (
           <Link
             href={`/products/${product.product_id}`}
             key={index}

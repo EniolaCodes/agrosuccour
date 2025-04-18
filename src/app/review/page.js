@@ -10,6 +10,7 @@ import { useSession } from "@/components/providers/SessionProvider"
 import OrderSummary from "@/components/OrderSummary"
 import { useFetchCartProducts } from "@/lib/models/product/hooks"
 import { useRouter } from "next/navigation"
+import { useGetUserOrder } from "@/lib/models/order/hooks"
 
 const Review = () => {
   const router = useRouter()
@@ -50,6 +51,17 @@ const Review = () => {
     refetch: refetchCartProducts,
   } = useFetchCartProducts(cartItems)
 
+
+//   order
+  const {
+    data: orders = [],
+    isLoading: isLoadingOrders,
+    refetch: refetchUserOrder,
+  } = useGetUserOrder({params: '?recent=true'})
+
+  const orderDetails = orders?.result?.data
+  const logisticsPrice = orders?.result?.data?.LogisticsPrice
+
   useEffect(() => {
     if (!isMounted) return
     if (typeof window === "undefined") return
@@ -65,8 +77,20 @@ const Review = () => {
     if (cartItems.length) {
       refetchCartProducts()
     }
+  }, [cartItems, refetchUserOrder, isMounted])
+  useEffect(() => {
+    if (!isMounted) return
+    if (cartItems.length) {
+      refetchCartProducts()
+    }
   }, [cartItems, refetchCartProducts, isMounted])
 
+useEffect(() => {
+    if (!isMounted) return
+    if (cartItems.length) {
+        refetchUserOrder()
+    }
+  }, [cartItems, refetchUserOrder, isMounted])
   useEffect(() => {
     if (!isMounted) return
     if (cartedProducts.length) {
@@ -133,7 +157,7 @@ const Review = () => {
         </div>
         {/* order summary */}
         <div className="hidden md:flex flex-col gap-6">
-          <OrderSummary products={products} totalPrice={totalPrice} />
+          <OrderSummary products={products} totalPrice={totalPrice} otherFees={logisticsPrice} />
 
           <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
             <div className="">

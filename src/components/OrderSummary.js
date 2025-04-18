@@ -7,6 +7,7 @@ export default function OrderSummary({
   //prevents error when value of products and totalPrice are missing
   products = [],
   totalPrice = 0,
+  otherFees,
   incrementQuantity,
   decrementQuantity,
   deleteProduct,
@@ -45,7 +46,7 @@ export default function OrderSummary({
       </div>
       <div className="flex justify-between items-center text-Grey400 text-[16px] border-b pb-2">
         <p>Other fees:</p>
-        <p>₦0.00</p>
+        <p>₦{ otherFees || 0.00}</p>
       </div>
       <div className="flex justify-between items-center text-Grey400 font-bold text-[16px] font-nunitoSans border-b pb-2">
         <p>Total:</p>

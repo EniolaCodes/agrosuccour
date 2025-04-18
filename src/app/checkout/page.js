@@ -132,6 +132,7 @@ const handleSubmit = async (e) => {
         // cart can also be send as payload but not necccessary field
         "address": values.address,
         "state": values.state,
+        logistic_id: logistic_id,
         cart: storedCart,
     //     "cart": {
     //     "cart_group_id": "session_abc12366666",
@@ -164,7 +165,7 @@ const handleSubmit = async (e) => {
                 alert("Unsuccessful Registration")
             }
             // toast.success("Registration successfully");
-            // router.push('/review');
+            router.push('/review');
 
         },
         onError: (error) => {
@@ -452,7 +453,7 @@ const handleSubmit = async (e) => {
 
                   {/* Logistics Price */}
                   <h1 className="mt-4 text-xl font-bold text-Grey500">
-                    Logistics Price: ₦{logistic_id}
+                    Logistics Price: ₦{logisticsPrice}
                   </h1>
                 </div>
               </div>
