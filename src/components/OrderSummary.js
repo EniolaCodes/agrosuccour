@@ -7,6 +7,8 @@ export default function OrderSummary({
   //prevents error when value of products and totalPrice are missing
   products = [],
   totalPrice = 0,
+  logisticPrice = 0,
+
   incrementQuantity,
   decrementQuantity,
   deleteProduct,
@@ -15,10 +17,14 @@ export default function OrderSummary({
 
   let buttonLink = "/checkout";
   let buttonText = "Checkout";
+  let displayLogisticPrice = false;
+  let calculatedTotal = totalPrice;
 
   if (pathname === "/review") {
     buttonLink = "/payment";
     buttonText = "Proceed to Payment";
+    displayLogisticPrice = true;
+    calculatedTotal = totalPrice + logisticPrice;
   } else if (pathname === "/payment") {
     buttonLink = "/ordercompleted";
     buttonText = "Complete Order";
@@ -43,10 +49,14 @@ export default function OrderSummary({
         <p>Subtotal:</p>
         <p>₦{totalPrice.toFixed(2)}</p>
       </div>
-      <div className="flex justify-between items-center text-Grey400 text-[16px] border-b pb-2">
-        <p>Other fees:</p>
-        <p>₦0.00</p>
-      </div>
+
+      {displayLogisticPrice && (
+        <div className="flex justify-between items-center text-Grey400 text-[16px] border-b pb-2">
+          <p>Other fees:</p>
+          <p>₦{logisticPrice.toFixed(2)}</p>
+        </div>
+      )}
+
       <div className="flex justify-between items-center text-Grey400 font-bold text-[16px] font-nunitoSans border-b pb-2">
         <p>Total:</p>
         <p>₦{totalPrice.toFixed(2)}</p>

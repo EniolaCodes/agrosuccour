@@ -7,6 +7,7 @@ import { FiLock } from "react-icons/fi";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiMail, FiUser, FiMapPin, FiGlobe } from "react-icons/fi";
 import OrderSummary from "@/components/OrderSummary";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/app/context/CartContext";
 import {
   useFetchCartProducts,
@@ -20,6 +21,7 @@ import "react-phone-input-2/lib/style.css";
 import ProgressIndicator from "@/components/ProgressIndicator";
 
 const Checkout = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -29,6 +31,11 @@ const Checkout = () => {
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
+    // At this point, the cart object in the context will have the logistic_price
+    const storedCart = JSON.parse(localStorage.getItem("cart"));
+    console.log("Final Cart with Logistic Price:", storedCart);
+    // Proceed with submitting the order or navigating to the payment page
+    router.push("/review");
   };
 
   const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
@@ -40,7 +47,7 @@ const Checkout = () => {
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const { removeItemFromCart } = useCart();
+  const { removeItemFromCart, setLogisticPrice } = useCart(); // Get setLogisticPrice
 
   const {
     data: cartedProducts = [],
@@ -58,6 +65,7 @@ const Checkout = () => {
   const { data: logisticsOptionsData } = useFetchLogisticsByLocation({
     from: fromLocation,
   });
+  console.log(logisticsOptionsData);
   const logisticsOptions =
     logisticsOptionsData?.result?.data?.map((item, index) => ({
       id: index,
@@ -102,6 +110,14 @@ const Checkout = () => {
       total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
     0
   );
+  // Update logistic price in the cart context when toLocation changes
+  useEffect(() => {
+    if (toLocation) {
+      setLogisticPrice(logisticsPrice);
+    } else {
+      setLogisticPrice(0); // Reset if no destination is selected
+    }
+  }, [toLocation, logisticsPrice]);
 
   return (
     <div className="px-4 md:px-52 py-8 ">
@@ -199,7 +215,7 @@ const Checkout = () => {
               </div>
 
               {/* Email */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                   Email
                 </label>
@@ -227,9 +243,9 @@ const Checkout = () => {
                     {errors.email.message}
                   </p>
                 )}
-              </div>
+              </div> */}
               {/* Password */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                   Password
                 </label>
@@ -257,9 +273,9 @@ const Checkout = () => {
                     {errors.password.message}
                   </p>
                 )}
-              </div>
+              </div> */}
               {/* Phone Number */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                   Phone Number
                 </label>
@@ -288,9 +304,9 @@ const Checkout = () => {
                     {errors.phone.message}
                   </p>
                 )}
-              </div>
+              </div> */}
               {/* Address */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                   City Address
                 </label>
@@ -314,7 +330,7 @@ const Checkout = () => {
                     {errors.address.message}
                   </p>
                 )}
-              </div>
+              </div> */}
               {/* State */}
               <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
@@ -383,16 +399,21 @@ const Checkout = () => {
                   </h1>
                 </div>
               </div>
-              <Link href="/review">
-                <button className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+
+              <button
+                type="submit"
+                className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
+              >
+                Submit
+              </button>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
+                >
                   Submit
                 </button>
-                <div className="flex justify-end">
-                  <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                    Submit
-                  </button>
-                </div>
-              </Link>
+              </div>
             </form>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
@@ -568,16 +589,20 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <Link href="/review">
-                <button className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+              <button
+                type="submit"
+                className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
+              >
+                Submit
+              </button>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
+                >
                   Submit
                 </button>
-                <div className="flex justify-end">
-                  <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                    Submit
-                  </button>
-                </div>
-              </Link>
+              </div>
             </form>
           )}
         </div>
