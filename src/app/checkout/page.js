@@ -19,24 +19,22 @@ import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import ProgressIndicator from "@/components/ProgressIndicator";
+import { useMutateSubmitUserDetails } from "@/lib/models/auth/hooks";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const Checkout = () => {
   const router = useRouter();
   const {
     register,
-    handleSubmit,
     control,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    // At this point, the cart object in the context will have the logistic_price
-    const storedCart = JSON.parse(localStorage.getItem("cart"));
-    console.log("Final Cart with Logistic Price:", storedCart);
-    // Proceed with submitting the order or navigating to the payment page
-    router.push("/review");
-  };
+
+  const [isLoadingSubmitDetails, setIsLoadingSubmitDetails] = useState(false);
+  const { isPending: isPendingSubmitDetails, mutate: onMutateSubmitDetails } =
+    useMutateSubmitUserDetails({});
 
   const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
   const currentStep = 0;
@@ -76,13 +74,19 @@ const Checkout = () => {
     from: fromLocation,
     to: toLocation,
   });
-  console.log("Price Data is here:", priceData);
+  //   console.log("Price Data is here:", priceData);
 
   const logisticsPrice = priceData?.result?.data?.logistic_price ?? 0;
+  const logistic_id = priceData?.result?.data?.logistic_id ?? 0;
 
-  console.log(locations, "Locations after mapping");
-  console.log(logisticsOptions, "Logistics Options after mapping");
-  console.log(logisticsPrice, "Logistics Price");
+  // Update logistic price in the cart context when toLocation changes
+  useEffect(() => {
+    if (toLocation) {
+      setLogisticPrice(logisticsPrice);
+    } else {
+      setLogisticPrice(0); // Reset if no destination is selected
+    }
+  }, [toLocation, logisticsPrice]);
 
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure client-side execution
@@ -118,6 +122,71 @@ const Checkout = () => {
       setLogisticPrice(0); // Reset if no destination is selected
     }
   }, [toLocation, logisticsPrice]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const values = Object.fromEntries(formData);
+    console.log("OUR great values: ", values);
+
+    if (!values.email || !values.password) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    setIsLoadingSubmitDetails(true);
+    const storedCart = JSON.parse(localStorage.getItem("cart"));
+    const payload = {
+      email: values.email,
+      username: values.fullName,
+      password: values.email,
+      // "email": "fawaz77@agrosuccour.com",
+      // "username": "fawaz77@agrosuccour.com",
+      // "password": "fawaz77@agrosuccour.com",
+      // cart can also be send as payload but not necccessary field
+      address: values.address,
+      state: values.state,
+      logistic_id: logistic_id,
+      cart: storedCart,
+      //     "cart": {
+      //     "cart_group_id": "session_abc12366666",
+      //     "total_amount": "54549.97",
+      //     // "logistic_id" : 1,
+      //     "items": [
+      //       {
+      //         "product_id": 2,
+      //         "quantity": 4
+      //       },
+      //       {
+      //         "product_id": 3,
+      //         "quantity": 10
+      //       }
+      //     ]
+      //   }
+    };
+    onMutateSubmitDetails(payload, {
+      onSuccess: (response) => {
+        console.log("OUr backend response: ", response);
+        // console.log("OUr backend response: ", response.result.success)
+        if (response.result.success) {
+          localStorage.setItem("token", response.result.token);
+          setIsLoadingSubmitDetails(false);
+          alert("Registration successfully");
+        } else {
+          setIsLoadingSubmitDetails(false);
+          alert("Unsuccessful Registration");
+        }
+        // toast.success("Registration successfully");
+        router.push("/review");
+      },
+      onError: (error) => {
+        console.log("Error: ", error);
+        setIsLoadingSubmitDetails(false);
+        toast.error(error.response.data.message.toString());
+      },
+    });
+  };
 
   return (
     <div className="px-4 md:px-52 py-8 ">
@@ -186,7 +255,7 @@ const Checkout = () => {
             </button>
           </div>
           {deliveryMethod === "delivery" ? (
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
+            <form onSubmit={handleSubmit} className="mt-8" method="POST">
               {/* Full Name */}
               <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
@@ -243,37 +312,9 @@ const Checkout = () => {
                     {errors.email.message}
                   </p>
                 )}
-              </div> */}
-              {/* Password */}
-              {/* <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  Password
-                </label>
-                <div className="relative">
-                  <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <input
-                    {...register("password", {
-                      required: "Password is required",
-                      minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters",
-                      },
-                    })}
-                    type="password"
-                    className={`w-full pl-10 p-4 border font-nunitoSans rounded-lg focus:outline-none ${
-                      errors.password
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400"
-                    }`}
-                    placeholder="Enter your password"
-                  />
-                </div>
-                {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div> */}
+
+              </div>
+
               {/* Phone Number */}
               {/* <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
@@ -404,19 +445,23 @@ const Checkout = () => {
                 type="submit"
                 className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
               >
-                Submit
+
+                {isLoadingSubmitDetails ? "Loading..." : "Submit "}
+
               </button>
               <div className="flex justify-end">
                 <button
                   type="submit"
                   className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
                 >
-                  Submit
+
+                  {isLoadingSubmitDetails ? "Loading..." : "Submit "}
+
                 </button>
               </div>
             </form>
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
+            <form onSubmit={handleSubmit} className="mt-8" method="POST">
               {/* Full Name */}
               <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
@@ -593,14 +638,13 @@ const Checkout = () => {
                 type="submit"
                 className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
               >
-                Submit
+
+                {isLoadingSubmitDetails ? "Loading..." : "Submit"}
               </button>
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
-                >
-                  Submit
+              <div type="submit" className="flex justify-end">
+                <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+                  {isLoadingSubmitDetails ? "Loading..." : "Submit"}
+
                 </button>
               </div>
             </form>

@@ -10,11 +10,18 @@ const CartComponent = () => {
   //   (count, item) => count + item.quantity,
   //   0
   // );
-  console.log("Cart items:", cart.items);
-  const cartCount = (cart.items || []).reduce(
-    (count, item) => count + (parseInt(item.quantity) || 0),
+  console.log("Cart in CartComponent:", cart);
+  console.log("Cart items in CartComponent:", cart?.items);
+//   const cartCount = (cart.items || []).reduce(
+//       (count, item) => count + (parseInt(item.quantity) || 0),
+//       0
+//     );
+const cartCount = (cart.items || []).reduce(
+    (count, item) => count + 1,
     0
   );
+
+    console.log("Cart Count in CartComponent:", cartCount);
 
   // Check if the current route is one of the specified pages
   const isCartOrCheckoutOrPaymentOrReviewPage =

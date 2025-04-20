@@ -59,7 +59,7 @@ export default function OrderSummary({
 
       <div className="flex justify-between items-center text-Grey400 font-bold text-[16px] font-nunitoSans border-b pb-2">
         <p>Total:</p>
-        <p>₦{totalPrice.toFixed(2)}</p>
+        <p>₦{calculatedTotal.toFixed(2)}</p>
       </div>
       <Link href={buttonLink}>
         <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
@@ -69,13 +69,3 @@ export default function OrderSummary({
     </div>
   );
 }
-
-//  Displays a summary of the user's order, including product details and total price.
-//  Provides controls to adjust product quantities and proceed to checkout.
-
-//  Props:
-// - products (Array): List of products in the cart.
-//  -totalPrice (number): Total price of all products combined.
-//   - incrementQuantity (function): Function to increase the quantity of a product.
-//   - decrementQuantity (function): Function to decrease the quantity of a product.
-//   - deleteProduct (function): Function to remove a product from the cart.

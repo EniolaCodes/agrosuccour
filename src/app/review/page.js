@@ -8,51 +8,118 @@ import { MdOutlinePayment } from "react-icons/md";
 import ProgressIndicator from "@/components/ProgressIndicator";
 import { useSession } from "@/components/providers/SessionProvider";
 import OrderSummary from "@/components/OrderSummary";
-import { useCart } from "@/app/context/CartContext";
 import { useFetchCartProducts } from "@/lib/models/product/hooks";
+import { useRouter } from "next/navigation";
+import { useGetUserOrder } from "@/lib/models/order/hooks";
+import { useCart } from "@/app/context/CartContext";
 
 const Review = () => {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+
   const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
   const currentStep = 1;
 
   const { cart } = useCart();
   console.log("Cart object in ReviewPage:", cart);
+
+
+  // Authentication check
+  useEffect(() => {
+    setIsMounted(true);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/checkout");
+    } else {
+      setIsAuthenticated(true);
+    }
+    setIsAuthLoading(false);
+  }, [router]);
+
+
   const sessionId = useSession();
   useEffect(() => {
-    console.log("Session ID in Review Page:", sessionId);
-    // Fetch review data associated with the sessionId
-  }, [sessionId]);
+    if (isMounted) {
+      console.log("Session ID in Review Page:", sessionId);
+      // Fetch review data associated with the sessionId
+    }
+  }, [sessionId, isMounted]);
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
   const {
     data: cartedProducts = [],
-    isLoading,
+    isLoading: isLoadingProducts,
     isError,
     refetch: refetchCartProducts,
   } = useFetchCartProducts(cartItems);
 
+  //   order
+  const {
+    data: orders = [],
+    isLoading: isLoadingOrders,
+    refetch: refetchUserOrder,
+  } = useGetUserOrder({ params: "?recent=true" });
+
+  const orderDetails = orders?.result?.data;
+  const logisticsPrice = orders?.result?.data?.LogisticsPrice;
+
   useEffect(() => {
-    if (typeof window === "undefined") return; // Ensure client-side execution
+    if (!isMounted) return;
+    if (typeof window === "undefined") return;
 
     const storedCart = JSON.parse(localStorage.getItem("cart")) || {
       items: [],
     };
     setCartItems(storedCart.items);
-  }, []);
+  }, [isMounted]);
 
   useEffect(() => {
+    if (!isMounted) return;
     if (cartItems.length) {
       refetchCartProducts();
     }
-  }, [cartItems, refetchCartProducts]);
+  }, [cartItems, refetchUserOrder, isMounted]);
+  useEffect(() => {
+    if (!isMounted) return;
+    if (cartItems.length) {
+      refetchCartProducts();
+    }
+  }, [cartItems, refetchCartProducts, isMounted]);
 
   useEffect(() => {
+    if (!isMounted) return;
+    if (cartItems.length) {
+      refetchUserOrder();
+    }
+  }, [cartItems, refetchUserOrder, isMounted]);
+  useEffect(() => {
+    if (!isMounted) return;
     if (cartedProducts.length) {
       setProducts(cartedProducts);
     }
-  }, [cartedProducts]);
+  }, [cartedProducts, isMounted]);
+
+  // Show loading state while checking authentication or loading products
+  if (isAuthLoading || !isMounted) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  // If not authenticated, this will redirect (handled in useEffect)
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Redirecting to checkout...
+      </div>
+    );
+  }
 
   const totalPrice = products.reduce(
     (total, product) =>
@@ -78,7 +145,7 @@ const Review = () => {
               </p>
             </div>
           </div>
-          <div className="bg-white  p-6 shadow-md rounded-[28px]">
+          <div className="bg-white p-6 shadow-md rounded-[28px]">
             {products.map((product) => (
               <div
                 key={product?.result?.data?.product_id}
@@ -86,7 +153,7 @@ const Review = () => {
               >
                 <div className="">
                   <Image
-                    src={product?.result?.data?.image_url}
+                    src={product?.result?.data?.image_url || "/placeholder.svg"}
                     alt={product?.result?.data?.product_name}
                     width={124}
                     height={80}
@@ -101,9 +168,6 @@ const Review = () => {
                     {product?.quantity} kilogram / Bag
                   </p>
                 </div>
-                {/* <span className="bg-[#F26262] text-white text-xs font-bold absolute px-2 py-1 top-2 right-0 rounded-full mb-4">
-                  {product.quantity}
-                </span> */}
                 <div className="flex items-center">
                   <p className="text-[20px] font-bold text-Grey500">
                     ₦
@@ -121,6 +185,10 @@ const Review = () => {
         <div className="hidden md:flex flex-col gap-6">
           <OrderSummary
             products={products}
+
+            // totalPrice={totalPrice}
+            // otherFees={logisticsPrice}
+
             totalPrice={cart.total_amount - cart.logistic_price}
             logisticPrice={cart.logistic_price}
           />
