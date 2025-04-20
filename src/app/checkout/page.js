@@ -7,6 +7,7 @@ import { FiLock } from "react-icons/fi";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiMail, FiUser, FiMapPin, FiGlobe } from "react-icons/fi";
 import OrderSummary from "@/components/OrderSummary";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/app/context/CartContext";
 import {
   useFetchCartProducts,
@@ -30,9 +31,11 @@ const Checkout = () => {
     formState: { errors },
   } = useForm();
 
+
   const [isLoadingSubmitDetails, setIsLoadingSubmitDetails] = useState(false);
   const { isPending: isPendingSubmitDetails, mutate: onMutateSubmitDetails } =
     useMutateSubmitUserDetails({});
+
   const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
   const currentStep = 0;
 
@@ -60,6 +63,7 @@ const Checkout = () => {
   const { data: logisticsOptionsData } = useFetchLogisticsByLocation({
     from: fromLocation,
   });
+  console.log(logisticsOptionsData);
   const logisticsOptions =
     logisticsOptionsData?.result?.data?.map((item, index) => ({
       id: index,
@@ -110,6 +114,14 @@ const Checkout = () => {
       total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
     0
   );
+  // Update logistic price in the cart context when toLocation changes
+  useEffect(() => {
+    if (toLocation) {
+      setLogisticPrice(logisticsPrice);
+    } else {
+      setLogisticPrice(0); // Reset if no destination is selected
+    }
+  }, [toLocation, logisticsPrice]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -272,7 +284,7 @@ const Checkout = () => {
               </div>
 
               {/* Email */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                   Email
                 </label>
@@ -300,9 +312,11 @@ const Checkout = () => {
                     {errors.email.message}
                   </p>
                 )}
+
               </div>
+
               {/* Phone Number */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                   Phone Number
                 </label>
@@ -331,9 +345,9 @@ const Checkout = () => {
                     {errors.phone.message}
                   </p>
                 )}
-              </div>
+              </div> */}
               {/* Address */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
                   City Address
                 </label>
@@ -357,7 +371,7 @@ const Checkout = () => {
                     {errors.address.message}
                   </p>
                 )}
-              </div>
+              </div> */}
               {/* State */}
               <div className="mb-4">
                 <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
@@ -431,14 +445,18 @@ const Checkout = () => {
                 type="submit"
                 className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
               >
+
                 {isLoadingSubmitDetails ? "Loading..." : "Submit "}
+
               </button>
               <div className="flex justify-end">
                 <button
                   type="submit"
                   className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
                 >
+
                   {isLoadingSubmitDetails ? "Loading..." : "Submit "}
+
                 </button>
               </div>
             </form>
@@ -620,11 +638,13 @@ const Checkout = () => {
                 type="submit"
                 className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
               >
+
                 {isLoadingSubmitDetails ? "Loading..." : "Submit"}
               </button>
               <div type="submit" className="flex justify-end">
                 <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
                   {isLoadingSubmitDetails ? "Loading..." : "Submit"}
+
                 </button>
               </div>
             </form>
