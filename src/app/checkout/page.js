@@ -1,12 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { FaWhatsapp } from "react-icons/fa";
 import { PiFireTruck } from "react-icons/pi";
 import { FiLock } from "react-icons/fi";
 import { BsBoxSeam } from "react-icons/bs";
 import { FiMail, FiUser, FiMapPin, FiGlobe } from "react-icons/fi";
-import OrderSummary from "@/components/OrderSummary";
 import { useCart } from "@/app/context/CartContext";
 import {
   useFetchCartProducts,
@@ -33,6 +30,7 @@ const Checkout = () => {
   const [isLoadingSubmitDetails, setIsLoadingSubmitDetails] = useState(false);
   const { isPending: isPendingSubmitDetails, mutate: onMutateSubmitDetails } =
     useMutateSubmitUserDetails({});
+
   const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
   const currentStep = 0;
 
@@ -137,21 +135,6 @@ const Checkout = () => {
       state: values.state,
       logistic_id: logistic_id,
       cart: storedCart,
-      //     "cart": {
-      //     "cart_group_id": "session_abc12366666",
-      //     "total_amount": "54549.97",
-      //     // "logistic_id" : 1,
-      //     "items": [
-      //       {
-      //         "product_id": 2,
-      //         "quantity": 4
-      //       },
-      //       {
-      //         "product_id": 3,
-      //         "quantity": 10
-      //       }
-      //     ]
-      //   }
     };
     onMutateSubmitDetails(payload, {
       onSuccess: (response) => {
@@ -630,41 +613,6 @@ const Checkout = () => {
             </form>
           )}
         </div>
-        {/* <div className="hidden md:flex flex-col gap-6">
-          <OrderSummary products={products} totalPrice={totalPrice} />
-          <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
-            <div className="">
-              <div className="flex space-x-8">
-                <PiFireTruck
-                  size={20}
-                  className="text-Green500 font-semibold"
-                />
-                <div className="font-nunitoSans space-y-2 mb-6">
-                  <h1 className="text-Green400 text-bold text-[16px] ">
-                    Quick Delivery
-                  </h1>
-                  <p className="text-Grey50 text-[13px]">
-                    Efficient order processing and timely delivery
-                  </p>
-                </div>
-              </div>
-              <hr className="w-full bg-Grey100" />
-            </div>
-            <div className="mt-6">
-              <div className="flex space-x-8">
-                <FaWhatsapp size={20} className="text-Green500 font-semibold" />
-                <div className="font-nunitoSans space-y-2">
-                  <h1 className="text-Green400 text-bold text-[16px] ">
-                    Contact us
-                  </h1>
-                  <p className="text-Grey50 text-[13px]">
-                    Reach out on +2340706375930. We will reply in 2mins.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
