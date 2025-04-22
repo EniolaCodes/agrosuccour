@@ -80,10 +80,10 @@ const Checkout = () => {
   useEffect(() => {
     if (toLocation) {
       setLogisticPrice(logisticsPrice);
-      setLogisticId(logistic_id); // <-- update logistic_id when toLocation is set
+      setLogisticId(logistic_id);
     } else {
-      setLogisticPrice(0);
-      setLogisticId(null); // <-- reset logistic_id if no destination
+      setLogisticPrice(0); // Reset if no destination is selected
+      setLogisticId(null);
     }
   }, [toLocation, logisticsPrice, logistic_id]);
 
@@ -129,7 +129,7 @@ const Checkout = () => {
     const values = Object.fromEntries(formData);
     console.log("OUR great values: ", values);
 
-    if (!values.email || !values.password) {
+    if (!values.email) {
       toast.error("All fields are required");
       return;
     }
@@ -166,7 +166,7 @@ const Checkout = () => {
           alert("Unsuccessful Registration");
         }
         // toast.success("Registration successfully");
-        router.push("/review");
+        // router.push("/review");
       },
       onError: (error) => {
         console.log("Error: ", error);
