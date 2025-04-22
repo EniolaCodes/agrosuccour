@@ -40,7 +40,7 @@ const Checkout = () => {
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const { removeItemFromCart, setLogisticPrice } = useCart(); // Get setLogisticPrice
+  const { removeItemFromCart, setLogisticPrice, setLogisticId } = useCart(); // Get setLogisticPrice
 
   const {
     data: cartedProducts = [],
@@ -80,10 +80,12 @@ const Checkout = () => {
   useEffect(() => {
     if (toLocation) {
       setLogisticPrice(logisticsPrice);
+      setLogisticId(logistic_id); // <-- update logistic_id when toLocation is set
     } else {
-      setLogisticPrice(0); // Reset if no destination is selected
+      setLogisticPrice(0);
+      setLogisticId(null); // <-- reset logistic_id if no destination
     }
-  }, [toLocation, logisticsPrice]);
+  }, [toLocation, logisticsPrice, logistic_id]);
 
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure client-side execution
