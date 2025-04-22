@@ -40,7 +40,7 @@ const Checkout = () => {
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const { removeItemFromCart, setLogisticPrice } = useCart(); // Get setLogisticPrice
+  const { removeItemFromCart, setLogisticPrice, setLogisticId } = useCart(); // Get setLogisticPrice
 
   const {
     data: cartedProducts = [],
@@ -74,14 +74,18 @@ const Checkout = () => {
   const logisticsPrice = priceData?.result?.data?.logistic_price ?? 0;
   const logistic_id = priceData?.result?.data?.logistic_id ?? 0;
 
+  console.log("Price data logistic_id: ", priceData?.result?.data?.logistic_id);
+
   // Update logistic price in the cart context when toLocation changes
   useEffect(() => {
     if (toLocation) {
       setLogisticPrice(logisticsPrice);
+      setLogisticId(logistic_id);
     } else {
       setLogisticPrice(0); // Reset if no destination is selected
+      setLogisticId(null);
     }
-  }, [toLocation, logisticsPrice]);
+  }, [toLocation, logisticsPrice, logistic_id]);
 
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure client-side execution
@@ -125,8 +129,12 @@ const Checkout = () => {
     const values = Object.fromEntries(formData);
     console.log("OUR great values: ", values);
 
-    if (!values.email || !values.password) {
+    if (!values.email) {
       toast.error("All fields are required");
+      return;
+    }
+    if (!logistic_id || logistic_id === 0) {
+      toast.error("Please select a valid delivery route");
       return;
     }
 
@@ -158,7 +166,7 @@ const Checkout = () => {
           alert("Unsuccessful Registration");
         }
         // toast.success("Registration successfully");
-        router.push("/review");
+        // router.push("/review");
       },
       onError: (error) => {
         console.log("Error: ", error);
