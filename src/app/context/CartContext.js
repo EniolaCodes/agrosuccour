@@ -28,16 +28,6 @@ export const CartProvider = ({ children }) => {
     return Date.now() - cart.createdAt > oneDay;
   };
 
-  // const calculateTotalAmount = (items = [], logisticPrice = 0) => {
-  //   const itemsTotal = items.reduce((total, item) => {
-  //     if (!item?.price || !item?.quantity) return total;
-  //     return (
-  //       total + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0)
-  //     );
-  //   }, 0);
-  //   return parseFloat((itemsTotal + parseFloat(logisticPrice)).toFixed(2)); // Add logistic price
-  // };
-
   const calculateTotalAmount = (items = [], logisticPrice = 0) => {
     console.log(
       "Calculating total. Items:",
@@ -79,6 +69,7 @@ export const CartProvider = ({ children }) => {
           items: [],
           total_amount: 0,
           logistic_price: 0, // Initialize logistic_price in new cart
+          logistic_id: null, // <-- Added logistic_id here
         };
         setCart(newCart);
         localStorage.setItem("cart", JSON.stringify(newCart));
@@ -117,6 +108,13 @@ export const CartProvider = ({ children }) => {
     setCart((prevCart) => ({
       ...prevCart,
       logistic_price: parseFloat(price),
+    }));
+  };
+
+  const setLogisticId = (id) => {
+    setCart((prevCart) => ({
+      ...prevCart,
+      logistic_id: id,
     }));
   };
 
@@ -180,7 +178,8 @@ export const CartProvider = ({ children }) => {
         removeItemFromCart,
         incrementQuantity,
         decrementQuantity,
-        setLogisticPrice, // Expose the new function
+        setLogisticPrice,
+        setLogisticId,
       }}
     >
       {children}
