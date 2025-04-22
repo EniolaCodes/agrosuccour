@@ -20,7 +20,8 @@ export const CartProvider = ({ children }) => {
     items: [],
     createdAt: null,
     total_amount: 0,
-    logistic_price: 0, // Add logistic_price to the cart state
+    logistic_price: 0,
+    logistic_id: null,
   });
 
   const isCartExpired = (cart) => {

@@ -40,7 +40,7 @@ const Checkout = () => {
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const { removeItemFromCart, setLogisticPrice } = useCart(); // Get setLogisticPrice
+  const { removeItemFromCart, setLogisticPrice, setLogisticId } = useCart(); // Get setLogisticPrice
 
   const {
     data: cartedProducts = [],
@@ -78,8 +78,10 @@ const Checkout = () => {
   useEffect(() => {
     if (toLocation) {
       setLogisticPrice(logisticsPrice);
+      setLogisticId(logistic_id);
     } else {
       setLogisticPrice(0); // Reset if no destination is selected
+      setLogisticId(null);
     }
   }, [toLocation, logisticsPrice]);
 
@@ -125,7 +127,7 @@ const Checkout = () => {
     const values = Object.fromEntries(formData);
     console.log("OUR great values: ", values);
 
-    if (!values.email || !values.password) {
+    if (!values.email ) {
       toast.error("All fields are required");
       return;
     }
@@ -158,7 +160,7 @@ const Checkout = () => {
           alert("Unsuccessful Registration");
         }
         // toast.success("Registration successfully");
-        router.push("/review");
+        // router.push("/review");
       },
       onError: (error) => {
         console.log("Error: ", error);
