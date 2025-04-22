@@ -74,6 +74,8 @@ const Checkout = () => {
   const logisticsPrice = priceData?.result?.data?.logistic_price ?? 0;
   const logistic_id = priceData?.result?.data?.logistic_id ?? 0;
 
+  console.log("Price data logistic_id: ", priceData?.result?.data?.logistic_id);
+
   // Update logistic price in the cart context when toLocation changes
   useEffect(() => {
     if (toLocation) {
@@ -127,6 +129,10 @@ const Checkout = () => {
 
     if (!values.email || !values.password) {
       toast.error("All fields are required");
+      return;
+    }
+    if (!logistic_id || logistic_id === 0) {
+      toast.error("Please select a valid delivery route");
       return;
     }
 
