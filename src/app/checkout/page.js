@@ -1,9 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { PiFireTruck } from "react-icons/pi";
-import { FiLock } from "react-icons/fi";
-import { BsBoxSeam } from "react-icons/bs";
-import { FiMail, FiUser, FiMapPin, FiGlobe } from "react-icons/fi";
 import { useCart } from "@/app/context/CartContext";
 import {
   useFetchCartProducts,
@@ -11,18 +7,19 @@ import {
   useFetchLogisticsByLocation,
   useFetchLogisticsPrice,
 } from "@/lib/models/product/hooks";
-import { useForm, Controller } from "react-hook-form";
-import PhoneInput from "react-phone-input-2";
+import { useForm } from "react-hook-form";
 import "react-phone-input-2/lib/style.css";
 import ProgressIndicator from "@/components/ProgressIndicator";
 import { useMutateSubmitUserDetails } from "@/lib/models/auth/hooks";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import ShippingDetails from "@/components/ShippingDetails";
 
 const Checkout = () => {
   const router = useRouter();
   const {
     register,
+    handleSubmit: handleFormSubmit,
     control,
     formState: { errors },
   } = useForm();
@@ -40,7 +37,7 @@ const Checkout = () => {
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const { removeItemFromCart, setLogisticPrice, setLogisticId } = useCart(); // Get setLogisticPrice
+  const { removeItemFromCart, setLogisticPrice, setLogisticId } = useCart();
 
   const {
     data: cartedProducts = [],
@@ -69,26 +66,22 @@ const Checkout = () => {
     from: fromLocation,
     to: toLocation,
   });
-  //   console.log("Price Data is here:", priceData);
 
   const logisticsPrice = priceData?.result?.data?.logistic_price ?? 0;
   const logistic_id = priceData?.result?.data?.logistic_id ?? 0;
 
-  console.log("Price data logistic_id: ", priceData?.result?.data?.logistic_id);
-
-  // Update logistic price in the cart context when toLocation changes
   useEffect(() => {
     if (toLocation) {
       setLogisticPrice(logisticsPrice);
       setLogisticId(logistic_id);
     } else {
-      setLogisticPrice(0); // Reset if no destination is selected
+      setLogisticPrice(0);
       setLogisticId(null);
     }
   }, [toLocation, logisticsPrice, logistic_id]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return; // Ensure client-side execution
+    if (typeof window === "undefined") return;
 
     const storedCart = JSON.parse(localStorage.getItem("cart")) || {
       items: [],
@@ -113,23 +106,26 @@ const Checkout = () => {
       total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
     0
   );
-  // Update logistic price in the cart context when toLocation changes
+
   useEffect(() => {
     if (toLocation) {
       setLogisticPrice(logisticsPrice);
     } else {
-      setLogisticPrice(0); // Reset if no destination is selected
+      setLogisticPrice(0);
     }
   }, [toLocation, logisticsPrice]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmitShippingDetails = async (data) => {
+    console.log("Form Data from react-hook-form:", data);
 
-    const formData = new FormData(e.target);
-    const values = Object.fromEntries(formData);
-    console.log("OUR great values: ", values);
-
-    if (!values.email) {
+    if (
+      !data.email ||
+      !data.fullName ||
+      !data.phone ||
+      (deliveryMethod === "delivery" && !data.address && !data.state) ||
+      (deliveryMethod === "delivery" && !fromLocation) ||
+      (deliveryMethod === "delivery" && !toLocation)
+    ) {
       toast.error("All fields are required");
       return;
     }
@@ -141,37 +137,32 @@ const Checkout = () => {
     setIsLoadingSubmitDetails(true);
     const storedCart = JSON.parse(localStorage.getItem("cart"));
     const payload = {
-      email: values.email,
-      username: values.fullName,
-      password: values.email,
-      // "email": "fawaz77@agrosuccour.com",
-      // "username": "fawaz77@agrosuccour.com",
-      // "password": "fawaz77@agrosuccour.com",
-      // cart can also be send as payload but not necccessary field
-      address: values.address,
-      state: values.state,
+      email: data.email,
+      username: data.fullName,
+      password: data.email,
+      address: data.address,
+      state: data.state,
       logistic_id: logistic_id,
       cart: storedCart,
     };
     onMutateSubmitDetails(payload, {
       onSuccess: (response) => {
         console.log("OUr backend response: ", response);
-        // console.log("OUr backend response: ", response.result.success)
-        if (response.result.success) {
+        if (response?.result?.success) {
           localStorage.setItem("token", response.result.token);
           setIsLoadingSubmitDetails(false);
-          alert("Registration successfully");
+          toast.success("Registration successful");
         } else {
           setIsLoadingSubmitDetails(false);
-          alert("Unsuccessful Registration");
+          toast.error("Unsuccessful registration");
         }
-        // toast.success("Registration successfully");
-        // router.push("/review");
       },
       onError: (error) => {
         console.log("Error: ", error);
         setIsLoadingSubmitDetails(false);
-        toast.error(error.response.data.message.toString());
+        toast.error(
+          error?.response?.data?.message?.toString() || "An error occurred"
+        );
       },
     });
   };
@@ -187,448 +178,23 @@ const Checkout = () => {
           <h2 className="text-2xl font-nunito text-Grey500 font-bold mt-6">
             Shipping Information
           </h2>
-          {/* Delivery Method */}
-          <div className="flex h-[100px] gap-4 mt-12">
-            <button
-              className={`flex-1 py-2 border rounded-[12px] ${
-                deliveryMethod === "delivery"
-                  ? "bg-Grey50 border border-Grey400"
-                  : "bg-white border-Grey100"
-              }`}
-              onClick={() => setDeliveryMethod("delivery")}
-            >
-              <span className="flex items-center justify-center gap-2 text-Grey500 text-[16px] font-nunito">
-                <div className="flex items-center space-x-6">
-                  {deliveryMethod === "delivery" ? (
-                    <>
-                      <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
-                        <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
-                      </div>
-                    </>
-                  ) : (
-                    <div className="w-6 h-6 rounded-full border border-Grey300" />
-                  )}
-                  <div className="flex items-center space-x-2">
-                    <PiFireTruck size={20} className="" />
-                    <p>Delivery</p>
-                  </div>
-                </div>
-              </span>
-            </button>
-            <button
-              className={`flex-1 py-2 border rounded-[12px] ${
-                deliveryMethod === "pickup"
-                  ? "bg-Grey50 border border-Grey400"
-                  : "bg-white border-Grey100"
-              }`}
-              onClick={() => setDeliveryMethod("pickup")}
-            >
-              <span className="flex items-center justify-center gap-2 text-Grey500 text-[16px] font-nunito">
-                <div className="flex items-center space-x-6">
-                  {deliveryMethod === "pickup" ? (
-                    <>
-                      <div className="relative w-6 h-6 rounded-full border-2 border-Green500 font-bold">
-                        <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
-                      </div>
-                    </>
-                  ) : (
-                    <div className="w-6 h-6 rounded-full border border-Grey300" />
-                  )}
-                  <div className="flex items-center space-x-2">
-                    <BsBoxSeam size={20} />
-                    <p>Pick up</p>
-                  </div>
-                </div>
-              </span>
-            </button>
-          </div>
-          {deliveryMethod === "delivery" ? (
-            <form onSubmit={handleSubmit} className="mt-8" method="POST">
-              {/* Full Name */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  Full Name / Company Name
-                </label>
-                <div className="relative">
-                  <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <input
-                    {...register("fullName", {
-                      required: "Full name is required",
-                    })}
-                    type="text"
-                    className={`w-full pl-10 p-4 font-nunitoSans border rounded-lg focus:outline-none ${
-                      errors.fullName
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400 "
-                    }`}
-                    placeholder="Yussuf Olabayo"
-                  />
-                </div>
-                {errors.fullName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.fullName.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  Email
-                </label>
-                <div className="relative">
-                  <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <input
-                    {...register("email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: /^\S+@\S+\.\S+$/,
-                        message: "Enter a valid email address",
-                      },
-                    })}
-                    type="email"
-                    className={`w-full pl-10 p-4 font-nunitoSans  border rounded-[8px] focus:outline-none ${
-                      errors.email
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400"
-                    }`}
-                    placeholder="example123@gmail.com"
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.email.message}
-                  </p>
-                )}
-              </div>
-              {/* Phone Number */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  Phone Number
-                </label>
-                <Controller
-                  name="phone"
-                  control={control}
-                  rules={{ required: "Phone number is required" }}
-                  render={({ field }) => (
-                    <div className="relative custom-phone-input">
-                      <PhoneInput
-                        {...field}
-                        country={"ng"} // Default country
-                        placeholder="8000000000"
-                        containerClass={"w-full"}
-                        inputClass={`w-full  border font-nunitoSans rounded-lg focus:outline-none ${
-                          errors.phone
-                            ? "border-red-500"
-                            : "border-Grey200 hover:border-Grey400"
-                        }`}
-                      />
-                    </div>
-                  )}
-                />
-                {errors.phone && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
-              {/* Address */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  City Address
-                </label>
-                <div className="relative">
-                  <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <input
-                    {...register("address", {
-                      required: "Address is required",
-                    })}
-                    type="text"
-                    className={`w-full pl-10 p-4 border font-nunitoSans rounded-lg focus:outline-none ${
-                      errors.address
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400"
-                    }`}
-                    placeholder="Address"
-                  />
-                </div>
-                {errors.address && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.address.message}
-                  </p>
-                )}
-              </div>
-              {/* State */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  State
-                </label>
-                <div className="relative">
-                  <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <select
-                    {...register("state", { required: "State is required" })}
-                    className={`w-full pl-10 p-4 border  font-nunitoSans rounded-lg focus:outline-none ${
-                      errors.state
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400"
-                    }`}
-                  >
-                    <option value="Oyo">Oyo</option>
-                    <option value="Kwara">Kwara</option>
-                    <option value="Lagos">Lagos</option>
-                    <option value="Kano">Kano</option>
-                  </select>
-                  {errors.state && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.state.message}
-                    </p>
-                  )}
-                </div>
-                {/* location */}
-                <div className="mt-6">
-                  {/* From Location */}
-                  <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                    From
-                  </label>
-                  <select
-                    value={fromLocation}
-                    onChange={(e) => setFromLocation(e.target.value)}
-                    className="w-full p-4 border border-Grey200 hover:border-Grey400 font-nunitoSans rounded-lg focus:outline-none"
-                  >
-                    <option value="">Select Location</option>
-                    {locations.map((location) => (
-                      <option key={location.id} value={location.name}>
-                        {location.name}
-                      </option>
-                    ))}
-                  </select>
-
-                  {/* To Location */}
-                  <label className="block mt-4 mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                    To
-                  </label>
-                  <select
-                    value={toLocation}
-                    onChange={(e) => setToLocation(e.target.value)}
-                    className="w-full p-4 border border-Grey200 hover:border-Grey400 font-nunitoSans rounded-lg focus:outline-none"
-                  >
-                    <option value="">Select Destination</option>
-                    {logisticsOptions.map((option) => (
-                      <option key={option.id} value={option.name}>
-                        {option.name}
-                      </option>
-                    ))}
-                  </select>
-
-                  {/* Logistics Price */}
-                  <h1 className="mt-4 text-xl font-bold text-Grey500">
-                    Logistics Price: ₦{logisticsPrice}
-                  </h1>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
-              >
-                {isLoadingSubmitDetails ? "Loading..." : "Submit "}
-              </button>
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
-                >
-                  {isLoadingSubmitDetails ? "Loading..." : "Submit "}
-                </button>
-              </div>
-            </form>
-          ) : (
-            <form onSubmit={handleSubmit} className="mt-8" method="POST">
-              {/* Full Name */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  Full Name / Company Name
-                </label>
-                <div className="relative">
-                  <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <input
-                    {...register("fullName", {
-                      required: "Full name is required",
-                    })}
-                    type="text"
-                    className={`w-full pl-10 p-4 font-nunitoSans border rounded-lg focus:outline-none ${
-                      errors.fullName
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400 "
-                    }`}
-                    placeholder="Yussuf Olabayo"
-                  />
-                </div>
-                {errors.fullName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.fullName.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  Email
-                </label>
-                <div className="relative">
-                  <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <input
-                    {...register("email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: /^\S+@\S+\.\S+$/,
-                        message: "Enter a valid email address",
-                      },
-                    })}
-                    type="email"
-                    className={`w-full pl-10 p-4 font-nunitoSans  border rounded-[8px] focus:outline-none ${
-                      errors.email
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400"
-                    }`}
-                    placeholder="example123@gmail.com"
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.email.message}
-                  </p>
-                )}
-              </div>
-              {/* Password */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  Password
-                </label>
-                <div className="relative">
-                  <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <input
-                    {...register("password", {
-                      required: "Password is required",
-                      minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters",
-                      },
-                    })}
-                    type="password"
-                    className={`w-full pl-10 p-4 border font-nunitoSans rounded-lg focus:outline-none ${
-                      errors.password
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400"
-                    }`}
-                    placeholder="Enter your password"
-                  />
-                </div>
-                {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-              {/* Phone Number */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  Phone Number
-                </label>
-                <Controller
-                  name="phone"
-                  control={control}
-                  rules={{ required: "Phone number is required" }}
-                  render={({ field }) => (
-                    <div className="relative custom-phone-input">
-                      <PhoneInput
-                        {...field}
-                        country={"ng"} // Default country
-                        placeholder="8000000000"
-                        containerClass={"w-full"}
-                        inputClass={`w-full  border font-nunitoSans rounded-lg focus:outline-none ${
-                          errors.phone
-                            ? "border-red-500"
-                            : "border-Grey200 hover:border-Grey400"
-                        }`}
-                      />
-                    </div>
-                  )}
-                />
-                {errors.phone && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
-              {/* Address */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  City Address
-                </label>
-                <div className="relative">
-                  <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <input
-                    {...register("address", {
-                      required: "Address is required",
-                    })}
-                    type="text"
-                    className={`w-full pl-10 p-4 border font-nunitoSans rounded-lg focus:outline-none ${
-                      errors.address
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400"
-                    }`}
-                    placeholder="Address"
-                  />
-                </div>
-                {errors.address && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.address.message}
-                  </p>
-                )}
-              </div>
-              {/* State */}
-              <div className="mb-4">
-                <label className="block mb-2 font-bold text-Grey500 text-[16px] font-nunitoSans">
-                  State
-                </label>
-                <div className="relative">
-                  <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                  <select
-                    {...register("state", { required: "State is required" })}
-                    className={`w-full pl-10 p-4 border  font-nunitoSans rounded-lg focus:outline-none ${
-                      errors.state
-                        ? "border-red-500"
-                        : "border-Grey200 hover:border-Grey400"
-                    }`}
-                  >
-                    <option value="Oyo">Oyo</option>
-                    <option value="Kwara">Kwara</option>
-                    <option value="Lagos">Lagos</option>
-                    <option value="Kano">Kano</option>
-                  </select>
-                  {errors.state && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.state.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="md:hidden mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
-              >
-                {isLoadingSubmitDetails ? "Loading..." : "Submit"}
-              </button>
-              <div type="submit" className="flex justify-end">
-                <button className=" hidden md:block mt-4 w-[217px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
-                  {isLoadingSubmitDetails ? "Loading..." : "Submit"}
-                </button>
-              </div>
-            </form>
-          )}
+          {/* Shipping Details */}
+          <ShippingDetails
+            onSubmit={handleFormSubmit(onSubmitShippingDetails)}
+            deliveryMethod={deliveryMethod}
+            setDeliveryMethod={setDeliveryMethod}
+            fromLocation={fromLocation}
+            setFromLocation={setFromLocation}
+            toLocation={toLocation}
+            setToLocation={setToLocation}
+            locations={locations}
+            logisticsOptions={logisticsOptions}
+            logisticsPrice={logisticsPrice}
+            isLoadingSubmitDetails={isLoadingSubmitDetails}
+            errors={errors}
+            register={register}
+            control={control}
+          />
         </div>
       </div>
     </div>
