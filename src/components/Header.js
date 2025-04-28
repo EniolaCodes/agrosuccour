@@ -391,7 +391,7 @@ const Header = () => {
                   </div>
                   {/* checkout button */}
                   <div className="pb-6">
-                    <Link href="/checkout">
+                    <Link href="/checkout" prefetch>
                       <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
                         Checkout ( ₦{totalPrice.toFixed(2)} )
                       </button>
