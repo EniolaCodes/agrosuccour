@@ -203,7 +203,7 @@ const ShippingDetails = ({
                 <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
                 <select
                   {...register("state", { required: "State is required" })}
-                  className={`w-full pl-10 p-4 border  font-nunitoSans rounded-lg focus:outline-none ${
+                  className={`w-full pl-10 p-4 border  font-nunitoSans rounded-lg focus:outline-none custom-select ${
                     errors.state
                       ? "border-red-500"
                       : "border-Grey200 hover:border-Grey400"
@@ -230,7 +230,7 @@ const ShippingDetails = ({
               <select
                 value={fromLocation}
                 onChange={(e) => setFromLocation(e.target.value)}
-                className="w-full p-4 border border-Grey200 hover:border-Grey400 font-nunitoSans rounded-lg focus:outline-none"
+                className="w-full p-4 border border-Grey200 hover:border-Grey400 font-nunitoSans rounded-lg focus:outline-none custom-select"
               >
                 <option value="">Select Location</option>
                 {locations.map((location) => (
@@ -247,7 +247,7 @@ const ShippingDetails = ({
               <select
                 value={toLocation}
                 onChange={(e) => setToLocation(e.target.value)}
-                className="w-full p-4 border border-Grey200 hover:border-Grey400 font-nunitoSans rounded-lg focus:outline-none"
+                className="w-full p-4 border border-Grey200 hover:border-Grey400 font-nunitoSans rounded-lg focus:outline-none custom-select"
               >
                 <option value="">Select Destination</option>
                 {logisticsOptions.map((option) => (

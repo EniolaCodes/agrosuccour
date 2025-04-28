@@ -14,11 +14,17 @@ import { useFetchCartProducts } from "@/lib/models/product/hooks";
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
   const [products, setProducts] = useState([]);
 
-  const { cart, removeItemFromCart, incrementQuantity, decrementQuantity } =
-    useCart();
+  const {
+    cart,
+    removeItemFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    isCartOpen,
+    toggleCartVisibility,
+  } = useCart();
+
   const items = cart ? cart.items : [];
   const isCartEmpty = !items || items.length === 0;
 
@@ -46,18 +52,48 @@ const Header = () => {
   const productsRef = useRef(null);
   const cartRef = useRef(null);
 
-  const handleClickOutside = (event) => {
-    //check if click is outside of the desktop menu
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setMenuOpen(false);
+  // Use the toggleCartVisibility function from the context
+  const toggleVisibleCart = () => {
+    toggleCartVisibility();
+  };
+
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
     }
-    if (productsRef.current && !productsRef.current.contains(event.target)) {
-      console.log("product closed");
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCartOpen]);
+
+  const handleClickOutside = (event) => {
+    // if (menuRef.current && !menuRef.current.contains(event.target)) {
+    //   setMenuOpen(false);
+    // }
+    // if (productsRef.current && !productsRef.current.contains(event.target)) {
+    //   console.log("product closed");
+    //   setProductsOpen(false);
+    // }
+    // if (cartRef.current && !cartRef.current.contains(event.target)) {
+    //   console.log("cart closed");
+    //   toggleCartVisibility();
+    // }
+
+    if (
+      productsOpen &&
+      productsRef.current &&
+      !productsRef.current.contains(event.target)
+    ) {
       setProductsOpen(false);
     }
-    if (cartRef.current && !cartRef.current.contains(event.target)) {
-      console.log("cart closed");
-      setCartOpen(false);
+    if (
+      isCartOpen &&
+      cartRef.current &&
+      !cartRef.current.contains(event.target)
+    ) {
+      toggleCartVisibility();
     }
   };
 
@@ -70,7 +106,6 @@ const Header = () => {
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const toggleProducts = () => setProductsOpen((prev) => !prev);
-  const toggleCart = () => setCartOpen((prev) => !prev);
   const router = useRouter();
 
   const handleHomeClick = () => {
@@ -89,19 +124,19 @@ const Header = () => {
 
   return (
     <div>
-      {(productsOpen || cartOpen) && (
+      {(productsOpen || isCartOpen) && (
         <div
           className="fixed inset-0 bg-Grey500 bg-opacity-70 z-40"
           onClick={() => {
             setProductsOpen(false);
-            setCartOpen(false);
+            toggleCartVisibility();
           }}
         />
       )}
 
       <header className=" hidden md:block px-20 py-4">
         <div className="w-full rounded-[28px] bg-Grey500 text-white py-4 px-6 flex items-center justify-between relative">
-          <Link href="/" className="flex justify-center items-center space-x-2">
+          <Link href="/" className="flex items-center mb-4 space-x-2">
             <Image
               src="/images/logo.svg"
               alt="Agrosuccour Logo"
@@ -112,6 +147,7 @@ const Header = () => {
               Agrosuccour
             </h1>
           </Link>
+
           {/* Search Bar */}
           <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative">
             <IoMenu
@@ -123,7 +159,7 @@ const Header = () => {
             <input
               type="text"
               placeholder="Search your favorite product..."
-              className="flex-1 p-3 text-Green50 focus:outline-none"
+              className="flex-1 p-3 text-Grey300 focus:outline-none"
             />
             <button className="flex items-center justify-center p-3 bg-Green500 absolute h-full top-0 right-0">
               <FiSearch className="text-Green50 text-[24px]" />
@@ -230,28 +266,26 @@ const Header = () => {
             </div>
           )}
           {/* navigation */}
-          <ul className="flex space-x-2 text-[16px] text-Green50 font-nunitoSans">
+          <ul className="flex space-x-4 text-[16px] text-Green50 font-nunitoSans">
             <li className=" hover:text-Green500 ">
               <Link href="/">Home</Link>
             </li>
-
             <li className="hover:text-Green500 ">
               <Link href="/products">Products</Link>
             </li>
+            <li className="flex text-[16px] justify-center items-center space-x-2">
+              <FiPhone className=" text-Green50" />
+              <span className="font-nunitoSans ">0706375930</span>
+            </li>
           </ul>
-          {/* Contact */}
-          <div className="flex text-[16px] justify-center items-center space-x-2">
-            <FiPhone className=" text-Green50" />
-            <span className="font-nunitoSans ">0706375930</span>
-          </div>
           {/* Cart */}
-          <div onClick={toggleCart} className="relative">
+          <div onClick={toggleVisibleCart} className="relative">
             <CartComponent />
           </div>
           {/* cart dropdown */}
-          {cartOpen && (
+          {isCartOpen && (
             <div
-              className="px-4 py-2 bg-white rounded-[8px] border w-[400px] h-auto absolute z-50 top-16 -right-10 overflow-y-scroll"
+              className="px-4 py-2 bg-white rounded-[8px] border w-[400px]  max-h-[80vh] overflow-y-auto z-50 top-28 right-24 fixed "
               ref={cartRef}
             >
               <div className="flex justify-between items-center mb-4">
@@ -260,10 +294,13 @@ const Header = () => {
                 </h1>
                 <div className="flex items-center space-x-4 text-Grey400">
                   <Link href="/cart">
-                    <ImEnlarge2 onClick={toggleCart} className="text-2xl" />
+                    <ImEnlarge2
+                      onClick={toggleVisibleCart}
+                      className="text-2xl"
+                    />
                   </Link>
                   <button
-                    onClick={toggleCart}
+                    onClick={toggleVisibleCart}
                     className=" flex items-center border border-Grey300 rounded-[12px] space-x-2 p-2"
                   >
                     <svg
@@ -392,7 +429,10 @@ const Header = () => {
                   {/* checkout button */}
                   <div className="pb-6">
                     <Link href="/checkout">
-                      <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
+                      <button
+                        onClick={toggleVisibleCart}
+                        className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition"
+                      >
                         Checkout ( ₦{totalPrice.toFixed(2)} )
                       </button>
                     </Link>
@@ -426,18 +466,18 @@ const Header = () => {
             <CartComponent />
           </div>
           {/* Search Bar */}
-          <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative">
+          <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative z-50">
             <IoMenu
-              className="text-Grey400 cursor-pointer relative z-50"
+              className="text-Grey400 cursor-pointer z-40"
               size={20}
               onClick={toggleMenu}
             />
             <input
               type="text"
               placeholder="Search your favorite product..."
-              className="flex-1 p-3 text-Green50 focus:outline-none"
+              className="flex-1 p-3 text-Grey300 focus:outline-none z-40"
             />
-            <button className="flex items-center justify-center p-3 bg-Green500 absolute h-full top-0 right-0">
+            <button className="flex items-center justify-center p-3 bg-Green500  h-full absolute top-0 right-0 z-40">
               <FiSearch className="text-Green50 text-[24px]" />
             </button>
           </div>
