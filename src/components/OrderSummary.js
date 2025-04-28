@@ -30,7 +30,7 @@ export default function OrderSummary({
     buttonText = "Complete Order";
   }
   return (
-    <div className="md:w-[350px] max-h-[70vh] pt-6 mt-6 md:mt-0 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
+    <div className="md:w-[350px] max-h-[90vh] pt-6 mt-6 md:mt-0 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
       <div>
         <div className="flex justify-between">
           <h2 className="text-[20px] text-Grey500 font-bold">Order Summary</h2>

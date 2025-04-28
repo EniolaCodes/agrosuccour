@@ -285,7 +285,7 @@ const Header = () => {
           {/* cart dropdown */}
           {isCartOpen && (
             <div
-              className="px-4 py-2 bg-white rounded-[8px] border w-[400px]  max-h-[80vh] overflow-y-auto z-50 top-16 right-4 fixed "
+              className="px-4 py-2 bg-white rounded-[8px] border w-[400px]  max-h-[80vh] overflow-y-auto z-50 top-28 right-24 fixed "
               ref={cartRef}
             >
               <div className="flex justify-between items-center mb-4">
@@ -429,7 +429,10 @@ const Header = () => {
                   {/* checkout button */}
                   <div className="pb-6">
                     <Link href="/checkout">
-                      <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition">
+                      <button
+                        onClick={toggleVisibleCart}
+                        className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition"
+                      >
                         Checkout ( ₦{totalPrice.toFixed(2)} )
                       </button>
                     </Link>

@@ -55,7 +55,7 @@ const Checkout = () => {
   const { data: logisticsOptionsData } = useFetchLogisticsByLocation({
     from: fromLocation,
   });
-  console.log(logisticsOptionsData);
+
   const logisticsOptions =
     logisticsOptionsData?.result?.data?.map((item, index) => ({
       id: index,
@@ -68,17 +68,17 @@ const Checkout = () => {
   });
 
   const logisticsPrice = priceData?.result?.data?.logistic_price ?? 0;
-  const logistic_id = priceData?.result?.data?.logistic_id ?? 0;
+  const logisticId = priceData?.result?.data?.logistic_id ?? null;
 
   useEffect(() => {
     if (toLocation) {
       setLogisticPrice(logisticsPrice);
-      setLogisticId(logistic_id);
+      setLogisticId(logisticId);
     } else {
       setLogisticPrice(0);
       setLogisticId(null);
     }
-  }, [toLocation, logisticsPrice, logistic_id]);
+  }, [toLocation, logisticsPrice, logisticId]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -118,6 +118,9 @@ const Checkout = () => {
   const onSubmitShippingDetails = async (data) => {
     console.log("Form Data from react-hook-form:", data);
 
+    // const formData = new FormData(e.target);
+    // const values = Object.fromEntries(formData);
+
     if (
       !data.email ||
       !data.fullName ||
@@ -127,12 +130,13 @@ const Checkout = () => {
       (deliveryMethod === "delivery" && !toLocation)
     ) {
       toast.error("All fields are required");
+      alert("All fields are required");
       return;
     }
-    if (!logistic_id || logistic_id === 0) {
-      toast.error("Please select a valid delivery route");
-      return;
-    }
+    // if (!logisticId || logisticId === 0) {
+    //   toast.error("Please select a valid delivery route");
+    //   return;
+    // }
 
     setIsLoadingSubmitDetails(true);
     const storedCart = JSON.parse(localStorage.getItem("cart"));
@@ -142,20 +146,25 @@ const Checkout = () => {
       password: data.email,
       address: data.address,
       state: data.state,
-      logistic_id: logistic_id,
+      logistic_id: logisticId,
       cart: storedCart,
     };
     onMutateSubmitDetails(payload, {
       onSuccess: (response) => {
         console.log("OUr backend response: ", response);
+
         if (response?.result?.success) {
           localStorage.setItem("token", response.result.token);
           setIsLoadingSubmitDetails(false);
           toast.success("Registration successful");
+          alert("Registration successful");
         } else {
           setIsLoadingSubmitDetails(false);
           toast.error("Unsuccessful registration");
+          alert("UnsuccessfulRegistration");
         }
+        // toast.success("Registration successfully");
+        router.push("/review");
       },
       onError: (error) => {
         console.log("Error: ", error);
