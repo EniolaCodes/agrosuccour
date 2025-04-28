@@ -68,14 +68,8 @@ const Checkout = () => {
   });
 
   const logisticsPrice = priceData?.result?.data?.logistic_price ?? 0;
-<<<<<<< HEAD
-  const logisticId = priceData?.result?.data?.logistic_id ?? null;
-
-  // Update logistic price in the cart context when toLocation changes
-=======
   const logistic_id = priceData?.result?.data?.logistic_id ?? 0;
 
->>>>>>> a8c096c2d1eb0a16e220b07c58d5c11715689ea3
   useEffect(() => {
     if (toLocation) {
       setLogisticPrice(logisticsPrice);
@@ -124,12 +118,6 @@ const Checkout = () => {
   const onSubmitShippingDetails = async (data) => {
     console.log("Form Data from react-hook-form:", data);
 
-<<<<<<< HEAD
-    const formData = new FormData(e.target);
-    const values = Object.fromEntries(formData);
-
-    if (!values.email ) {
-=======
     if (
       !data.email ||
       !data.fullName ||
@@ -138,7 +126,6 @@ const Checkout = () => {
       (deliveryMethod === "delivery" && !fromLocation) ||
       (deliveryMethod === "delivery" && !toLocation)
     ) {
->>>>>>> a8c096c2d1eb0a16e220b07c58d5c11715689ea3
       toast.error("All fields are required");
       return;
     }
@@ -150,32 +137,18 @@ const Checkout = () => {
     setIsLoadingSubmitDetails(true);
     const storedCart = JSON.parse(localStorage.getItem("cart"));
     const payload = {
-<<<<<<< HEAD
-      email: values.email,
-      username: values.fullName,
-      password: values.email,
-      address: values.address,
-      state: values.state,
-      logistic_id: logisticId,
-=======
       email: data.email,
       username: data.fullName,
       password: data.email,
       address: data.address,
       state: data.state,
       logistic_id: logistic_id,
->>>>>>> a8c096c2d1eb0a16e220b07c58d5c11715689ea3
       cart: storedCart,
     };
     onMutateSubmitDetails(payload, {
       onSuccess: (response) => {
         console.log("OUr backend response: ", response);
-<<<<<<< HEAD
-
-        if (response.result.success) {
-=======
         if (response?.result?.success) {
->>>>>>> a8c096c2d1eb0a16e220b07c58d5c11715689ea3
           localStorage.setItem("token", response.result.token);
           setIsLoadingSubmitDetails(false);
           toast.success("Registration successful");
@@ -183,11 +156,6 @@ const Checkout = () => {
           setIsLoadingSubmitDetails(false);
           toast.error("Unsuccessful registration");
         }
-<<<<<<< HEAD
-        // toast.success("Registration successfully");
-        router.push("/review");
-=======
->>>>>>> a8c096c2d1eb0a16e220b07c58d5c11715689ea3
       },
       onError: (error) => {
         console.log("Error: ", error);
