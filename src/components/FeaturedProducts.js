@@ -46,8 +46,16 @@ const FeaturedProducts = () => {
       <h2 className="text-4xl font-nunito font-bold text-Grey500 text-center mb-4">
         <span className="text-Green500">Featured</span> Products
       </h2>
+      <Image
+        src="/images/advertframe.svg"
+        alt="Featured Product"
+        layout="responsive"
+        width={400}
+        height={500}
+        className="block md:hidden object-cover next-img bg-Grey500 rounded-[12px] shadow-md overflow-hidden mb-8"
+      />
       <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
-        <h1 className="text-Grey500 font-semibold font-nunito text-4xl">
+        <h1 className="text-Grey500 font-semibold font-nunito text-[26px]">
           All Products
         </h1>
         <Link href="/products">
@@ -56,16 +64,16 @@ const FeaturedProducts = () => {
           </h1>
         </Link>
       </div>
-      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
+      <div className="grid bg-white rounded-[28px] px-6 py-8 grid-cols-2 md:grid-cols-6 gap-6">
         {/* large image */}
-        <div className="col-span-2 md:col-span-2 md:row-span-2 bg-Grey500 rounded-[12px] shadow-md overflow-hidden">
+        <div className="col-span-2 md:col-span-2 md:row-span-2  ">
           <Image
-            src="/images/bigProduct.svg"
+            src="/images/advertframe.svg"
             alt="Featured Product"
             layout="responsive"
             width={400}
             height={500}
-            className="object-cover"
+            className="hidden md:block object-cover bg-Grey500 rounded-[12px] shadow-md overflow-hidden"
           />
         </div>
         {/* Small Products Section Under Large Image */}

@@ -19,6 +19,7 @@ module.exports = {
         Green400: "#89C169",
         Green500: "#6BB244",
         Green600: "#61A23E",
+        Green700: "0B1711",
         Green800: "#3B6225",
         Green900: "#2D4B1D",
         Grey50: "#E7E9E8",

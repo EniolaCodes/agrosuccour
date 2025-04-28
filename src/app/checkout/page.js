@@ -168,7 +168,7 @@ const Checkout = () => {
   };
 
   return (
-    <div className="px-4 md:px-52 py-8 ">
+    <div className="px-4 md:px-80 md:py-8 ">
       <div className="flex flex-row space-x-6">
         <div className="bg-white flex-1 p-6 shadow-md rounded-[28px]">
           {/* Progress Bar */}

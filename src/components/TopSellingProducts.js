@@ -46,7 +46,7 @@ const TopSellingProducts = () => {
   return (
     <div className="px-4 md:px-20 py-8">
       <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
-        <h1 className="text-Grey500 text-4xl font-nunito font-bold">
+        <h1 className="text-Grey500 text-[26px] font-nunito font-bold">
           Top Selling Products
         </h1>
         <Link href="/products">

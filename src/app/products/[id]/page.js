@@ -80,16 +80,6 @@ const ProductDetails = () => {
         <div className=" flex flex-col md:flex-row md:space-x-8">
           {/* Sidebar for smaller images */}
           <div className="hidden md:flex md:flex-col md:space-y-4 mt-2 ">
-            {/* {[1, 2, 3].map((_, index) => (
-              <Image
-                key={index}
-                src="/images/meat 1.svg"
-                alt={`Small image ${index + 1}`}
-                width={170}
-                height={100}
-                className="bg-Grey100 p-2 rounded-[16px]"
-              />
-            ))} */}
             {[1, 2, 3].map((_, index) => (
               <Image
                 key={index}
@@ -194,8 +184,8 @@ const ProductDetails = () => {
 
       {/* related products */}
       <div className="mt-8">
-        <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px] overflow-y-scroll">
-          <h1 className="text-Grey500 text-[20px] md:text-4xl font-nunito font-bold">
+        <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px] ">
+          <h1 className="text-Grey500 text-[26px] font-nunito font-bold">
             Related Products
           </h1>
           <Link href="/products">
