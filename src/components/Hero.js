@@ -9,7 +9,7 @@ const Hero = () => {
   const slides = [
     {
       image: "/images/bg1.svg",
-      title: "Fresh Meats & Premium Proteins",
+      title: "Fresh Meats & Premium Proteins - Quality You Can Trust",
       description:
         "Explore premium meats and proteins from trusted farms. Choose from grass-fed beef, free-range poultry, seafood, and plant-based options—all sustainably sourced, fresh, and ready for delivery to elevate your meals.",
     },
@@ -33,7 +33,7 @@ const Hero = () => {
 
   return (
     <div className="px-4 md:px-20 py-6 ">
-      <div className="w-full relative h-[500px] bg-cover bg-center rounded-[28px] overflow-hidden">
+      <div className="w-full relative h-[400px] md:h-[500px] bg-cover bg-center rounded-[28px] overflow-hidden">
         {/* Slide Image */}
         <div className="absolute inset-0">
           <Image
@@ -56,11 +56,11 @@ const Hero = () => {
         </div>
       </div>
       {/* Slide Content */}
-      <div className="absolute inset-0 flex flex-col justify-center items-start z-10 ml-6 md:ml-20 px-4 md:px-8 md:mt-10 max-w-lg">
-        <h1 className="text-2xl md:text-5xl py-6 mt-6 font-nunito text-Green50 font-bold mb-2">
+      <div className="absolute inset-0 flex flex-col justify-center items-start ml-6 md:ml-20 px-4 md:px-8 md:mt-10 max-w-lg">
+        <h1 className="text-2xl md:text-5xl py-6 mt-6 font-nunito text-Green50 font-bold mb-8 md:mb-4 w-[324px] md:w-[600px] md:h-[177px] h-[96px]">
           {slides[currentIndex].title}
         </h1>
-        <p className="mb-6 opacity-80 text-sm md:text-lg text-agroHeading font-nunitoSans">
+        <p className="mb-6 opacity-80 text-sm md:text-lg text-agroHeading font-nunitoSans w-[324px] md:w-[600px]">
           {slides[currentIndex].description}
         </p>
         <Link href="/products">
@@ -70,7 +70,7 @@ const Hero = () => {
         </Link>
       </div>
       {/* Slide Indicators */}
-      <div className="absolute z-20 bottom-24 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute z-20 bottom-40 md:bottom-24 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {slides.map((_, index) => (
           <button
             key={index}

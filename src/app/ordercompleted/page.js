@@ -7,10 +7,7 @@ import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
 const OrderCompleted = () => {
   const sessionId = useSession();
-  useEffect(() => {
-    console.log("Session ID in Order Completed  Page:", sessionId);
-    // Fetch review data associated with the sessionId
-  }, [sessionId]);
+  useEffect(() => {}, [sessionId]);
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
@@ -23,7 +20,7 @@ const OrderCompleted = () => {
   } = useFetchCartProducts(cartItems);
 
   useEffect(() => {
-    if (typeof window === "undefined") return; // Ensure client-side execution
+    if (typeof window === "undefined") return;
 
     const storedCart = JSON.parse(localStorage.getItem("cart")) || {
       items: [],

@@ -87,7 +87,7 @@ export default function Cart() {
                         className={`px-3 py-1 rounded-md font-extrabold ${
                           product.quantity > 1
                             ? "bg-Green500 text-Green50"
-                            : "bg-Green200 text-Green50"
+                            : "bg-Grey100 text-Green50"
                         }`}
                       >
                         -
@@ -132,13 +132,15 @@ export default function Cart() {
             </div>
           </div>
           {/* Order Summary */}
-          <OrderSummary
-            products={cart.items}
-            totalPrice={totalPrice}
-            incrementQuantity={incrementQuantity}
-            decrementQuantity={decrementQuantity}
-            deleteProduct={removeItemFromCart}
-          />
+          <div className="sticky top-6 self-start">
+            <OrderSummary
+              products={cart.items}
+              totalPrice={totalPrice}
+              incrementQuantity={incrementQuantity}
+              decrementQuantity={decrementQuantity}
+              deleteProduct={removeItemFromCart}
+            />
+          </div>
         </div>
       </div>
 
@@ -257,6 +259,7 @@ export default function Cart() {
         </div>
 
         {/* Order Summary */}
+
         <OrderSummary
           products={cart.items}
           totalPrice={totalPrice}

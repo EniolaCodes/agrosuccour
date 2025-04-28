@@ -18,6 +18,9 @@ const Payment = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState("debit-card");
   const [saveCard, setSaveCard] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   const bankDetails = [
     "AGROSUCCOUR | 2000000020 | UBA Plc, Nigeria",
@@ -64,9 +67,20 @@ const Payment = () => {
     refetch: refetchCartProducts,
   } = useFetchCartProducts(cartItems);
 
+  //Authentication check
+  useEffect(() => {
+    setIsMounted(true);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/checkout");
+    } else {
+      setIsAuthenticated(true);
+    }
+    setIsAuthLoading(false);
+  }, [router]);
+
   useEffect(() => {
     if (typeof window === "undefined") return; // Ensure client-side execution
-
     const storedCart = JSON.parse(localStorage.getItem("cart")) || {
       items: [],
     };
@@ -90,6 +104,24 @@ const Payment = () => {
       total + (product?.result?.data?.price || 0) * (product?.quantity || 0),
     0
   );
+
+  // Show loading state during auth
+  if (isAuthLoading || !isMounted) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  // If not authenticated, this will redirect already
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Redirecting to checkout...
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 md:px-52 py-8 overflow-y-auto">

@@ -24,6 +24,8 @@ export const CartProvider = ({ children }) => {
     logistic_id: null,
   });
 
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   const isCartExpired = (cart) => {
     const oneDay = 24 * 60 * 60 * 1000;
     return Date.now() - cart.createdAt > oneDay;
@@ -69,16 +71,21 @@ export const CartProvider = ({ children }) => {
           createdAt: timestamp,
           items: [],
           total_amount: 0,
-          logistic_price: 0, // Initialize logistic_price in new cart
-          logistic_id: null, // <-- Added logistic_id here
+          logistic_price: 0,
+          logistic_id: null,
         };
         setCart(newCart);
         localStorage.setItem("cart", JSON.stringify(newCart));
       } else {
         setCart({
-          ...savedCart,
-          total_amount: parseFloat(
-            calculateTotalAmount(savedCart.items).toFixed(2)
+          cart_group_id: savedCart.cart_group_id,
+          createdAt: savedCart.createdAt,
+          items: savedCart.items || [],
+          logistic_price: savedCart.logistic_price || 0,
+          logistic_id: savedCart.logistic_id || null,
+          total_amount: calculateTotalAmount(
+            savedCart.items || [],
+            savedCart.logistic_price || 0
           ),
         });
       }
@@ -171,16 +178,22 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // Function to toggle the cart visibility
+  const toggleCartVisibility = () => {
+    setIsCartOpen((prevState) => !prevState);
+  };
   return (
     <CartContext.Provider
       value={{
         cart,
+        isCartOpen,
         addItemToCart,
         removeItemFromCart,
         incrementQuantity,
         decrementQuantity,
         setLogisticPrice,
         setLogisticId,
+        toggleCartVisibility,
       }}
     >
       {children}

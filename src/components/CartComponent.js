@@ -5,25 +5,13 @@ import { useCart } from "@/app/context/CartContext";
 
 const CartComponent = () => {
   const pathname = usePathname();
-  const { cart } = useCart(); // Get cart count from context
-  // const cartCount = cart.items.reduce(
-  //   (count, item) => count + item.quantity,
-  //   0
-  // );
+  const { cart } = useCart();
+
   console.log("Cart in CartComponent:", cart);
   console.log("Cart items in CartComponent:", cart?.items);
-//   const cartCount = (cart.items || []).reduce(
-//       (count, item) => count + (parseInt(item.quantity) || 0),
-//       0
-//     );
-const cartCount = (cart.items || []).reduce(
-    (count, item) => count + 1,
-    0
-  );
 
-    console.log("Cart Count in CartComponent:", cartCount);
+  const cartCount = (cart.items || []).reduce((count, item) => count + 1, 0);
 
-  // Check if the current route is one of the specified pages
   const isCartOrCheckoutOrPaymentOrReviewPage =
     pathname === "/cart" ||
     pathname === "/checkout" ||
