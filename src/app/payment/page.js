@@ -13,14 +13,17 @@ import ProgressIndicator from "@/components/ProgressIndicator";
 import OrderSummary from "@/components/OrderSummary";
 import { useCart } from "@/app/context/CartContext";
 import { useFetchCartProducts } from "@/lib/models/product/hooks";
+import { useShipping } from "../context/ShippingContext";
 
 const Payment = () => {
+  const router = useRouter();
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState("debit-card");
   const [saveCard, setSaveCard] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
+  const { shippingDetails, cartSummary } = useShipping();
 
   const bankDetails = [
     "AGROSUCCOUR | 2000000020 | UBA Plc, Nigeria",
@@ -33,24 +36,13 @@ const Payment = () => {
     });
   };
 
-  const [addresses, setAddresses] = useState([
-    {
-      name: "Yussuf Olabayo",
-      email: "example123@gmail.com",
-      address: "Idi Oji junction, Ologuneru, Ibadan-Eruwa Expy, Ibadan. OYO",
-      phone: "+2348000000000",
-      country: "Nigeria",
-    },
-  ]);
-  const router = useRouter();
-
   const redirectToCheckout = () => {
     router.push("/checkout");
   };
 
-  // Delete all addresses
   const handleDeleteAll = () => {
-    setAddresses([]); // Clear all addresses
+    localStorage.removeItem("shippingDetails");
+    window.location.reload(); // force re-render or use state
   };
 
   const steps = ["DELIVERY", "REVIEW", "PAYMENT"];
@@ -122,6 +114,20 @@ const Payment = () => {
       </div>
     );
   }
+  const shippingList = Array.isArray(shippingDetails)
+    ? shippingDetails
+    : [shippingDetails];
+
+  if (!shippingDetails || !cartSummary) {
+    return (
+      <div className="text-Grey500 text-[18px] text-center mt-10">
+        No shipping data found. Please return to{" "}
+        <Link href="/checkout" className="hover:text-Green500">
+          Checkout
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 md:px-52 py-8 overflow-y-auto">
@@ -138,15 +144,15 @@ const Payment = () => {
               Where to send your order
             </h2>
             <div className="">
-              {addresses.length > 0 ? (
-                addresses.map((address, index) => (
+              {shippingList.length > 0 ? (
+                shippingList.map((shippingDetails, index) => (
                   <div
                     key={index}
                     className="p-4 rounded-[8px] shadow mb-4 bg-Grey50"
                   >
                     <div className="flex justify-between font-nunitoSans mb-2">
                       <h3 className="text-[20px] text-Grey500 ">
-                        {address.name}
+                        {shippingDetails.fullName}
                       </h3>
                       <div className="flex space-x-4 font-bold text-[16px]">
                         <button
@@ -167,29 +173,29 @@ const Payment = () => {
                     <div className="space-y-2 text-Grey400">
                       <div className="flex items-center text-[14px] space-x-2">
                         <FiUser />
-                        <p className=" ">{address.name}</p>
+                        <p className=" ">{shippingDetails.fullName}</p>
                       </div>
                       <div className="flex items-center text-[14px] space-x-2">
                         <FiMail />
-                        <p className="">{address.email}</p>
+                        <p className="">{shippingDetails.email}</p>
                       </div>
                       <div className="flex items-center text-[14px] space-x-2">
                         <FiMapPin />
-                        <p className="">{address.address}</p>
+                        <p className="">{shippingDetails.address}</p>
                       </div>
                       <div className="flex items-center text-[14px] space-x-2">
                         <FiPhone />
-                        <p className="">{address.phone}</p>
+                        <p className="">{shippingDetails.phone}</p>
                       </div>
-                      <div className="flex items-center text-[14px] space-x-2">
+                      {/* <div className="flex items-center text-[14px] space-x-2">
                         <Image
                           src="/images/nigeria 1.svg"
                           width={20}
                           height={20}
                           alt=""
                         />
-                        <p className="">{address.country}</p>
-                      </div>
+                        <p className="">{shippingDetails.country}</p>
+                      </div> */}
                     </div>
                     <div className="bg-Grey200 w-full h-px mt-2" />
                     <button

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import OrderSummary from "@/components/OrderSummary";
@@ -12,6 +12,7 @@ export default function Cart() {
     useCart();
 
   const items = cart ? cart.items : [];
+  // const items = useMemo(() => (cart ? cart.items : []), [cart]);
   const isCartEmpty = !items || items.length === 0;
   const {
     data: cartedProducts = [],
@@ -21,8 +22,6 @@ export default function Cart() {
   } = useFetchCartProducts(items);
 
   console.log("Carted Products is here:", cartedProducts);
-
-  // const totalPrice = cart?.total_amount;
 
   const totalPrice = cartedProducts.reduce((acc, product) => {
     const price = parseFloat(product?.result?.data?.price) || 0;
