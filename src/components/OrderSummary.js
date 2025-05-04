@@ -1,9 +1,9 @@
 "use client";
-
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function OrderSummary({
+const OrderSummaryComponent = ({
   //prevents error when value of products and totalPrice are missing
   products = [],
   totalPrice = 0,
@@ -12,7 +12,7 @@ export default function OrderSummary({
   incrementQuantity,
   decrementQuantity,
   deleteProduct,
-}) {
+}) => {
   const pathname = usePathname();
 
   let buttonLink = "/checkout";
@@ -68,4 +68,9 @@ export default function OrderSummary({
       </Link>
     </div>
   );
-}
+};
+OrderSummaryComponent.displayName = "OrderSummary"; // Set the display name
+
+const OrderSummary = React.memo(OrderSummaryComponent);
+
+export default OrderSummary;

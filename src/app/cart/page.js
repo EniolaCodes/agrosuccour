@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import OrderSummary from "@/components/OrderSummary";
@@ -7,7 +7,7 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { useCart } from "@/app/context/CartContext";
 import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
-export default function Cart() {
+const CartComponent = () => {
   const { cart, removeItemFromCart, incrementQuantity, decrementQuantity } =
     useCart();
 
@@ -269,4 +269,10 @@ export default function Cart() {
       </div>
     </>
   );
-}
+};
+
+CartComponent.displayName = "Cart"; // Add the display name for better debugging
+
+const Cart = React.memo(CartComponent);
+
+export default Cart;

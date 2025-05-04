@@ -24,6 +24,7 @@ const Payment = () => {
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const { shippingDetails, cartSummary } = useShipping();
+  const { cart } = useCart();
 
   const bankDetails = [
     "AGROSUCCOUR | 2000000020 | UBA Plc, Nigeria",
@@ -50,7 +51,6 @@ const Payment = () => {
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const { removeItemFromCart } = useCart();
 
   const {
     data: cartedProducts = [],
@@ -420,7 +420,7 @@ const Payment = () => {
         {/* right side */}
         <div className="hidden md:flex flex-col gap-6">
           {/* Order Summary */}
-          <OrderSummary products={products} totalPrice={totalPrice} />
+          <OrderSummary products={products} totalPrice={cart.total_amount} />
           <div className="bg-Grey400 rounded-[28px] p-4 w-[350px]">
             <div className="">
               <div className="flex space-x-8">

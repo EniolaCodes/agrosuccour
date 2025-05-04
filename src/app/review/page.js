@@ -25,7 +25,6 @@ const Review = () => {
   const { cart } = useCart();
   console.log("Cart object in ReviewPage:", cart);
 
-
   // Authentication check
   useEffect(() => {
     setIsMounted(true);
@@ -37,7 +36,6 @@ const Review = () => {
     }
     setIsAuthLoading(false);
   }, [router]);
-
 
   const sessionId = useSession();
   useEffect(() => {
@@ -184,11 +182,6 @@ const Review = () => {
         {/* order summary */}
         <div className="hidden md:flex flex-col gap-6">
           <OrderSummary
-            products={products}
-
-            // totalPrice={totalPrice}
-            // otherFees={logisticsPrice}
-
             totalPrice={cart.total_amount - cart.logistic_price}
             logisticPrice={cart.logistic_price}
           />
