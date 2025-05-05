@@ -27,8 +27,8 @@ const Payment = () => {
   const { cart } = useCart();
 
   const bankDetails = [
-    "AGROSUCCOUR | 2000000020 | UBA Plc, Nigeria",
-    "AGROSUCCOUR | 2000000021 | UBA Plc, Nigeria",
+    "AGRO-SUCCOUR NIGERIA LIMITED | 0126516021 | Wema bank",
+    "Agro-succor Nigeria Ltd | 1229561022 | Zenith Bank",
   ];
 
   const handleCopy = (text) => {
@@ -374,7 +374,7 @@ const Payment = () => {
                     Contact us
                   </h1>
                   <p className="text-Grey50 text-[13px]">
-                    Reach out on +2340706375930. We will reply in 2mins.
+                    Reach out on +2347026542265. We will reply in 2mins.
                   </p>
                 </div>
               </div>

@@ -229,7 +229,7 @@ const Review = () => {
                     Contact us
                   </h1>
                   <p className="text-Grey50 text-[13px]">
-                    Reach out on +2340706375930. We will reply in 2mins.
+                    Reach out on +2347026542265. We will reply in 2mins.
                   </p>
                 </div>
               </div>
