@@ -113,10 +113,6 @@ const Header = () => {
     router.push("/"); // Redirect to the home page
   };
 
-  const handleAboutClick = () => {
-    toggleMenu(); // Close the menu
-    router.push("/about"); // Redirect to the home page
-  };
   const handleCartClick = () => {
     toggleMenu(); // Close the menu
     router.push("/cart"); // Redirect to the cart page
@@ -449,7 +445,7 @@ const Header = () => {
           {/* logo & cart */}
           <div className="flex items-center justify-between">
             {/* logo */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center relative">
               <Link href="/" className="flex items-center space-x-4">
                 <Image
                   src="/images/logo.svg"
@@ -457,13 +453,15 @@ const Header = () => {
                   width={40}
                   height={40}
                 />
-                <h1 className="text-[20px] font-urbanist font-semibold text-Green50">
+                <h1 className="text-[20px] font-urbanist font-semibold text-Green50 mt-6">
                   Agrosuccour
                 </h1>
               </Link>
             </div>
             {/* cart component */}
-            <CartComponent />
+            <Link href="/cart" onClick={handleCartClick}>
+              <CartComponent />
+            </Link>
           </div>
           {/* Search Bar */}
           <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative z-50">
@@ -485,7 +483,7 @@ const Header = () => {
           {menuOpen && (
             <div
               ref={menuRef}
-              className="mt-2 bg-white rounded-md shadow-lg absolute z-50 top-36 left-8 w-[272px] h-[600px]"
+              className=" bg-white rounded-md shadow-lg absolute z-50 top-44 left-8 w-[272px] max-h-[600px]"
             >
               <div className="flex justify-end items-center p-4">
                 <IoClose
@@ -500,11 +498,6 @@ const Header = () => {
                     Home
                   </Link>
                 </li>
-                <li className="font-bold hover:bg-Green100 px-6 py-1">
-                  <Link href="/about" onClick={handleAboutClick}>
-                    About
-                  </Link>
-                </li>
                 <li className="px-6 py-1 font-bold hover:bg-Green100">
                   <Link
                     href="/cart"
@@ -513,7 +506,7 @@ const Header = () => {
                   >
                     <span className="">Cart</span>
                     <span className="text-sm bg-red-600 text-Green50 px-2 py-1 rounded-full">
-                      4
+                      {products.length}
                     </span>
                   </Link>
                 </li>

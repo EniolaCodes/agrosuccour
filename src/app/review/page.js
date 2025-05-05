@@ -182,6 +182,7 @@ const Review = () => {
         {/* order summary */}
         <div className="hidden md:flex flex-col gap-6">
           <OrderSummary
+            products={products}
             totalPrice={cart.total_amount - cart.logistic_price}
             logisticPrice={cart.logistic_price}
           />

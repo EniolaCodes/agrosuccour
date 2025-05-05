@@ -7,8 +7,6 @@ import { FiMail, FiUser, FiMapPin, FiPhone, FiCopy } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { PiFireTruck } from "react-icons/pi";
 import { MdOutlinePayment } from "react-icons/md";
-import { BsQuestionLg } from "react-icons/bs";
-import { RiCalendarEventFill } from "react-icons/ri";
 import ProgressIndicator from "@/components/ProgressIndicator";
 import OrderSummary from "@/components/OrderSummary";
 import { useCart } from "@/app/context/CartContext";
@@ -41,6 +39,9 @@ const Payment = () => {
     router.push("/checkout");
   };
 
+  const redirectToPayStack = () => {
+    router.push("/pay");
+  };
   const handleDeleteAll = () => {
     localStorage.removeItem("shippingDetails");
     window.location.reload(); // force re-render or use state
@@ -255,7 +256,7 @@ const Payment = () => {
                   </div>
                 </div>
 
-                {/* Debit Card Details */}
+                {/* Paystack Details */}
                 {selectedPaymentMethod === "paystack" && (
                   <div className="flex flex-col items-center space-y-8  ">
                     <Image
@@ -268,7 +269,10 @@ const Payment = () => {
                       Click “Continue ”, you will be redirected to paystack to
                       complete your payment securely.
                     </p>
-                    <button className=" bg-Green500 text-white rounded-[8px] p-[10px] text-[16px] md:text-[18px] font-bold w-full md:w-[190px]  h-[48px] hover:bg-Green600 transition">
+                    <button
+                      onClick={redirectToPayStack}
+                      className=" bg-Green500 text-white rounded-[8px] p-[10px] text-center text-[16px] md:text-[18px] font-bold w-full md:w-[190px]  h-[48px] hover:bg-Green600 transition"
+                    >
                       Continue
                     </button>
                   </div>

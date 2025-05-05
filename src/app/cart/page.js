@@ -249,13 +249,13 @@ const CartComponent = () => {
           )}
         </div>
         {/* checkout button */}
-        <div className="">
+        {/* <div className="">
           <Link href="/checkout">
             <button className="mt-4 w-full bg-Green500 text-white font-medium py-2 rounded-[12px] hover:bg-[#5A9E3A] transition">
               Checkout
             </button>
           </Link>
-        </div>
+        </div> */}
 
         {/* Order Summary */}
 
