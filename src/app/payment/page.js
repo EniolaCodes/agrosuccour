@@ -18,7 +18,7 @@ import { useShipping } from "../context/ShippingContext";
 const Payment = () => {
   const router = useRouter();
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState("debit-card");
+    useState("paystack");
   const [saveCard, setSaveCard] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -187,15 +187,6 @@ const Payment = () => {
                         <FiPhone />
                         <p className="">{shippingDetails.phone}</p>
                       </div>
-                      {/* <div className="flex items-center text-[14px] space-x-2">
-                        <Image
-                          src="/images/nigeria 1.svg"
-                          width={20}
-                          height={20}
-                          alt=""
-                        />
-                        <p className="">{shippingDetails.country}</p>
-                      </div> */}
                     </div>
                     <div className="bg-Grey200 w-full h-px mt-2" />
                     <button
@@ -231,9 +222,9 @@ const Payment = () => {
               {/* payment option */}
               <div className="space-y-4">
                 <div
-                  onClick={() => setSelectedPaymentMethod("debit-card")}
-                  className={`mb-8 border bg-Grey50 hover:border-Grey50"  ${
-                    selectedPaymentMethod === "debit-card"
+                  onClick={() => setSelectedPaymentMethod("paystack")}
+                  className={`mb-8 border bg-Grey50 hover:border-Grey50 "  ${
+                    selectedPaymentMethod === "paystack"
                       ? " border"
                       : "border-Grey50"
                   } p-2 rounded-[8px] flex justify-between items-center cursor-pointer`}
@@ -241,126 +232,45 @@ const Payment = () => {
                   <div className="flex items-center space-x-2">
                     <div
                       className={`relative w-6 h-6 rounded-full ${
-                        selectedPaymentMethod === "debit-card"
+                        selectedPaymentMethod === "paystack"
                           ? "border-2 border-Green500"
                           : "border-2 border-Grey100"
                       }`}
                     >
-                      {selectedPaymentMethod === "debit-card" && (
+                      {selectedPaymentMethod === "paystack" && (
                         <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
                       )}
                     </div>
-                    <span className="text-[16px] text-Grey500 font-nunitoSans font-bold">
-                      Debit Card
+                    <span className="text-[16px] text-Grey500 font-nunitoSans font-bold ">
+                      Paystack
                     </span>
                   </div>
                   <div className="flex space-x-2">
                     <Image
-                      src="/images/mastercard.svg"
-                      alt="master card"
-                      width={50}
-                      height={50}
-                    />
-                    <Image
-                      src="/images/visa.svg"
-                      alt="visa card"
-                      width={50}
-                      height={50}
-                    />
-                    <Image
-                      src="/images/verve.svg"
-                      alt="verve card"
-                      width={50}
-                      height={50}
+                      src="/images/paystack.svg"
+                      alt="paystack"
+                      width={100}
+                      height={100}
                     />
                   </div>
                 </div>
 
                 {/* Debit Card Details */}
-                {selectedPaymentMethod === "debit-card" && (
-                  <div className="space-y-4">
-                    <div className="relative">
-                      <FiMail className="absolute left-3 top-[55px] transform -translate-y-1/2 text text-Grey200" />
-                      <p className="text-Grey500 text-[16px] mb-2 font-bold">
-                        Card Number
-                      </p>
-                      <input
-                        type="text"
-                        placeholder="5199 8080 8080 8080"
-                        className="w-full pl-10 p-2 border border-Grey200 rounded-lg focus:outline-none  hover:border-Grey400"
-                      />
-                    </div>
-                    <div className="flex space-x-4 w-full">
-                      <div className="flex-1 flex-row">
-                        <p className="text-Grey500 text-[16px] mb-2 font-bold">
-                          Expiration date
-                        </p>
-                        <div className="relative">
-                          <RiCalendarEventFill className="absolute left-3 top-1/2 transform -translate-y-1/2 text-Grey200" />
-                          <select className="w-[100px] md:w-1/2 border border-Grey200 rounded-lg p-2 pl-10 focus:outline-none  border:border-Grey400">
-                            <option>MM</option>
-                            <option>01</option>
-                            <option>02</option>
-                            <option>03</option>
-                            <option>04</option>
-                            <option>05</option>
-                            <option>06</option>
-                            <option>07</option>
-                            <option>08</option>
-                            <option>09</option>
-                            <option>10</option>
-                            <option>11</option>
-                            <option>12</option>
-                          </select>
-                          <RiCalendarEventFill className="absolute left-[110px] md:left-[190px] top-1/2 transform -translate-y-1/2 text-Grey200" />
-                          <select className="w-[100px] md:w-1/2 border border-Grey200 rounded-lg p-2 pl-12 focus:outline-none  hover:border-Grey400">
-                            <option>YY</option>
-                            <option>2024</option>
-                            <option>2025</option>
-                            <option>2026</option>
-                            <option>2027</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="flex-1 relative">
-                        <p className="text-Grey500 text-[16px] font-bold mb-2">
-                          CRV
-                        </p>
-                        <input
-                          type="text"
-                          placeholder="572"
-                          className="w-[110px] md:w-1/3 border border-gray-300 rounded-lg p-2 focus:outline-none  hover:border-Grey400"
-                        />
-                        <BsQuestionLg
-                          size={20}
-                          className="absolute transform -translate-y-1/2 bottom-0.5 left-20  bg-Grey200 rounded-full p-1 text-white "
-                        />
-                      </div>
-                    </div>
-                    <div className="relative">
-                      <FiUser className="absolute left-3 bottom-3 transform -translate-y-1/2 text-Grey200" />
-                      <p className="text-Grey500 text-[16px] font-bold mb-2">
-                        Name on Card
-                      </p>
-                      <input
-                        type="text"
-                        className="w-full pl-10 p-4 font-nunitoSans border rounded-lg focus:outline-none  hover:border-Grey400"
-                        placeholder="Yussuf Olabayo"
-                      />
-                    </div>
-                    <label className="flex items-center space-x-2 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={saveCard}
-                        onChange={() => setSaveCard(!saveCard)}
-                        className={`bg-Grey500 text-white rounded-md ${
-                          saveCard ? "bg-Grey500 text-white" : ""
-                        }`}
-                      />
-                      <span className="text-Green900 text-[13px]">
-                        Save Card
-                      </span>
-                    </label>
+                {selectedPaymentMethod === "paystack" && (
+                  <div className="flex flex-col items-center space-y-8  ">
+                    <Image
+                      src="/images/material.svg"
+                      alt="paystack"
+                      width={100}
+                      height={100}
+                    />
+                    <p className="max-w-[450px] text-center">
+                      Click “Continue ”, you will be redirected to paystack to
+                      complete your payment securely.
+                    </p>
+                    <button className=" bg-Green500 text-white rounded-[8px] p-[10px] text-[16px] md:text-[18px] font-bold w-full md:w-[190px]  h-[48px] hover:bg-Green600 transition">
+                      Continue
+                    </button>
                   </div>
                 )}
                 {/* bank transfer */}
