@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useCart } from "@/app/context/CartContext";
+import { useShipping } from "../context/ShippingContext";
 import {
   useFetchCartProducts,
   useFetchLogistics,
@@ -38,6 +39,7 @@ const Checkout = () => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const { removeItemFromCart, setLogisticPrice, setLogisticId } = useCart();
+  const { setShippingDetails, setCartSummary } = useShipping();
 
   const {
     data: cartedProducts = [],
@@ -131,6 +133,8 @@ const Checkout = () => {
     ) {
       toast.error("All fields are required");
     //   alert("All fields are required")
+      // toast.error("All fields are required");
+      alert("All fields are required");
       return;
     }
     // if (!logisticId || logisticId === 0) {
@@ -150,6 +154,23 @@ const Checkout = () => {
       logistic_id: logisticId,
       cart: storedCart,
     };
+
+    setShippingDetails({
+      email: data.email,
+      fullName: data.fullName,
+      phone: data.phone,
+      address: data.address,
+      state: data.state,
+      deliveryMethod,
+      fromLocation,
+      toLocation,
+    });
+
+    setCartSummary({
+      items: products,
+      totalPrice,
+    });
+
     onMutateSubmitDetails(payload, {
       onSuccess: (response) => {
         console.log("OUr backend response: ", response);
@@ -157,12 +178,12 @@ const Checkout = () => {
         if (response?.result?.success) {
           localStorage.setItem("token", response.result.token);
           setIsLoadingSubmitDetails(false);
-          toast.success("Registration successful");
-          alert("Registration successful")
+          // toast.success("Registration successful");
+          alert("Registration successful");
         } else {
           setIsLoadingSubmitDetails(false);
-          toast.error("Unsuccessful registration");
-          alert("UnsuccessfulRegistration")
+          // toast.error("Unsuccessful registration");
+          alert("UnsuccessfulRegistration");
         }
         // toast.success("Registration successfully");
         router.push("/review");
@@ -170,9 +191,9 @@ const Checkout = () => {
       onError: (error) => {
         console.log("Error: ", error);
         setIsLoadingSubmitDetails(false);
-        toast.error(
-          error?.response?.data?.message?.toString() || "An error occurred"
-        );
+        // toast.error(
+        //   error?.response?.data?.message?.toString() || "An error occurred"
+        // );
       },
     });
   };

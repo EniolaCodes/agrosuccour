@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import TansStackProvider from "@/components/providers/TansStackProvider";
 import SessionProvider from "@/components/providers/SessionProvider";
 import { CartProvider, useCart } from "./context/CartContext";
+import { ShippingProvider } from "./context/ShippingContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ErrorProvider, useError } from "./context/ErrorContext";
@@ -48,18 +49,20 @@ export default function RootLayout({ children }) {
         <SessionProvider>
           <ErrorProvider>
             <TansStackProvider>
-              <CartProvider>
-                <ProvidersWrapper>{children}</ProvidersWrapper>
-                <ToastContainer
-                  position="top-left"
-                  autoClose={3000}
-                  newestOnTop={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="light"
-                />
-              </CartProvider>
+              <ShippingProvider>
+                <CartProvider>
+                  <ProvidersWrapper>{children}</ProvidersWrapper>
+                  <ToastContainer
+                    position="top-left"
+                    autoClose={3000}
+                    newestOnTop={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                  />
+                </CartProvider>
+              </ShippingProvider>
             </TansStackProvider>
           </ErrorProvider>
         </SessionProvider>

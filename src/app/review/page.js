@@ -25,7 +25,6 @@ const Review = () => {
   const { cart } = useCart();
   console.log("Cart object in ReviewPage:", cart);
 
-
   // Authentication check
   useEffect(() => {
     setIsMounted(true);
@@ -37,7 +36,6 @@ const Review = () => {
     }
     setIsAuthLoading(false);
   }, [router]);
-
 
   const sessionId = useSession();
   useEffect(() => {
@@ -185,10 +183,6 @@ const Review = () => {
         <div className="hidden md:flex flex-col gap-6">
           <OrderSummary
             products={products}
-
-            // totalPrice={totalPrice}
-            // otherFees={logisticsPrice}
-
             totalPrice={cart.total_amount - cart.logistic_price}
             logisticPrice={cart.logistic_price}
           />
@@ -236,7 +230,7 @@ const Review = () => {
                     Contact us
                   </h1>
                   <p className="text-Grey50 text-[13px]">
-                    Reach out on +2340706375930. We will reply in 2mins.
+                    Reach out on +2347026542265. We will reply in 2mins.
                   </p>
                 </div>
               </div>

@@ -22,7 +22,7 @@ const Footer = () => {
               className=""
             />
             <h2
-              className="text-[26px] mt-6
+              className="text-[20px] md:text-[26px] mt-3 md:mt-6
             font-urbanist font-semibold text-Green100"
             >
               Agrosuccour
@@ -57,7 +57,7 @@ const Footer = () => {
             </h3>
             <div className="flex items-center space-x-2 mb-2 text-agroHeading">
               <FiPhone />
-              <span className="opacity-80">+234 7066375930</span>
+              <span className="opacity-80">+234 7026542265</span>
             </div>
             <div className="flex items-center space-x-2 text-agroHeading">
               <FiMail />

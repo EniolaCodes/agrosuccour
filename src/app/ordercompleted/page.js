@@ -4,8 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "@/components/providers/SessionProvider";
 import { useFetchCartProducts } from "@/lib/models/product/hooks";
+import { useCart } from "../context/CartContext";
+import { useShipping } from "../context/ShippingContext";
 
 const OrderCompleted = () => {
+  const { cart } = useCart();
+  const { shippingDetails } = useShipping();
+
   const sessionId = useSession();
   useEffect(() => {}, [sessionId]);
 
@@ -102,7 +107,9 @@ const OrderCompleted = () => {
             <div className="">
               <div className="flex justify-between items-center text-[13px] font-nunitoSans mb-4">
                 <span className="text-Grey400">Account name:</span>
-                <span className="text-Grey500 font-bold">Yussuf Olabayo</span>
+                <span className="text-Grey500 font-bold">
+                  {shippingDetails?.fullName}
+                </span>
               </div>
               <div className="flex justify-between items-center text-[13px] font-nunitoSans mb-4">
                 <span className="text-Grey400 ">Account number:</span>
@@ -130,8 +137,9 @@ const OrderCompleted = () => {
             </div>
             <hr className="my-4 border-Grey-50" />
             <p className="text-[31px] font-nunitoSans text-center font-bold text-Green900">
-              ₦{totalPrice.toFixed(2)}
+              {cart.total_amount}
             </p>
+
             <hr className="my-4 border-Grey-50" />
             <div className="mt-4">
               <Image
@@ -146,7 +154,10 @@ const OrderCompleted = () => {
             </div>
           </div>
           <div className="ml-10">
-            <button className="mt-4 ml-10 md:ml-0 w-[260px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+            <button
+              onClick={() => window.print()}
+              className="mt-4 ml-10 md:ml-0 w-[260px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
+            >
               Download receipt
             </button>
             <Link href="/products">

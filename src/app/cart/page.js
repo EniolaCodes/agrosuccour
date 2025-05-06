@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import OrderSummary from "@/components/OrderSummary";
@@ -7,11 +7,12 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { useCart } from "@/app/context/CartContext";
 import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
-export default function Cart() {
+const CartComponent = () => {
   const { cart, removeItemFromCart, incrementQuantity, decrementQuantity } =
     useCart();
 
   const items = cart ? cart.items : [];
+  // const items = useMemo(() => (cart ? cart.items : []), [cart]);
   const isCartEmpty = !items || items.length === 0;
   const {
     data: cartedProducts = [],
@@ -21,8 +22,6 @@ export default function Cart() {
   } = useFetchCartProducts(items);
 
   console.log("Carted Products is here:", cartedProducts);
-
-  // const totalPrice = cart?.total_amount;
 
   const totalPrice = cartedProducts.reduce((acc, product) => {
     const price = parseFloat(product?.result?.data?.price) || 0;
@@ -250,13 +249,13 @@ export default function Cart() {
           )}
         </div>
         {/* checkout button */}
-        <div className="">
+        {/* <div className="">
           <Link href="/checkout">
             <button className="mt-4 w-full bg-Green500 text-white font-medium py-2 rounded-[12px] hover:bg-[#5A9E3A] transition">
               Checkout
             </button>
           </Link>
-        </div>
+        </div> */}
 
         {/* Order Summary */}
 
@@ -270,4 +269,10 @@ export default function Cart() {
       </div>
     </>
   );
-}
+};
+
+CartComponent.displayName = "Cart"; // Add the display name for better debugging
+
+const Cart = React.memo(CartComponent);
+
+export default Cart;
