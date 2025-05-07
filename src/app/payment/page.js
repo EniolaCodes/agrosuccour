@@ -12,6 +12,7 @@ import OrderSummary from "@/components/OrderSummary";
 import { useCart } from "@/app/context/CartContext";
 import { useFetchCartProducts } from "@/lib/models/product/hooks";
 import { useShipping } from "../context/ShippingContext";
+import PaymentComponent from "@/components/PaymentComponent";
 
 const Payment = () => {
   const router = useRouter();
@@ -104,6 +105,9 @@ const Payment = () => {
     );
   }
 
+//   get orderId
+const orderId = localStorage.getItem("orderId")
+
   // If not authenticated, this will redirect already
   if (!isAuthenticated) {
     return (
@@ -139,7 +143,7 @@ const Payment = () => {
           {/* shipping info */}
           <section>
             <h2 className="text-[25px] text-Grey500 font-nunito font-bold mt-4 mb-4">
-              Where to send your order
+              Where to send your order {cart.total_amount}
             </h2>
             <div className="">
               {shippingList.length > 0 ? (
@@ -266,9 +270,7 @@ const Payment = () => {
                       Click “Continue ”, you will be redirected to paystack to
                       complete your payment securely.
                     </p>
-                    <button className=" bg-Green500 text-white rounded-[8px] p-[10px] text-center text-[16px] md:text-[18px] font-bold w-full md:w-[190px]  h-[48px] hover:bg-Green600 transition">
-                      Continue
-                    </button>
+                    <PaymentComponent orderId={orderId} amount={cart.total_amount} email={shippingDetails.email} />
                   </div>
                 )}
                 {/* bank transfer */}

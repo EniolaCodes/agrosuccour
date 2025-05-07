@@ -177,15 +177,16 @@ const Checkout = () => {
 
         if (response?.result?.success) {
           localStorage.setItem("token", response.result.token);
+          localStorage.setItem("orderId", response.result.orderId);
           setIsLoadingSubmitDetails(false);
-          // toast.success("Registration successful");
-          alert("Registration successful");
+          toast.success("Registration successful");
+        //   alert("Registration successful");
         } else {
           setIsLoadingSubmitDetails(false);
-          // toast.error("Unsuccessful registration");
-          alert("UnsuccessfulRegistration");
+          toast.error("Unsuccessful registration");
+        //   alert("UnsuccessfulRegistration");
         }
-        // toast.success("Registration successfully");
+
         router.push("/review");
       },
       onError: (error) => {

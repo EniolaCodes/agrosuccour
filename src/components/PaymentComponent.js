@@ -1,9 +1,17 @@
 'use client';
 import React, { useEffect } from 'react';
 import { useMutateInitiatePayment, useMutateVerifyPayment } from '@/lib/models/payment/hooks';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
-const PaymentComponenter = ({ orderId, amount, email }) => {
+const PaymentComponent = ({ orderId, amount, email }) => {
+  const router = useRouter();
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+
+   // Convert amount to number and handle potential string input
+   const numericAmount = typeof amount === 'string' ?
+   parseFloat(amount.replace(/[^0-9.-]/g, '')) :
+   Number(amount);
 
   // Initialize the mutation hook
   const { mutate: mutateInitiatePayment } = useMutateInitiatePayment({
@@ -16,29 +24,30 @@ const PaymentComponenter = ({ orderId, amount, email }) => {
       if (transactionRef) {
         const handler = window.PaystackPop.setup({
           key: publicKey,
-          email: 'famaths011@gmail.com',
-          amount: 1000 * 100, // Amount in kobo , to be changed to original amount
+          email: email,
+          amount: Math.round(numericAmount * 100), // Amount in kobo , to be changed to original amount
           currency: 'NGN',
           reference: transactionRef, // Use the backend-generated reference
           onClose: () => {
-            alert('Payment was canceled.');
+            toast.error("Payment canceled");
           },
           callback: (response) => {
             // console.log('THUS IS RESPONSE IN CALLBACK', response)
               mutateVerifyPayment({payment_id: transactionId , reference: response.reference });
-              alert(`Payment complete! Reference: ${response.reference}`);
+            //   alert(`Payment complete! Reference: ${response.reference}`);
 
           },
         });
 
         handler.openIframe(); // Open the Paystack modal
       } else {
-        alert('Invalid transaction reference.');
+        // alert('Invalid transaction reference.');
+        console.log('Invalid transaction reference.')
       }
     },
     onError: (error) => {
       console.log('Error Initializing Payment:', error);
-      alert('Payment initialization failed.');
+      toast.error("Payment initialization failed.");
     },
   });
 
@@ -47,15 +56,17 @@ const PaymentComponenter = ({ orderId, amount, email }) => {
       console.log('Payment Verification Successful:', verificationResp);
       //   verificationResp.result.data.payment_status == 'Completed'
       if (verificationResp.result.data.payment_status == 'Completed') {
-        alert('Payment verified successfully!');
-        // Add further post-payment success logic here
+        // console.log('Payment verified successfully!')
+        toast.success("Payment Successful!");
+        // router.push("/ordercompleted");
       } else {
-        alert('Payment verification failed on the backend.');
+        // console.log('Payment verification failed on the backend!')
+        toast.error("Payment Failed !");
       }
     },
     onError: (error) => {
       console.error('Error Verifying Payment:', error);
-      alert('An error occurred during payment verification.');
+      toast.error("An error occurred during payment verification");
     },
   });
 
@@ -73,8 +84,8 @@ const PaymentComponenter = ({ orderId, amount, email }) => {
   const handlePayment = () => {
 
     const payload = {
-                    "order_id" : 1,
-                    "amount" : 200
+                    "order_id" : orderId,
+                    "amount" : numericAmount
                     // "payment_method" : "Card"
                 }
     mutateInitiatePayment(payload);
@@ -90,4 +101,4 @@ const PaymentComponenter = ({ orderId, amount, email }) => {
   );
 };
 
-export default PaymentComponenter;
+export default PaymentComponent;
