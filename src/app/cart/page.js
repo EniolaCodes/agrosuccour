@@ -8,8 +8,13 @@ import { useCart } from "@/app/context/CartContext";
 import { useFetchCartProducts } from "@/lib/models/product/hooks";
 
 const CartComponent = () => {
-  const { cart, removeItemFromCart, incrementQuantity, decrementQuantity } =
-    useCart();
+  const {
+    cart,
+    removeItemFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    formatPrice,
+  } = useCart();
 
   const items = cart ? cart.items : [];
   // const items = useMemo(() => (cart ? cart.items : []), [cart]);

@@ -14,6 +14,14 @@ const fetchUserIP = async () => {
   }
 };
 
+// Function to format number with commas
+const formatPrice = (price) => {
+  return Number(price).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
+
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({
     cart_group_id: null,
@@ -194,6 +202,7 @@ export const CartProvider = ({ children }) => {
         setLogisticPrice,
         setLogisticId,
         toggleCartVisibility,
+        formatPrice,
       }}
     >
       {children}

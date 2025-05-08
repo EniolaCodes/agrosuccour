@@ -8,7 +8,7 @@ import { useCart } from "../context/CartContext";
 import { useShipping } from "../context/ShippingContext";
 
 const OrderCompleted = () => {
-  const { cart } = useCart();
+  const { cart, formatPrice } = useCart();
   const { shippingDetails } = useShipping();
 
   const sessionId = useSession();
@@ -137,7 +137,7 @@ const OrderCompleted = () => {
             </div>
             <hr className="my-4 border-Grey-50" />
             <p className="text-[31px] font-nunitoSans text-center font-bold text-Green900">
-              {cart.total_amount}
+              ₦{formatPrice(cart.total_amount)}
             </p>
 
             <hr className="my-4 border-Grey-50" />

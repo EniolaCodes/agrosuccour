@@ -262,7 +262,7 @@ const Header = () => {
             </div>
           )}
           {/* navigation */}
-          <ul className="flex space-x-4 text-[16px] text-Green50 font-nunitoSans">
+          <ul className="flex space-x-4 text-[16px] text-Green50 font-nunitoSans ml-16">
             <li className=" hover:text-Green500 ">
               <Link href="/">Home</Link>
             </li>
@@ -271,7 +271,7 @@ const Header = () => {
             </li>
             <li className="flex text-[16px] justify-center items-center space-x-2">
               <FiPhone className=" text-Green50" />
-              <span className="font-nunitoSans ">0706375930</span>
+              <span className="font-nunitoSans ">+234 7026542265</span>
             </li>
           </ul>
           {/* Cart */}

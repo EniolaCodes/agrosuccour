@@ -23,7 +23,7 @@ const Payment = () => {
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const { shippingDetails, cartSummary } = useShipping();
-  const { cart } = useCart();
+  const { cart, formatPrice } = useCart();
 
   const bankDetails = [
     "AGRO-SUCCOUR NIGERIA LIMITED | 0126516021 | Wema bank",
@@ -105,8 +105,8 @@ const Payment = () => {
     );
   }
 
-//   get orderId
-const orderId = localStorage.getItem("orderId")
+  //   get orderId
+  const orderId = localStorage.getItem("orderId");
 
   // If not authenticated, this will redirect already
   if (!isAuthenticated) {
@@ -229,7 +229,7 @@ const orderId = localStorage.getItem("orderId")
                     selectedPaymentMethod === "paystack"
                       ? " border"
                       : "border-Grey50"
-                  } p-2 rounded-[8px] flex justify-between items-center cursor-pointer`}
+                  } p-4 rounded-[8px] flex justify-between items-center cursor-pointer`}
                 >
                   <div className="flex items-center space-x-2">
                     <div
@@ -270,7 +270,11 @@ const orderId = localStorage.getItem("orderId")
                       Click “Continue ”, you will be redirected to paystack to
                       complete your payment securely.
                     </p>
-                    <PaymentComponent orderId={orderId} amount={cart.total_amount} email={shippingDetails.email} />
+                    <PaymentComponent
+                      orderId={orderId}
+                      amount={formatPrice(cart.total_amount)}
+                      email={shippingDetails.email}
+                    />
                   </div>
                 )}
                 {/* bank transfer */}
@@ -305,11 +309,11 @@ const orderId = localStorage.getItem("orderId")
                       account. Use your Order ID as a reference. Your order will
                       ship as soon as we confirm your payment.
                     </p>
-                    <div className="flex flex-col space-y-4 text-[11px] text-Grey400">
+                    <div className="flex flex-col space-y-4 text-[11px] text-Grey400 items-center">
                       {bankDetails.map((detail, index) => (
                         <div
                           key={index}
-                          className="flex items-center justify-between"
+                          className="flex items-center justify-between w-full"
                         >
                           <span className="text-sm">{detail}</span>
                           <FiCopy
@@ -319,6 +323,9 @@ const orderId = localStorage.getItem("orderId")
                           />
                         </div>
                       ))}
+                      <button className="bg-Green500 text-white rounded-[8px] p-[10px] text-center text-[16px] md:text-[18px] font-bold w-full md:w-[190px] h-[48px] hover:bg-Green600 transition">
+                        Confirm
+                      </button>
                     </div>
                   </div>
                 )}

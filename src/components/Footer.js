@@ -119,17 +119,10 @@ const Footer = () => {
             Pay with ease:
           </span>
           <Image
-            src="/images/mastercard.svg"
-            alt="Mastercard"
-            width={30}
-            height={30}
-            className=""
-          />
-          <Image
-            src="/images/visa.svg"
-            alt="Visa"
-            width={30}
-            height={30}
+            src="/images/paystack.svg"
+            alt="paystack"
+            width={100}
+            height={100}
             className=""
           />
         </div>
