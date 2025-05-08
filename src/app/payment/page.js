@@ -298,7 +298,7 @@ const Payment = () => {
                 {/* Bank Transfer Details */}
                 {selectedPaymentMethod === "bank-transfer" && (
                   <div className="mt-4 font-nunitoSans">
-                    <p className="text-[11px] text-Grey400 mb-4">
+                    <p className="text-[14px] text-Grey400 mb-4">
                       To complete your order, please pay directly into our
                       account. Use your Order ID as a reference. Your order will
                       ship as soon as we confirm your payment.
