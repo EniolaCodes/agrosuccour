@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCart } from "../app/context/CartContext";
 
 const OrderSummaryComponent = ({
   //prevents error when value of products and totalPrice are missing
@@ -29,6 +30,7 @@ const OrderSummaryComponent = ({
     buttonLink = "/ordercompleted";
     buttonText = "Complete Order";
   }
+  const { formatPrice } = useCart();
   return (
     <div className="md:w-[350px] max-h-[90vh] pt-6 mt-6 md:mt-0 bg-white p-4 rounded-[28px] shadow-md flex flex-col space-y-12">
       <div>
@@ -47,19 +49,19 @@ const OrderSummaryComponent = ({
       </div>
       <div className="flex justify-between items-center text-[16px] text-Grey400 border-b pb-2">
         <p>Subtotal:</p>
-        <p>₦{totalPrice.toFixed(2)}</p>
+        <p>₦{formatPrice(totalPrice.toFixed(2))}</p>
       </div>
 
       {displayLogisticPrice && (
         <div className="flex justify-between items-center text-Grey400 text-[16px] border-b pb-2">
           <p>Other fees:</p>
-          <p>₦{logisticPrice.toFixed(2)}</p>
+          <p>₦{formatPrice(logisticPrice.toFixed(2))}</p>
         </div>
       )}
 
       <div className="flex justify-between items-center text-Grey400 font-bold text-[16px] font-nunitoSans border-b pb-2">
         <p>Total:</p>
-        <p>₦{calculatedTotal.toFixed(2)}</p>
+        <p>₦{formatPrice(calculatedTotal.toFixed(2))}</p>
       </div>
       <Link href={buttonLink}>
         <button className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">

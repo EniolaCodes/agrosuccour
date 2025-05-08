@@ -5,7 +5,7 @@ export const useMutateInitiatePayment = (options) => {
 
     const initiatePayment = (data) =>
       backendFetch({
-        endpoint: '/payment/create/',
+        endpoint: '/user/payment/create/',
         method: 'POST',
         body: data,
     });
@@ -20,7 +20,7 @@ export const useMutateVerifyPayment = (options) => {
 
     const verifyPayment = (data) =>
       backendFetch({
-        endpoint: '/payment/verify/',
+        endpoint: '/user/payment/verify/',
         method: 'POST',
         body: data,
     });

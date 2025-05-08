@@ -9,6 +9,7 @@ import SessionProvider from "@/components/providers/SessionProvider";
 import { CartProvider, useCart } from "./context/CartContext";
 import { ShippingProvider } from "./context/ShippingContext";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ErrorProvider, useError } from "./context/ErrorContext";
 import ErrorPage from "./error/page";
 
