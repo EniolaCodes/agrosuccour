@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { FaInstagram, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import { FaInstagram, FaTwitter, FaWhatsapp, FaTiktok } from "react-icons/fa";
 import { CiFacebook } from "react-icons/ci";
 import { FiPhone, FiMail } from "react-icons/fi";
 
@@ -103,14 +103,33 @@ const Footer = () => {
                 alt=""
               />
             </a>
-            <a href="#" className="text-agroGreen">
+            <a
+              href="https://www.instagram.com/agrosuccour?igsh=NnRvdm4xaHE0MWdt"
+              className="text-agroGreen"
+              target="_blank"
+            >
               <FaInstagram size={20} />
             </a>
-            <a href="#" className="text-agroGreen">
+            <a
+              href="https://www.facebook.com/share/197KQ8cmiy/"
+              className="text-agroGreen"
+              target="_blank"
+            >
+              <CiFacebook size={20} />
+            </a>
+            <a
+              href="https://api.whatsapp.com/send/?phone=2347026542265&text&type=phone_number&app_absent=0"
+              className="text-agroGreen"
+              target="_blank"
+            >
               <FaWhatsapp size={20} />
             </a>
-            <a href="#" className="text-agroGreen">
-              <CiFacebook size={20} />
+            <a
+              href="https://www.tiktok.com/@agrosuccour?_t=ZM-8wD2KaA53kF&_r=1"
+              className="text-agroGreen"
+              target="_blank"
+            >
+              <FaTiktok size={20} />
             </a>
           </div>
         </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -31,9 +31,17 @@ const Hero = () => {
     setCurrentIndex(index);
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    }, 3000);
+
+    return () => clearInterval(interval); // cleanup on unmount
+  }, [slides.length]);
+
   return (
     <div className="px-4 md:px-20 py-6 ">
-      <div className="w-full relative h-[400px] md:h-[500px] bg-cover bg-center rounded-[28px] overflow-hidden">
+      <div className="w-full relative h-[400px] md:h-[500px] bg-cover bg-center rounded-[28px] overflow-hidden transition-all duration-1000 ease-in-out">
         {/* Slide Image */}
         <div className="absolute inset-0">
           <Image
