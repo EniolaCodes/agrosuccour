@@ -154,7 +154,7 @@ const CartComponent = () => {
           <div className="text-Grey400 text-lg font-bold">
             <h1 className="text-Grey500 text-xl font-bold">Shopping Cart</h1>
             <p className="text-[16px] font-bold text-Grey500">
-              ₦{(totalPrice || 0).toFixed(2)}
+              ₦{formatPrice(totalPrice || 0)}
             </p>
           </div>
           <Link
@@ -230,10 +230,10 @@ const CartComponent = () => {
                     </div>
                     <p className="text-lg font-bold text-Grey500 ml-2">
                       ₦
-                      {(
+                      {formatPrice(
                         (product?.result?.data?.price || 0) *
-                        (product?.quantity || 0)
-                      ).toFixed(2)}
+                          (product?.quantity || 0)
+                      )}
                     </p>
                   </div>
                 </div>
@@ -253,14 +253,6 @@ const CartComponent = () => {
             </div>
           )}
         </div>
-        {/* checkout button */}
-        {/* <div className="">
-          <Link href="/checkout">
-            <button className="mt-4 w-full bg-Green500 text-white font-medium py-2 rounded-[12px] hover:bg-[#5A9E3A] transition">
-              Checkout
-            </button>
-          </Link>
-        </div> */}
 
         {/* Order Summary */}
 

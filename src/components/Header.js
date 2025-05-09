@@ -23,6 +23,7 @@ const Header = () => {
     decrementQuantity,
     isCartOpen,
     toggleCartVisibility,
+    formatPrice,
   } = useCart();
 
   const items = cart ? cart.items : [];
@@ -338,7 +339,7 @@ const Header = () => {
                       {products.length} items
                     </h1>
                     <p className="text-[16px] font-bold bg-Green100 rounded-[6px] p-1 text-Green900">
-                      ₦{(totalPrice || 0).toFixed(2)}
+                      ₦{formatPrice(totalPrice || 0)}
                     </p>
                   </div>
                   <div className="flex flex-col space-y-4">
@@ -412,10 +413,10 @@ const Header = () => {
                             </div>
                             <p className="text-lg font-bold text-Grey500 ml-2">
                               ₦
-                              {(
+                              {formatPrice(
                                 (product?.result?.data?.price || 0) *
-                                (product?.quantity || 0)
-                              ).toFixed(2)}
+                                  (product?.quantity || 0)
+                              )}
                             </p>
                           </div>
                         </div>
@@ -429,7 +430,7 @@ const Header = () => {
                         onClick={toggleVisibleCart}
                         className="mt-4 w-full h-[44px] bg-Green500 text-white text-[16px]uppercase font-bold py-2 rounded-[8px] hover:bg-Green600 transition"
                       >
-                        Checkout ( ₦{totalPrice.toFixed(2)} )
+                        Checkout ( ₦{formatPrice(totalPrice)} )
                       </button>
                     </Link>
                   </div>
@@ -494,9 +495,7 @@ const Header = () => {
               </div>
               <ul className="flex flex-col text-[16px] font-nunitoSans text-Grey500 space-y-4 mt-2">
                 <li className="font-bold hover:bg-Green100 px-6 py-1">
-                  <Link href="/" onClick={handleHomeClick}>
-                    Home
-                  </Link>
+                  <Link href="/">Home</Link>
                 </li>
                 <li className="px-6 py-1 font-bold hover:bg-Green100">
                   <Link
