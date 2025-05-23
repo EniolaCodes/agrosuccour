@@ -138,7 +138,7 @@ const Footer = () => {
             Pay with ease:
           </span>
           <Image
-            src="/images/paystack.svg"
+            src="/images/Group.png"
             alt="paystack"
             width={100}
             height={100}

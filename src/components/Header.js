@@ -70,18 +70,6 @@ const Header = () => {
   }, [isCartOpen]);
 
   const handleClickOutside = (event) => {
-    // if (menuRef.current && !menuRef.current.contains(event.target)) {
-    //   setMenuOpen(false);
-    // }
-    // if (productsRef.current && !productsRef.current.contains(event.target)) {
-    //   console.log("product closed");
-    //   setProductsOpen(false);
-    // }
-    // if (cartRef.current && !cartRef.current.contains(event.target)) {
-    //   console.log("cart closed");
-    //   toggleCartVisibility();
-    // }
-
     if (
       productsOpen &&
       productsRef.current &&
@@ -118,7 +106,9 @@ const Header = () => {
     toggleMenu(); // Close the menu
     router.push("/cart"); // Redirect to the cart page
   };
-
+  const handleMobileCartClick = () => {
+    router.push("/cart");
+  };
   return (
     <div>
       {(productsOpen || isCartOpen) && (
@@ -441,8 +431,8 @@ const Header = () => {
         </div>
       </header>
       {/* mobile */}
-      <header className="px-4 py-2 bg-Grey50 md:hidden">
-        <div className="w-full rounded-[28px] bg-Grey500 py-4 px-6 flex flex-col space-y-4 relative">
+      <header className="px-4 py-2 bg-Grey50 relative z-50  md:hidden">
+        <div className="w-full rounded-[28px] bg-Grey500 py-4 px-6 flex flex-col space-y-4">
           {/* logo & cart */}
           <div className="flex items-center justify-between">
             {/* logo */}
@@ -460,7 +450,7 @@ const Header = () => {
               </Link>
             </div>
             {/* cart component */}
-            <Link href="/cart" onClick={handleCartClick}>
+            <Link href="/cart" className="">
               <CartComponent />
             </Link>
           </div>
