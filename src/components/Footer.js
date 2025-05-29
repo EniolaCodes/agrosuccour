@@ -8,10 +8,10 @@ import { FiPhone, FiMail } from "react-icons/fi";
 const Footer = () => {
   return (
     <footer
-      className="w-full relative h-auto  bg-cover bg-center bg-no-repeat mt-16 px-4 pt-6 pb-14 md:py-8 md:px-20"
+      className="w-full relative h-auto  bg-cover bg-center bg-no-repeat mt-16 px-4 pt-6 pb-14 md:px-6 lg:py-8 lg:px-20"
       style={{ backgroundImage: "url('/images/Footer.svg')" }}
     >
-      <div className="flex flex-col space-y-10 md:flex-row md:space-x-28">
+      <div className="flex flex-col space-y-10 md:flex-row md:space-x-8 lg:space-x-28">
         <div>
           <div className="flex items-center space-x-2">
             <Image
@@ -34,7 +34,7 @@ const Footer = () => {
             satisfaction.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4 lg:gap-12">
           <div className="">
             <h3 className="text-xl font-semibold mb-4 text-agroHeading">
               Useful links
@@ -52,10 +52,10 @@ const Footer = () => {
             </ul>
           </div>
           <div className="">
-            <h3 className="text-xl font-semibold mb- text-agroHeading mb-4">
+            <h3 className="text-xl font-semibold  text-agroHeading mb-4">
               Reach out to us
             </h3>
-            <div className="flex items-center space-x-2 mb-2 text-agroHeading">
+            <div className="flex items-center  space-x-2 mb-2 text-agroHeading">
               <FiPhone />
               <span className="opacity-80">+234 7026542265</span>
             </div>
@@ -88,7 +88,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="container mx-auto mt-8 flex flex-col md:flex-row justify-between">
+      <div className="container mx-auto mt-8 flex flex-col space-y-4 md:flex-row justify-between">
         <div className="flex items-center gap-4 md:space-x-4">
           <span className="text-Green50 text-[16px]  md:text-[25px] font-bold font-nunito">
             Connect with us:

@@ -126,7 +126,7 @@ const Review = () => {
   );
 
   return (
-    <div className="px-4 overflow-hidden md:px-52 py-8 ">
+    <div className="px-4 overflow-hidden lg:px-52 py-8 ">
       <div className="flex flex-row space-x-6">
         <div className="flex flex-col flex-1">
           <div className=" mb-6 bg-white p-4 rounded-[28px]">

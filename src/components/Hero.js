@@ -40,7 +40,7 @@ const Hero = () => {
   }, [slides.length]);
 
   return (
-    <div className="px-4 md:px-20 py-6 ">
+    <div className="px-4 md:px-6 lg:px-20 py-6 ">
       <div className="w-full relative h-[400px] md:h-[500px] bg-cover bg-center rounded-[28px] overflow-hidden transition-all duration-1000 ease-in-out">
         {/* Slide Image */}
         <div className="absolute inset-0">
@@ -64,7 +64,7 @@ const Hero = () => {
         </div>
       </div>
       {/* Slide Content */}
-      <div className="absolute inset-0  flex flex-col justify-center items-start ml-6 md:ml-20 px-4 md:px-8 md:mt-10 max-w-lg">
+      <div className="absolute inset-0  flex flex-col justify-center items-start ml-6 md:ml-10 lg:ml-20 px-4 md:px-6 lg:px-8 md:mt-10 max-w-lg">
         <h1 className="text-2xl md:text-5xl py-6 mt-6 font-nunito text-Green50 font-bold mb-8 md:mb-4 w-[324px] md:w-[600px] md:h-[177px] h-[96px]">
           {slides[currentIndex].title}
         </h1>

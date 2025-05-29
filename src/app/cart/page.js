@@ -37,7 +37,7 @@ const CartComponent = () => {
   return (
     <>
       {/* desktop */}
-      <div className="hidden md:block px-20 pt-6">
+      <div className="hidden md:block md:px-6 lg:px-20 pt-6">
         <div className="mb-4 bg-white rounded-[28px] border p-4 flex justify-between items-center">
           <h1 className="text-Grey500 font-nunito text-[25px] font-bold">
             Shopping Cart
@@ -67,20 +67,20 @@ const CartComponent = () => {
                         className="rounded-md"
                       />
                       <div>
-                        <h2 className="text-[20px] text-Grey500 font-bold">
+                        <h2 className="text-[16px] lg:text-[20px] text-Grey500 font-bold">
                           {product?.result?.data?.product_name}
                         </h2>
-                        <p className="text-[16px] text-Grey400">
+                        <p className="text-[14px] lg:text-[16px] text-Grey400">
                           {product?.quantity} kilogram / Bag
                         </p>
                       </div>
                     </div>
                     <p className="text-[20px] font-bold text-Grey500 ml-2">
                       ₦
-                      {(
+                      {formatPrice(
                         (product?.result?.data?.price || 0) *
-                        (product?.quantity || 0)
-                      ).toFixed(2)}
+                          (product?.quantity || 0)
+                      )}
                     </p>
                     <div className="flex items-center space-x-2">
                       <button

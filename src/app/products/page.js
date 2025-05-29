@@ -57,7 +57,7 @@ const Products = () => {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <ErrorPage message={error.message} />; // Render the ErrorPage
   return (
-    <div className="px-4 md:px-20 py-8">
+    <div className="px-4  md:px-6 lg:px-20 py-8">
       <div className="flex">
         {/* Sidebar - hidden on mobile */}
         <div className="hidden lg:flex w-1/4 h-full">
