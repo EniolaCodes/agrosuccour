@@ -291,8 +291,10 @@ const Payment = () => {
             }`}
                     onClick={() => setSelectedPaymentMethod(method.id)}
                   >
+
                     <div className="flex justify-between items-center space-x-2">
                       <div className="flex items-center space-x-4">
+
                         <div
                           className={`relative w-6 h-6 rounded-full border-2 ${
                             selectedPaymentMethod === method.id
