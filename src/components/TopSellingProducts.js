@@ -44,7 +44,7 @@ const TopSellingProducts = () => {
   if (isError) return <ErrorPage message={error.message} />; // Render the ErrorPage
 
   return (
-    <div className="px-4 md:px-20 py-8">
+    <div className="px-4 md:px-6 lg:px-20 py-8">
       <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
         <h1 className="text-Grey500 text-[26px] font-nunito font-bold">
           Top Selling Products
@@ -55,7 +55,7 @@ const TopSellingProducts = () => {
           </h1>
         </Link>
       </div>
-      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-6 gap-6">
+      <div className="bg-white rounded-[28px] px-6 py-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
         {topsellingProducts?.map((product, index) => (
           <Link
             href={`/products/${product.product_id}`}

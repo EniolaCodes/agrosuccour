@@ -42,7 +42,7 @@ const FeaturedProducts = () => {
   if (isError) return <ErrorPage message={error.message} />; // Render the ErrorPage
 
   return (
-    <div className="px-4 md:px-20 py-8">
+    <div className="px-4 md:px-6 lg:px-20 py-8">
       <h2 className="text-4xl font-nunito font-bold text-Grey500 text-center mb-4">
         <span className="text-Green500">Featured</span> Products
       </h2>
@@ -64,7 +64,7 @@ const FeaturedProducts = () => {
           </h1>
         </Link>
       </div>
-      <div className="grid bg-white rounded-[28px] px-6 py-8 grid-cols-2 md:grid-cols-6 gap-6">
+      <div className="grid bg-white rounded-[28px] px-6 py-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
         {/* large image */}
         <div className="col-span-2 md:col-span-2 md:row-span-2  ">
           <Image

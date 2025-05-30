@@ -53,7 +53,7 @@ const OrderCompleted = () => {
 
   return (
     <div className="px-4 md:px-52 py-8 ">
-      <div className="flex flex-col md:flex-row space-x-6">
+      <div className="flex flex-col md:flex-row md:space-x-6">
         <div className="flex flex-col flex-1">
           <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-[28px]">
             <h1 className="text-Grey500 font-semibold font-nunito text-[25px]">
@@ -100,9 +100,9 @@ const OrderCompleted = () => {
         </div>
         {/* right side */}
         <div className="">
-          <div className="w-[350px] bg-white rounded-[28px] p-6 shadow-lg mt-10 md:mt-0 ml-10 md:ml-0">
+          <div className=" bg-white rounded-[28px] p-4 shadow-lg mt-10 md:mt-0 ">
             <h2 className="text-[25px] font-bold font-nunito mb-4 text-[#000000] text-center">
-              Payment details
+              Order details
             </h2>
             <div className="">
               <div className="flex justify-between items-center text-[13px] font-nunitoSans mb-4">
@@ -141,7 +141,7 @@ const OrderCompleted = () => {
             </p>
 
             <hr className="my-4 border-Grey-50" />
-            <div className="mt-4">
+            <div className="mt-4 flex flex-col items-center justify-center">
               <Image
                 src="/images/barcode.svg"
                 width={350}
@@ -153,10 +153,10 @@ const OrderCompleted = () => {
               </p>
             </div>
           </div>
-          <div className="ml-10">
+          <div className="flex flex-col items-center">
             <button
               onClick={() => window.print()}
-              className="mt-4 ml-10 md:ml-0 w-[260px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
+              className="mt-4  w-[260px] h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition"
             >
               Download receipt
             </button>
@@ -172,8 +172,8 @@ const OrderCompleted = () => {
         href="/products"
         className="block md:hidden bg-Green50 fixed bottom-0 w-full"
       >
-        <div className="p-8">
-          <button className=" mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold py-2 rounded-md hover:bg-Green600 transition">
+        <div className="w-full">
+          <button className=" mt-4 w-full h-[44px] bg-Green500 text-white text-[16px] font-bold p-8 rounded-md hover:bg-Green600 transition">
             Continue shopping
           </button>
         </div>

@@ -70,18 +70,6 @@ const Header = () => {
   }, [isCartOpen]);
 
   const handleClickOutside = (event) => {
-    // if (menuRef.current && !menuRef.current.contains(event.target)) {
-    //   setMenuOpen(false);
-    // }
-    // if (productsRef.current && !productsRef.current.contains(event.target)) {
-    //   console.log("product closed");
-    //   setProductsOpen(false);
-    // }
-    // if (cartRef.current && !cartRef.current.contains(event.target)) {
-    //   console.log("cart closed");
-    //   toggleCartVisibility();
-    // }
-
     if (
       productsOpen &&
       productsRef.current &&
@@ -118,7 +106,9 @@ const Header = () => {
     toggleMenu(); // Close the menu
     router.push("/cart"); // Redirect to the cart page
   };
-
+  const handleMobileCartClick = () => {
+    router.push("/cart");
+  };
   return (
     <div>
       {(productsOpen || isCartOpen) && (
@@ -131,8 +121,8 @@ const Header = () => {
         />
       )}
 
-      <header className=" hidden md:block px-20 py-4">
-        <div className="w-full rounded-[28px] bg-Grey500 text-white py-4 px-6 flex items-center justify-between relative">
+      <header className=" hidden md:block lg:px-20 md:px-4 py-6">
+        <div className="w-full rounded-[28px] bg-Grey500 text-white py-4 px-6 flex space-x-10 items-center justify-between relative">
           <Link href="/" className="flex items-center mb-4 space-x-2">
             <Image
               src="/images/logo.svg"
@@ -140,26 +130,25 @@ const Header = () => {
               width={30}
               height={30}
             />
-            <h1 className="text-[26px] mt-4 font-urbanist font-semibold text-Green100">
+            <h1 className="text-[26px] mt-4  font-urbanist font-semibold text-Green100">
               Agrosuccour
             </h1>
           </Link>
 
           {/* Search Bar */}
-          <div className="flex items-center bg-white rounded-[8px] overflow-hidden w-full max-w-lg px-4 py-2 relative">
+          <div className=" bg-white rounded-[8px] overflow-hidden w-full md:hidden lg:flex lg:items-center lg:max-w-lg  px-2 py-1 relative">
             <IoMenu
               className="text-Grey400 cursor-pointer relative z-50"
-              size={30}
+              size={24}
               onClick={toggleProducts}
             />
-
             <input
               type="text"
               placeholder="Search your favorite product..."
-              className="flex-1 p-3 text-Grey300 focus:outline-none"
+              className="w-full md:text-[10px] lg:text-[16px] flex-1 md:px-2 md:py-1 lg:p-3 text-Grey300 focus:outline-none"
             />
             <button className="flex items-center justify-center p-3 bg-Green500 absolute h-full top-0 right-0">
-              <FiSearch className="text-Green50 text-[24px]" />
+              <FiSearch className="text-Green50 text-[20px]" />
             </button>
           </div>
           {/*desktop menu */}
@@ -168,7 +157,7 @@ const Header = () => {
               ref={productsRef}
               className="mt-4 p-4 bg-white rounded-[8px] shadow-lg w-[272px] h-auto absolute z-50 top-20 left-72"
             >
-              <ul className="flex flex-col space-y-4 mt-6 mb-6 text-[13px] font-nunitoSans">
+              <ul className="flex flex-col   space-y-4 mt-6 mb-6 text-[13px] font-nunitoSans">
                 <li className="flex space-x-4 text-Grey400 hover:bg-Green200 hover:rounded-[8px] p-1">
                   <Image
                     src="/images/box 1.svg"
@@ -263,7 +252,7 @@ const Header = () => {
             </div>
           )}
           {/* navigation */}
-          <ul className="flex space-x-4 text-[16px] text-Green50 font-nunitoSans ml-16">
+          <ul className="flex space-x-6 text-[16px] text-Green50 font-nunitoSans flex-shrink-0 items-center">
             <li className=" hover:text-Green500 ">
               <Link href="/">Home</Link>
             </li>
@@ -441,8 +430,8 @@ const Header = () => {
         </div>
       </header>
       {/* mobile */}
-      <header className="px-4 py-2 bg-Grey50 md:hidden">
-        <div className="w-full rounded-[28px] bg-Grey500 py-4 px-6 flex flex-col space-y-4 relative">
+      <header className="px-4 py-2 bg-Grey50 relative z-50  md:hidden">
+        <div className="w-full rounded-[28px] bg-Grey500 py-4 px-6 flex flex-col space-y-4">
           {/* logo & cart */}
           <div className="flex items-center justify-between">
             {/* logo */}
@@ -460,7 +449,7 @@ const Header = () => {
               </Link>
             </div>
             {/* cart component */}
-            <Link href="/cart" onClick={handleCartClick}>
+            <Link href="/cart" className="">
               <CartComponent />
             </Link>
           </div>

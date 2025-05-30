@@ -25,11 +25,6 @@ const Payment = () => {
   const { shippingDetails, cartSummary } = useShipping();
   const { cart, formatPrice } = useCart();
 
-  const bankDetails = [
-    "AGRO-SUCCOUR NIGERIA LIMITED | 0126516021 | Wema bank",
-    "Agro-succor Nigeria Ltd | 1229561022 | Zenith Bank",
-  ];
-
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text).then(() => {
       alert("Copied to clipboard!");
@@ -131,8 +126,33 @@ const Payment = () => {
     );
   }
 
+  // Define your payment methods as an array for easy mapping and management
+  const paymentMethods = [
+    {
+      id: "paystack",
+      name: "Paystack",
+      logoSrc: "/images/paystack.svg",
+      description:
+        "Click “Continue”, you will be redirected to Paystack to complete your payment securely.",
+      logoAlt: "Paystack logo",
+    },
+    {
+      id: "globalpay",
+      name: "GlobalPay",
+      logoSrc: "/images/globalpay-logo.png",
+      description:
+        "Click “Continue”, you will be redirected to GlobalPay to complete your payment securely.",
+      logoAlt: "GlobalPay logo",
+    },
+  ];
+
+  // Find the currently selected method's details for displaying description etc.
+  const currentSelectedMethodDetails = paymentMethods.find(
+    (method) => method.id === selectedPaymentMethod
+  );
+
   return (
-    <div className="px-4 md:px-52 py-8 overflow-y-auto">
+    <div className="px-4 lg:px-52 py-8 overflow-hidden">
       <div className="flex flex-row space-x-6">
         <div className="bg-white flex-1 p-6 shadow-md rounded-[28px]">
           {/* Progress Bar */}
@@ -143,7 +163,7 @@ const Payment = () => {
           {/* shipping info */}
           <section>
             <h2 className="text-[25px] text-Grey500 font-nunito font-bold mt-4 mb-4">
-              Where to send your order {cart.total_amount}
+              Where to send your order ₦{formatPrice(cart.total_amount)}
             </h2>
             <div className="">
               {shippingList.length > 0 ? (
@@ -214,119 +234,114 @@ const Payment = () => {
             <section className="mt-8">
               <div>
                 <h2 className="text-[25px] font-nunito text-Grey500 font-bold mb-2">
-                  Choose a payment method
+                  Pay with paystack or globalpay
                 </h2>
                 <p className="text-[13px] font-nunitoSans text-Grey400 mb-6 w-[397px]">
                   You will not be charged until you review this order on the
-                  next page. All transactions are secure and encrypted.
+                  next page. All transactions are secured and encrypted.
                 </p>
               </div>
               {/* payment option */}
-              <div className="space-y-4">
-                <div
-                  onClick={() => setSelectedPaymentMethod("paystack")}
-                  className={`mb-8 border bg-Grey50 hover:border-Grey50 "  ${
-                    selectedPaymentMethod === "paystack"
-                      ? " border"
-                      : "border-Grey50"
-                  } p-4 rounded-[8px] flex justify-between items-center cursor-pointer`}
-                >
-                  <div className="flex items-center space-x-2">
-                    <div
-                      className={`relative w-6 h-6 rounded-full ${
-                        selectedPaymentMethod === "paystack"
-                          ? "border-2 border-Green500"
-                          : "border-2 border-Grey100"
-                      }`}
-                    >
-                      {selectedPaymentMethod === "paystack" && (
+              {/* <div className="space-y-4">
+                <div className="mb-8 border bg-Grey50 hover:border-Grey50">
+                  <div className="flex justify-between items-center space-x-2">
+                    <div className="flex space-x-4 p-6">
+                      <div className="relative w-6 h-6 rounded-full border-2 border-Green500">
                         <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
-                      )}
+                      </div>
+                      <span className="text-[16px] text-Grey500 font-nunitoSans font-bold ">
+                        Paystack
+                      </span>
                     </div>
-                    <span className="text-[16px] text-Grey500 font-nunitoSans font-bold ">
-                      Paystack
-                    </span>
-                  </div>
-                  <div className="flex space-x-2">
                     <Image
-                      src="/images/paystack.svg"
+                      src="/images/paystack.com"
                       alt="paystack"
                       width={100}
                       height={100}
                     />
                   </div>
                 </div>
+                <div className="flex flex-col items-center space-y-8  ">
+                  <Image
+                    src="/images/paystack.com"
+                    alt="paystack"
+                    width={100}
+                    height={100}
+                  />
+                  <p className="max-w-[450px] text-center">
+                    Click “Continue ”, you will be redirected to paystack to
+                    complete your payment securely.
+                  </p>
+                  <PaymentComponent
+                    orderId={orderId}
+                    amount={formatPrice(cart.total_amount)}
+                    email={shippingDetails.email}
+                  />
+                </div>
+              </div> */}
+              <div className="space-y-6">
+                {paymentMethods.map((method) => (
+                  <div
+                    key={method.id}
+                    className={`border rounded-lg p-6 cursor-pointer transition-all duration-200
+            ${
+              selectedPaymentMethod === method.id
+                ? "border-Green500 bg-green-50"
+                : "bg-Grey50 hover:border-Grey300"
+            }`}
+                    onClick={() => setSelectedPaymentMethod(method.id)}
+                  >
 
-                {/* Paystack Details */}
-                {selectedPaymentMethod === "paystack" && (
-                  <div className="flex flex-col items-center space-y-8  ">
+                    <div className="flex justify-between items-center space-x-2">
+                      <div className="flex items-center space-x-4">
+
+                        <div
+                          className={`relative w-6 h-6 rounded-full border-2 ${
+                            selectedPaymentMethod === method.id
+                              ? "border-Green500"
+                              : "border-Grey300"
+                          }`}
+                        >
+                          {selectedPaymentMethod === method.id && (
+                            <div className="absolute inset-0 m-auto w-2.5 h-2.5 rounded-full bg-Green500" />
+                          )}
+                        </div>
+                        <span className="text-[16px] text-Grey800 font-nunitoSans font-bold">
+                          {method.name}
+                        </span>
+                      </div>
+                      <Image
+                        src={method.logoSrc}
+                        alt={method.logoAlt}
+                        width={90}
+                        height={45}
+                        objectFit="contain"
+                      />
+                    </div>
+                  </div>
+                ))}
+                {currentSelectedMethodDetails && (
+                  <div className="flex flex-col items-center space-y-8 mt-8 p-6 bg-white rounded-lg shadow-md">
                     <Image
-                      src="/images/material.svg"
-                      alt="paystack"
-                      width={100}
-                      height={100}
+                      src={currentSelectedMethodDetails.logoSrc}
+                      alt={currentSelectedMethodDetails.logoAlt}
+                      width={120}
+                      height={60}
+                      objectFit="contain"
                     />
-                    <p className="max-w-[450px] text-center">
-                      Click “Continue ”, you will be redirected to paystack to
-                      complete your payment securely.
+                    <p className="max-w-[450px] text-center text-Grey600">
+                      {currentSelectedMethodDetails.description}
                     </p>
                     <PaymentComponent
+                      selectedMethod={selectedPaymentMethod}
                       orderId={orderId}
-                      amount={formatPrice(cart.total_amount)}
-                      email={shippingDetails.email}
+                      amount={
+                        cart?.total_amount
+                          ? formatPrice(cart.total_amount)
+                          : formatPrice(0)
+                      }
+                      email={shippingDetails?.email || ""}
                     />
-                  </div>
-                )}
-                {/* bank transfer */}
-                <div
-                  onClick={() => setSelectedPaymentMethod("bank-transfer")}
-                  className={`border ${
-                    selectedPaymentMethod === "bank-transfer"
-                      ? "border"
-                      : "border-Grey50"
-                  } p-4 rounded-md flex bg-Grey50 border hover:border-Grey50 items-center cursor-pointer`}
-                >
-                  <div
-                    className={`relative w-6 h-6 rounded-full ${
-                      selectedPaymentMethod === "bank-transfer"
-                        ? "border-2 border-Green500"
-                        : "border-2 border-Grey100"
-                    }`}
-                  >
-                    {selectedPaymentMethod === "bank-transfer" && (
-                      <div className="absolute inset-0 m-auto w-2 h-2 rounded-full bg-Green500" />
-                    )}
-                  </div>
-                  <span className="ml-2 text-[16px] text-Grey500 font-bold font-nunitoSans">
-                    Direct bank transfer
-                  </span>
-                </div>
-                {/* Bank Transfer Details */}
-                {selectedPaymentMethod === "bank-transfer" && (
-                  <div className="mt-4 font-nunitoSans">
-                    <p className="text-[14px] text-Grey400 mb-4">
-                      To complete your order, please pay directly into our
-                      account. Use your Order ID as a reference. Your order will
-                      ship as soon as we confirm your payment.
-                    </p>
-                    <div className="flex flex-col space-y-4 text-[11px] text-Grey400 items-center">
-                      {bankDetails.map((detail, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between w-full"
-                        >
-                          <span className="text-sm">{detail}</span>
-                          <FiCopy
-                            size={20}
-                            className="text-Grey400 cursor-pointer"
-                            onClick={() => handleCopy(detail)}
-                          />
-                        </div>
-                      ))}
-                      <button className="bg-Green500 text-white rounded-[8px] p-[10px] text-center text-[16px] md:text-[18px] font-bold w-full md:w-[190px] h-[48px] hover:bg-Green600 transition">
-                        Confirm
-                      </button>
-                    </div>
                   </div>
                 )}
               </div>
