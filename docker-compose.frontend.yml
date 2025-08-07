@@ -1,0 +1,21 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend-frontend-1
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:3100
+    depends_on:
+      - backend
+    networks:
+      - agro-network
+
+networks:
+  agro-network:
+    external: true
